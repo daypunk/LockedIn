@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "selfgraph",
+  "description": "Personal experience knowledge graph for Claude Code. Build the graph by talking; render resumes, cover letters, portfolios, and an interactive graph viz from the same vault.",
+  "version": "0.0.1",
+  "author": {
+    "name": "daypunk",
+    "email": "daehee216@naver.com"
+  },
+  "homepage": "https://github.com/daypunk/selfgraph",
+  "license": "MIT",
+  "keywords": ["selfgraph", "knowledge-graph", "career", "resume", "cover-letter", "ontology"]
+}

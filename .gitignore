@@ -1,0 +1,46 @@
+# Python build / cache
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+
+# Virtualenv / env
+.venv/
+venv/
+.env
+.envrc
+.python-version
+
+# Test / coverage artifacts
+.coverage
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.tox/
+.nox/
+.hypothesis/
+htmlcov/
+coverage.xml
+
+# Jupyter
+.ipynb_checkpoints/
+
+# IDE / editors
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Claude Code per-repo workspace (project-local plugin / skill / settings).
+.claude/
+
+# Local working notes / state directory.
+.omc/
+
+# Local agent / tool outputs.
+.agent-os/
+
+# Defensive: rendered outputs (real outputs go to ~/.selfgraph/outputs/)
+outputs/

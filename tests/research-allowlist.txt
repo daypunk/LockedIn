@@ -1,0 +1,28 @@
+# Allowlist of hosts that may appear as citation URLs in any skill's
+# research-notes.md. CI's URL liveness check refuses citations to other
+# hosts to prevent random-blog-stuffing.
+#
+# Korean job-market sources (jaso skill)
+linkareer.co.kr
+saramin.co.kr
+jobkorea.co.kr
+wanted.co.kr
+incruit.com
+
+# US tech / PM resume sources
+levels.fyi
+lennysnewsletter.com
+gergelyorosz.com
+blog.pragmaticengineer.com
+
+# Academic
+scholar.google.com
+arxiv.org
+
+# OSS reference
+github.com
+
+# Generic dev media (use sparingly; prefer the above)
+news.ycombinator.com
+medium.com
+substack.com

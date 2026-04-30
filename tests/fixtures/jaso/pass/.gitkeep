@@ -1,0 +1,4 @@
+# Place known-good (합격) jaso fixtures here.
+# See tests/fixtures/jaso/TEMPLATE.md for the required frontmatter
+# format and authoring policy. Target: 5 fixtures spanning 5
+# industries (IT 대기업, 외국계, 금융, 제조, 스타트업).

@@ -1,0 +1,9 @@
+# Place known-bad (불합격 / templated / weak) jaso fixtures here.
+# See tests/fixtures/jaso/TEMPLATE.md for the required frontmatter
+# format and authoring policy. Target: 5 fixtures, each isolating
+# one failure mode:
+#   01-templated-phrasing.md     — banned-phrase hits
+#   02-passive-voice.md          — consistent passive voice
+#   03-no-company-fit.md         — generic, applies to any company
+#   04-missing-structure.md      — continuous prose, no STAR/PAR
+#   05-missing-metrics.md        — adjectives without numbers

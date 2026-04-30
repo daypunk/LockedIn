@@ -1,0 +1,21 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "selfgraph",
+  "owner": {
+    "name": "daypunk",
+    "email": "daehee216@naver.com"
+  },
+  "description": "Personal experience knowledge graph for Claude Code.",
+  "plugins": [
+    {
+      "name": "selfgraph",
+      "source": "./plugins/selfgraph",
+      "description": "Build and grow a personal markdown ontology, then render resumes, cover letters, portfolios, and an interactive graph viz from the same vault.",
+      "category": "productivity",
+      "tags": ["knowledge-graph", "ontology", "career", "resume", "cover-letter", "obsidian"],
+      "license": "MIT",
+      "homepage": "https://github.com/daypunk/selfgraph",
+      "repository": "https://github.com/daypunk/selfgraph"
+    }
+  ]
+}

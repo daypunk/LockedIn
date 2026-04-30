@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "status": "placeholder — finalize after research pass",
+  "rationale": "These are recurring vague phrases that flatten 자소서 voice. Each entry MUST be backed by a source from research-notes.md once that file ships.",
+  "phrases": [
+    "열정적으로",
+    "성실하게",
+    "최선을 다하여",
+    "최선을 다하겠습니다",
+    "노력하겠습니다",
+    "발전시키겠습니다",
+    "기여하고 싶습니다",
+    "도전하는 자세",
+    "꾸준히 노력하여"
+  ],
+  "policy": "Each occurrence reduces the 표현 dimension by 1 (floor 0). The reviewer turn surfaces the offending sentence in the notes array."
+}

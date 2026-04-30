@@ -1,0 +1,3 @@
+# Vendored single-file Python helpers for the skill-only path.
+# Each helper must produce byte-identical output to its CLI counterpart
+# on the shared fixtures (parity test in CI).

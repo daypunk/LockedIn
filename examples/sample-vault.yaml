@@ -1,0 +1,120 @@
+# Example fixture for: selfgraph init --non-interactive --fixture <this-file>
+#
+# Deterministic seed — no LLM. Each entity becomes one markdown note in
+# the vault. Fields conform to the v0.2 schema in
+# selfgraph/ontology/schema.py (per-type required/optional contracts).
+#
+# Schema reference: docs/ontology-spec.md and docs/ontology-mapping.md.
+
+schema_version: 2
+template: career
+
+entities:
+  - type: person
+    title: Sample User
+    slug: sample-user
+    fields:
+      name: Sample User                           # required
+      current_role: Product Manager
+      based_in: Seoul
+      summary: PM with 5 years across fintech and SaaS.
+    links:
+      - {predicate: held_role_at, object: company-a}
+      - {predicate: held_role_at, object: company-b}
+      - {predicate: works_on, object: project-a}
+      - {predicate: works_on, object: project-b}
+      - {predicate: speaks, object: language-en}
+      - {predicate: speaks, object: language-ko}
+
+  - type: company
+    title: Company A
+    slug: company-a
+    fields:
+      name: Company A                             # required
+      industry: fintech
+      employees: 200
+
+  - type: company
+    title: Company B
+    slug: company-b
+    fields:
+      name: Company B                             # required
+      industry: SaaS
+      employees: 1500
+
+  - type: role
+    title: Lead PM, Payments
+    slug: role-lead-pm-payments
+    fields:
+      title: Lead PM, Payments                    # required
+      start_date: 2023-03-01                      # required
+      end_date: 2025-12-31
+      level: lead
+    links:
+      - {predicate: produced, object: achievement-payments-uplift}
+      - {predicate: uses_skill, object: skill-roadmapping}
+
+  - type: project
+    title: Payments Onboarding Redesign
+    slug: project-a
+    fields:
+      name: Payments Onboarding Redesign          # required
+      year: 2024
+    links:
+      - {predicate: produced, object: achievement-payments-uplift}
+      - {predicate: uses_skill, object: skill-discovery}
+
+  - type: project
+    title: Internal PRD Tooling
+    slug: project-b
+    fields:
+      name: Internal PRD Tooling                  # required
+      year: 2025
+    links:
+      - {predicate: uses_skill, object: skill-roadmapping}
+
+  - type: achievement
+    title: 30% lift in payments funnel completion
+    slug: achievement-payments-uplift
+    fields:
+      headline: 30% lift in payments funnel completion   # required
+      metric: completion_rate
+      delta: "+30%"
+      timeframe: 2024-Q3
+
+  - type: skill
+    title: Roadmapping
+    slug: skill-roadmapping
+    fields:
+      name: Roadmapping                           # required
+      level: advanced
+
+  - type: skill
+    title: Customer discovery
+    slug: skill-discovery
+    fields:
+      name: Customer discovery                    # required
+      level: intermediate
+
+  - type: education
+    title: BS, Industrial Engineering
+    slug: education-bs-ie
+    fields:
+      institution: Sample University              # required
+      area: Industrial Engineering
+      study_type: Bachelor
+      end_date: 2020-02-01
+
+  - type: language
+    title: English (professional)
+    slug: language-en
+    fields:
+      language: English                           # required
+      fluency: professional
+
+  - type: language
+    title: Korean (native)
+    slug: language-ko
+    fields:
+      language: Korean                            # required
+      fluency: native

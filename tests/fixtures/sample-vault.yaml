@@ -1,0 +1,18 @@
+# Phase 1 / Phase 4 fixture for `selfgraph init --non-interactive --fixture`.
+# Real fixture content lands in Phase 1 step 9 once the interview engine is
+# implemented. Until then, this is a placeholder so AC-3 / AC-1 / AC-1b CI
+# recipes have a known target path.
+schema_version: 1
+template: career
+person:
+  name: Sample User
+  current_role: PM at Sample Co.
+companies:
+  - name: Sample Co.
+    roles:
+      - title: PM
+        start: 2024-01-01
+projects:
+  - title: Sample project
+    achievements:
+      - "Reduced X by 30%"

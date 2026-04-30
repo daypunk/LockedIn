@@ -1,0 +1,89 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  lint-and-test:
+    name: lint + test (${{ matrix.os }})
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: install uv
+        run: curl -LsSf https://astral.sh/uv/install.sh | sh
+      - name: install package
+        run: |
+          source $HOME/.local/bin/env || true
+          uv pip install --system -e ".[dev]"
+      - name: lint
+        run: ruff check selfgraph tests
+      - name: test
+        run: pytest -q
+
+  language-policy:
+    name: language policy lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: reject CJK in skill meta files
+        # English-only enforcement for the main skill, render-resume-en,
+        # render-portfolio, and README.md. The selfgraph-render-jaso skill is
+        # exempt because its domain IS Korean output.
+        # CJK elsewhere is allowed only inside fenced
+        # <!-- ko-example -->...<!-- /ko-example --> blocks.
+        run: |
+          set -e
+          for f in $(find plugins/selfgraph/skills \
+                       \( -name 'SKILL.md' -o -name 'AGENTS.md' \
+                          -o -name 'TOOLS.md' -o -name 'RUBRIC.md' \) \
+                     | grep -v '/selfgraph-render-jaso/') README.md; do
+            [ -f "$f" ] || continue
+            python3 - "$f" <<'PY'
+          import re, sys
+          path = sys.argv[1]
+          with open(path, 'r', encoding='utf-8') as fh:
+              text = fh.read()
+          # Allowed: fenced ko-example blocks AND language switcher links.
+          stripped = re.sub(r'<!--\s*ko-example\s*-->.*?<!--\s*/ko-example\s*-->', '', text, flags=re.S)
+          stripped = re.sub(
+              r'\[(English|한국어|日本語|中文|Español|Deutsch|Français)\]\([^)]+\)',
+              '', stripped,
+          )
+          if re.search(r'[가-힯ㄱ-ㆎ一-鿿]', stripped):
+              print(f'CJK characters found outside <!-- ko-example --> block (or language switcher) in {path}')
+              sys.exit(1)
+          PY
+          done
+
+  research-notes-liveness:
+    name: research-notes URL liveness
+    runs-on: ubuntu-latest
+    if: ${{ false }}  # enables when research-notes.md ships with citations
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "URL liveness gate enables when renderer skills land."
+
+  skill-only-smoke:
+    name: skill-only path smoke
+    runs-on: ubuntu-latest
+    if: ${{ false }}  # enables when helpers/init.py and helpers/render_graph.py exist
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "Skill-only Docker recipe enables once helpers ship."
+
+  cli-accelerator-smoke:
+    name: CLI accelerator path smoke
+    runs-on: ubuntu-latest
+    if: ${{ false }}  # enables when CLI subcommands implement core flows
+    steps:
+      - uses: actions/checkout@v4
+      - run: echo "CLI accelerator Docker recipe enables once core flows ship."
