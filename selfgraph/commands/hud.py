@@ -188,10 +188,7 @@ def hud(argv: list[str] | None = None) -> int:
     parser.add_argument("--vault", help="vault path (default ~/.selfgraph/)")
     args = parser.parse_args(argv)
 
-    if args.no_color:
-        color = False
-    else:
-        color = _wants_color(args.color)
+    color = False if args.no_color else _wants_color(args.color)
     vault = resolve_vault(args.vault)
     try:
         line = _render(vault, color)

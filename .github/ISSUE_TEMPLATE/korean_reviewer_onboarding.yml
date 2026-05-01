@@ -1,0 +1,75 @@
+name: Korean reviewer onboarding (render-jaso)
+description: Help calibrate the 자소서 rubric for v1.1.
+title: "[Reviewer] "
+labels: ["reviewer-onboarding", "render-jaso"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The `render-jaso` skill ships with research-based calibration
+        (public guides + cross-source consensus). v1.1 wants a named
+        human domain reviewer to walk through the golden fixture set
+        and sign off on the rubric bands.
+
+        Engagement: ~2–3 hours, fully asynchronous. Attribution as you
+        prefer (full name, handle, or anonymous).
+
+        Read [`reviewers.md`](../../plugins/selfgraph/skills/selfgraph-render-jaso/reviewers.md)
+        for the engagement format before filing this issue.
+
+  - type: input
+    id: handle
+    attributes:
+      label: How would you like to be credited?
+      description: Full name, handle, or "anonymous". You can change this later.
+      placeholder: "@yourhandle"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: experience
+    attributes:
+      label: Experience (check all that apply)
+      options:
+        - label: I have written 자소서 that resulted in offers in the past 2 years.
+        - label: I have reviewed 자소서 as part of hiring or peer review.
+        - label: I have worked in HR / recruiting at a Korean company.
+        - label: I have hired or screened in 2+ industries from the v1 target set.
+
+  - type: checkboxes
+    id: industries
+    attributes:
+      label: Industries you can speak to (check all)
+      options:
+        - label: IT 대기업 (Samsung / LG / Naver / Kakao / SK / etc.)
+        - label: 외국계 (Google / Microsoft / Amazon Korea / etc.)
+        - label: 금융 (은행 / 증권 / 보험 / 핀테크)
+        - label: 제조 (자동차 / 화학 / 반도체 / etc.)
+        - label: 스타트업 (Series A–C, fast-growth)
+        - label: 공공기관 / 공기업
+
+  - type: textarea
+    id: availability
+    attributes:
+      label: Availability for the engagement
+      description: Approximate window when you could complete the 2–3 hour async review.
+      placeholder: "Any weekday in the next 2 weeks, evenings KST."
+    validations:
+      required: true
+
+  - type: textarea
+    id: contact
+    attributes:
+      label: Preferred contact channel
+      description: Email, LinkedIn, or "via this issue thread". Maintainer will reach out privately.
+      placeholder: "via this issue thread"
+    validations:
+      required: true
+
+  - type: textarea
+    id: notes
+    attributes:
+      label: Anything else
+      description: Optional. Background, concerns, expectations, etc.
+    validations:
+      required: false

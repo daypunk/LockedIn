@@ -95,8 +95,7 @@ notes round-trip, graph derivation). CI enforces this via the parity test.
     ├── graph.json
     ├── graph.html                  ← single-file viz, the project's hero asset
     ├── resume-us-tech-senior.md
-    ├── jaso-<slug>-1.md
-    └── portfolio/index.html
+    └── jaso-<slug>-1.md
 ```
 
 Every entity is one markdown file. Every edge is one entry in a note's

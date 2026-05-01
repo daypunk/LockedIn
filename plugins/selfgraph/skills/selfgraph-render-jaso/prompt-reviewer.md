@@ -15,9 +15,14 @@ scores by ~1 point.
 
 ## Procedure
 
-1. **Load `RUBRIC.md`** — read the file fresh. The five dimensions
-   (`두괄식 / 구조화 / 구체성 / 표현 / 적합성`) and their score bands are
-   the only thing you score against.
+1. **Load `RUBRIC.md` (load-bearing).** Read the file fresh from disk
+   in this turn. The five dimensions (`두괄식 / 구조화 / 구체성 / 표현
+   / 적합성`) and their score bands are the only thing you score
+   against.
+   **Hard guard**: if `RUBRIC.md` content is not visible in this
+   turn's context, STOP and request it before scoring. Do not score
+   from memory of a prior turn — same-context scoring inflates by ~1
+   point per CLAUDE.md working agreement.
 2. **Banned-phrase regex** — load `banned_phrases.json`. For each
    match in the draft, the 표현 dimension drops by 1 (floor 0). Record
    each hit in `notes`.

@@ -1,0 +1,95 @@
+name: Bug report
+description: Something is broken or behaves unexpectedly.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file a bug. Please include enough
+        detail that the maintainer can reproduce the issue locally.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: One or two sentences describing what went wrong.
+      placeholder: "selfgraph render graph crashes on a vault with no edges."
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Exact commands or actions, in order.
+      placeholder: |
+        1. SELFGRAPH_VAULT=/tmp/sg python3 -m selfgraph init --fixture examples/sample-vault.yaml
+        2. rm /tmp/sg/edges.md
+        3. python3 -m selfgraph render graph
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      placeholder: "graph.html generated with the empty-vault notice."
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      placeholder: "Traceback ending in KeyError: 'edges'."
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: selfgraph version
+      description: Output of `python3 -m selfgraph --version`.
+      placeholder: "selfgraph 1.0.0"
+    validations:
+      required: true
+
+  - type: input
+    id: python
+    attributes:
+      label: Python version
+      placeholder: "3.12.4"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: os
+    attributes:
+      label: Operating system
+      options:
+        - macOS
+        - Linux
+        - Windows
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Logs / traceback
+      description: Paste full output if the bug surfaces an error.
+      render: shell
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I ran `python3 -m selfgraph doctor` and reviewed its output.
+          required: true
+        - label: I confirmed this is not the user's vault state being protected (the design rule).
+          required: true

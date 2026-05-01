@@ -30,7 +30,7 @@ detected during render.
 
 ## Renderer
 
-**Purpose**: produce artifacts (jaso, resume_en, portfolio, graph) from the
+**Purpose**: produce artifacts (jaso, resume_en, graph) from the
 ontology.
 **Triggers**: `/selfgraph render <kind>`.
 **Discipline**:

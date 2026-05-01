@@ -1,17 +1,36 @@
 {
   "schema_version": 1,
-  "status": "placeholder — finalize after research pass",
-  "rationale": "These are recurring vague phrases that flatten 자소서 voice. Each entry MUST be backed by a source from research-notes.md once that file ships.",
+  "status": "v1.0 — research-based; cross-source confirmed",
+  "rationale": "Each entry was flagged by 3+ independent Korean 자소서 guides as 진부 / 추상적 / 클리셰. Cross-source HR survey statistics: 성실한 (49.2%), 노력하는 (36.3%), 책임감 있는 (28.5%), 솔선수범하는 (21.8%), 창의적인 (21.8%), 도전적인 (13.4%) per published 인사담당자 surveys. Sources: 워크넷, 잡코리아, 사람인, 링커리어, 캐치, 하이잡, brunch career writers, plus the khan.co.kr / hankookilbo HR-survey citations. See research-notes.md.",
   "phrases": [
-    "열정적으로",
+    "성실한",
     "성실하게",
+    "성실히",
+    "노력하는",
+    "노력하겠습니다",
+    "노력하여",
+    "꾸준히 노력",
+    "책임감 있는",
+    "책임감 있게",
+    "솔선수범",
+    "솔선수범하는",
+    "창의적인",
+    "창의적으로",
+    "도전적인",
+    "도전하는 자세",
+    "열정적으로",
+    "열정적인",
     "최선을 다하여",
     "최선을 다하겠습니다",
-    "노력하겠습니다",
+    "최선을 다해",
     "발전시키겠습니다",
     "기여하고 싶습니다",
-    "도전하는 자세",
-    "꾸준히 노력하여"
+    "기여하겠습니다",
+    "배우는 자세",
+    "배우겠습니다",
+    "성장하겠습니다",
+    "보탬이 되",
+    "임하겠습니다"
   ],
-  "policy": "Each occurrence reduces the 표현 dimension by 1 (floor 0). The reviewer turn surfaces the offending sentence in the notes array."
+  "policy": "Each occurrence reduces the 표현 dimension by 1 (floor 0). The reviewer turn surfaces the offending sentence in banned_phrase_hits using pipe-separated format: '성실한|... 성실한 자세로 임했습니다 ...'. Multiple distinct phrases compound; multiple instances of the same phrase count once."
 }

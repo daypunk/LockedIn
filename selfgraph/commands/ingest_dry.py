@@ -9,18 +9,18 @@ in the skill (host AI asks the user).
 
 from __future__ import annotations
 
+from collections.abc import Callable
 from pathlib import Path
-from typing import Callable, Optional
 
 
-def _read_text_file(path: Path) -> Optional[str]:
+def _read_text_file(path: Path) -> str | None:
     try:
         return path.read_text(encoding="utf-8", errors="replace")
     except OSError:
         return None
 
 
-def _read_pdf(path: Path) -> Optional[str]:
+def _read_pdf(path: Path) -> str | None:
     try:
         from pypdf import PdfReader  # type: ignore[import-not-found]
     except ImportError:
@@ -32,7 +32,7 @@ def _read_pdf(path: Path) -> Optional[str]:
         return None
 
 
-def _read_docx(path: Path) -> Optional[str]:
+def _read_docx(path: Path) -> str | None:
     try:
         import docx  # type: ignore[import-not-found]  # python-docx
     except ImportError:
@@ -44,7 +44,7 @@ def _read_docx(path: Path) -> Optional[str]:
         return None
 
 
-READERS: dict[str, Callable[[Path], Optional[str]]] = {
+READERS: dict[str, Callable[[Path], str | None]] = {
     ".md": _read_text_file,
     ".markdown": _read_text_file,
     ".txt": _read_text_file,

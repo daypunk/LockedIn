@@ -36,8 +36,8 @@ jobs:
       - uses: actions/checkout@v4
       - name: reject CJK in skill meta files
         # English-only enforcement for the main skill, render-resume-en,
-        # render-portfolio, and README.md. The selfgraph-render-jaso skill is
-        # exempt because its domain IS Korean output.
+        # and README.md. The selfgraph-render-jaso skill is exempt because
+        # its domain IS Korean output.
         # CJK elsewhere is allowed only inside fenced
         # <!-- ko-example -->...<!-- /ko-example --> blocks.
         run: |

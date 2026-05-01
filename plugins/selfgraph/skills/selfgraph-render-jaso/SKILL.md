@@ -15,8 +15,10 @@ description: |
 
 # render-jaso
 
-Status: **placeholder**. Real prompt and rubric land after
-`research-notes.md` is filled with cited sources.
+Status: **v1.0 (Beta)** — research-based calibration. RUBRIC.md (5
+dimensions × score bands), prompt-writer.md, prompt-reviewer.md, and
+banned_phrases.json (28 cross-source-confirmed entries) all ship.
+Named human domain reviewer awaited for v1.1 (see `reviewers.md`).
 
 ## Use this when
 
@@ -28,7 +30,6 @@ Status: **placeholder**. Real prompt and rubric land after
 ## Do NOT use when
 
 - User wants an English resume → use `render-resume-en`.
-- User wants a portfolio site → use `render-portfolio`.
 - The vault is empty (no ontology nodes to quote) → seed first via
   `/selfgraph init` or `selfgraph init --fixture FILE`.
 
@@ -74,11 +75,9 @@ separation.
 ```
 SKILL.md            (this file)
 research-notes.md   citations with URL + ISO date + 2-sentence gloss
-RUBRIC.md           5-dimension scoring contract
-banned_phrases.json regex list
-prompt-writer.md    (TODO) writer-turn prompt
-prompt-reviewer.md  (TODO) reviewer-turn prompt (re-loaded fresh)
-reviewers.md        (TODO) named human reviewer + fallback channel
+RUBRIC.md           5-dimension scoring contract + score bands
+banned_phrases.json 28 cross-source-confirmed regex entries
+prompt-writer.md    writer-turn prompt
+prompt-reviewer.md  reviewer-turn prompt (re-loaded fresh)
+reviewers.md        engagement format; v1.1 named reviewer placeholder
 ```
-
-Author order: research-notes → RUBRIC → banned_phrases → prompts.

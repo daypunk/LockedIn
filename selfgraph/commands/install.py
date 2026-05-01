@@ -14,7 +14,6 @@ Source tree shape (plugin format):
         selfgraph/                    main skill (SKILL.md, AGENTS.md, TOOLS.md)
         selfgraph-render-jaso/
         selfgraph-render-resume-en/
-        selfgraph-render-portfolio/
 
 Target tree shape (Claude Code skills directory):
 
@@ -22,7 +21,6 @@ Target tree shape (Claude Code skills directory):
         selfgraph/
         selfgraph-render-jaso/
         selfgraph-render-resume-en/
-        selfgraph-render-portfolio/
 """
 
 from __future__ import annotations

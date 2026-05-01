@@ -6,7 +6,8 @@
 > Don't learn schemas. Don't learn commands. Talk to Claude — selfgraph
 > structures your experience and renders any artifact you ask for.
 
-[![Status](https://img.shields.io/badge/status-pre--alpha-orange.svg)]()
+[![Status](https://img.shields.io/badge/status-beta-blue.svg)]()
+[![Version](https://img.shields.io/badge/version-1.0.0--beta-blue.svg)]()
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
 
 ## Install
@@ -66,8 +67,7 @@ the truth — **the structured experience behind it is**.
 
 - **Talk to it.** Natural-language activation. No commands required.
 - **One graph, many renders.** English resume, Korean cover letter,
-  static portfolio site, interactive graph viz — all from the same
-  vault.
+  interactive graph viz — all from the same vault.
 - **Two-turn writer/reviewer.** Renderers self-evaluate in separate
   Claude turns against a rubric. JSON score tells you if a draft is
   good before you submit.
@@ -79,9 +79,11 @@ the truth — **the structured experience behind it is**.
 
 ## Status
 
-Pre-alpha. The skill scaffold and CLI surface are in place. Renderer
-prompts and rubrics are v0.1 foundational; ontology is v0.2 (15 entity
-types, 15 edge predicates, JSON Resume / Schema.org / FOAF aligned).
+**v1.0 (Beta)**. First public release. Renderers ship with
+research-based calibration (cross-source consensus across 20+ guides
+per domain). Named human domain reviewer engagement is the v1.1
+target. Ontology is v0.2 (15 entity types, 15 edge predicates, JSON
+Resume / Schema.org / FOAF aligned).
 
 ## Advanced
 

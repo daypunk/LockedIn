@@ -9,7 +9,7 @@ Two execution surfaces, deliberately separated:
 
 * **Claude Code skill commands** (need an LLM in the loop, run inside
   Claude Code on the user's existing subscription): interactive `init`,
-  smart `ingest`, `render jaso/resume/portfolio`, `query`.
+  smart `ingest`, `render jaso/resume`, `query`.
 
 When a skill-only subcommand is invoked from a plain terminal, the CLI
 prints a short pointer explaining how to invoke it inside Claude Code,
@@ -85,9 +85,9 @@ def _build_parser() -> argparse.ArgumentParser:
 
     p_render = sub.add_parser(
         "render",
-        help="render an artifact. graph: deterministic CLI. jaso/resume/portfolio: skill.",
+        help="render an artifact. graph: deterministic CLI. jaso/resume: skill.",
     )
-    p_render.add_argument("kind", choices=["jaso", "resume", "portfolio", "graph"])
+    p_render.add_argument("kind", choices=["jaso", "resume", "graph"])
     p_render.add_argument("--target", help="renderer profile (e.g. us-tech-senior)")
     p_render.add_argument("--company", help="company name (jaso only)")
     p_render.add_argument("--question", help="question id or text (jaso only)")
@@ -155,7 +155,7 @@ def main(argv: list[str] | None = None) -> int:
             return ingest_dry_run(args.path, domain=args.domain)
         return _redirect("ingest", f"ingest {args.path}")
 
-    # render: graph is deterministic; jaso/resume/portfolio need the skill
+    # render: graph is deterministic; jaso/resume need the skill
     if args.cmd == "render":
         if args.kind == "graph":
             from selfgraph.commands.render_graph import run_render_graph

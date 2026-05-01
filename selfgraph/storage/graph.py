@@ -19,9 +19,7 @@ def _is_vault_note(path: Path) -> bool:
         return False
     if "outputs" in path.parts:
         return False
-    if "templates" in path.parts:
-        return False
-    return True
+    return "templates" not in path.parts
 
 
 def derive_graph_json(vault: Path) -> dict[str, Any]:

@@ -22,7 +22,6 @@ Skill-only (LLM in the loop, Claude Code session required):
 | Ingester | `/selfgraph ingest <path> [--domain DOMAIN]` | resolves ambiguities by asking |
 | Renderer (jaso) | `/selfgraph render jaso [--company C] [--question Q] [--self-evaluate]` | two-turn writer/reviewer |
 | Renderer (resume) | `/selfgraph render resume [--target T] [--self-evaluate]` | two-turn writer/reviewer |
-| Renderer (portfolio) | `/selfgraph render portfolio` | single-turn |
 | Query | `/selfgraph query "<text>"` | natural-language graph query |
 
 If the user types these as bare `selfgraph ...` in a plain terminal, the
@@ -73,7 +72,8 @@ selection matters for token spend on their plan. Default tiers:
 | Ingest diff classification | haiku |
 | Render jaso (writer turn) | sonnet |
 | Render jaso (reviewer turn) | sonnet (reviewer) |
-| Render resume_en | sonnet |
+| Render resume_en (writer turn) | sonnet |
+| Render resume_en (reviewer turn) | sonnet (reviewer) |
 | Cultural review of jaso (deep cases) | opus |
 | Graph derivation / validate | haiku |
 

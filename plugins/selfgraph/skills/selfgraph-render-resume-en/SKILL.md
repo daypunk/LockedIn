@@ -2,9 +2,11 @@
 name: selfgraph-render-resume-en
 description: |
   Render an English resume from the selfgraph ontology — metric-first
-  bullets, STAR/PAR structure, target persona (us-tech-senior /
-  us-tech-mid / pm-product). Two-turn writer/reviewer pattern with a JSON
-  rubric (≥80% metric density, action-verb diversity, no vague verbs).
+  bullets in XYZ or CAR shape ("Accomplished X as measured by Y by
+  doing Z" / Challenge-Action-Result), target persona (us-tech-senior
+  / us-tech-mid / pm-product). Two-turn writer/reviewer pattern with a
+  JSON rubric (≥80% metric density floor, action-verb diversity, no
+  weak verbs).
 
   Use when the user says: "render resume", "make a resume",
   "us-tech-senior resume", "resume for [target]", "polish my resume".
@@ -14,7 +16,11 @@ description: |
 
 # render-resume-en
 
-Status: **placeholder**.
+Status: **v1.0** — research-based calibration; ships with full rubric,
+writer/reviewer prompts, and banned-phrase regex list. Dimension
+definitions derived from cross-source consensus across 20+ US tech
+resume guides (see `research-notes.md`). Named human domain reviewer
+recommended for v1.1.
 
 ## Use this when
 
@@ -24,7 +30,6 @@ Status: **placeholder**.
 ## Do NOT use when
 
 - User wants a Korean cover letter → `render-jaso`.
-- User wants a portfolio website → `render-portfolio`.
 - The vault has no project / role / achievement nodes yet → seed first.
 
 ## Required design constraints
@@ -32,8 +37,10 @@ Status: **placeholder**.
 - **Metric-first bullets** — every bullet contains a number (`%`, `x`,
   `$`, count, or duration). Rubric enforces ≥80% metric density via
   regex.
-- **STAR / PAR per bullet** — situation/problem implied or stated, action
-  active-voice, result quantified.
+- **XYZ or CAR per bullet** — XYZ = "Accomplished X as measured by Y,
+  by doing Z"; CAR = Challenge / Action / Result compressed to one
+  bullet line. Active voice, quantified result. (STAR is the implicit
+  story arc; XYZ/CAR is the bullet shape.)
 - **Active voice** — banned: "was responsible for", "helped to", "worked
   on", "was involved in".
 - **No keyword stuffing** — ATS-friendly via real verbs and metrics, not
@@ -61,8 +68,9 @@ Same writer/reviewer split as `render-jaso`:
 
 ```
 SKILL.md
-research-notes.md   citations with URL + ISO date + 2-sentence gloss
-RUBRIC.md           (TODO) metric / verb / ATS / vagueness scoring
-prompt-writer.md    (TODO)
-prompt-reviewer.md  (TODO)
+research-notes.md     citations with URL + ISO date + 2-sentence gloss
+RUBRIC.md             5 dimensions; score bands; fixture authoring guide
+prompt-writer.md      writer turn instruction
+prompt-reviewer.md    reviewer turn instruction (separate Claude context)
+banned_phrases.json   regex list of weak / vague / templated phrases
 ```

@@ -22,10 +22,7 @@ def render(template: str, context: dict) -> str:
     def lookup(path: str) -> str:
         node: object = context
         for part in path.split("."):
-            if isinstance(node, dict):
-                node = node.get(part, "")
-            else:
-                node = getattr(node, part, "")
+            node = node.get(part, "") if isinstance(node, dict) else getattr(node, part, "")
         return "" if node is None else str(node)
 
     return _VAR.sub(lambda m: lookup(m.group(1)), template)

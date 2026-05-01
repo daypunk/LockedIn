@@ -1,17 +1,17 @@
 ---
 name: selfgraph
 description: |
-  Personal experience knowledge graph for Claude Code. Build and grow a
-  markdown ontology from Q&A interviews and document ingestion (PDF, DOCX,
-  MD, TXT), then render English resumes, Korean cover letters,
-  portfolios, meeting notes, and an interactive graph visualization from
-  the same vault. Runs entirely on the user's Claude Code subscription —
-  never calls the Anthropic API directly.
+  Personal experience knowledge graph for Claude Code. Build and grow
+  a markdown ontology from Q&A interviews and document ingestion (PDF,
+  DOCX, MD, TXT), then render English resumes, Korean cover letters,
+  meeting notes, and an interactive graph visualization from the same
+  vault. Runs entirely on the user's Claude Code subscription — never
+  calls the Anthropic API directly.
 
   Activate when the user mentions selfgraph by name, asks to set up or
-  update a personal career / experience graph, asks to render a resume /
-  cover letter / portfolio / meeting note from their own experience,
-  drops a resume PDF or DOCX with a request to absorb it, or queries
+  update a personal career / experience graph, asks to render a resume
+  / cover letter / meeting note from their own experience, drops a
+  resume PDF or DOCX with a request to absorb it, or queries
   their own experience ("what projects used Rust?", "which roles taught
   me X"). Do NOT activate for unrelated coding, code review, or general
   questions.
@@ -26,7 +26,7 @@ render artifacts from it. Single-purpose: one namespace, one demo.
 
 - The user says "selfgraph" or "career graph" or "experience graph".
 - The user asks to render an artifact from their own experience: a
-  resume, a cover letter, a portfolio, a meeting note.
+  resume, a cover letter, a meeting note.
 - The user drops a resume `.pdf` / `.docx` or career notes and asks to
   absorb them into a structured graph.
 - The user asks a query about their own experience.
@@ -48,9 +48,9 @@ Reasoning runs **inside Claude Code** on the user's subscription; the
 | Skill (host AI) | Q&A interview, ingest ambiguity resolution, render writer + reviewer turns, NL query interpretation | Every user-in-the-loop flow |
 | CLI utility | install, doctor, validate, template, render graph, init --fixture, ingest --dry-run, PDF/DOCX text extraction, hud | Deterministic; called by skill via Bash, or by user directly |
 
-If a skill-only command (`render jaso/resume/portfolio`, interactive
-`init`, smart `ingest`, `query`) is typed in a plain terminal, the CLI
-prints a redirect message — that's expected.
+If a skill-only command (`render jaso/resume`, interactive `init`,
+smart `ingest`, `query`) is typed in a plain terminal, the CLI prints
+a redirect message — that's expected.
 
 ## First activation — safety net for skipped setup
 

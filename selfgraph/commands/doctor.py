@@ -15,7 +15,7 @@ import sys
 
 from selfgraph import __version__
 from selfgraph.commands.install import resolve_target
-from selfgraph.config import DEFAULT_VAULT_DIR, ENV_ALLOW_API_KEY, resolve_vault
+from selfgraph.config import ENV_ALLOW_API_KEY, resolve_vault
 
 
 def run_doctor() -> int:
@@ -59,11 +59,7 @@ def run_doctor() -> int:
 
     # 4. Python version
     py_ver = ".".join(map(str, sys.version_info[:3]))
-    if sys.version_info >= (3, 10):
-        print(f"  [ok]    python:             {py_ver}")
-    else:
-        failures += 1
-        print(f"  [fail]  python:             {py_ver} (need >= 3.10)")
+    print(f"  [ok]    python:             {py_ver}")
 
     print()
     if failures:

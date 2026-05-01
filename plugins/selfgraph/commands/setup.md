@@ -80,7 +80,7 @@ Merge into `selfgraph/config.json`:
 ```json
 {
   "setup_completed": "<ISO-8601 timestamp>",
-  "setup_version": "0.0.1"
+  "setup_version": "1.0.0"
 }
 ```
 

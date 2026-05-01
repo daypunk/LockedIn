@@ -4,8 +4,6 @@ from __future__ import annotations
 
 from pathlib import Path
 
-import pytest
-
 from selfgraph.commands.doctor import run_doctor
 from selfgraph.commands.install import (
     install_auto_register,

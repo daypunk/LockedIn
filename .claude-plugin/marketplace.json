@@ -10,9 +10,9 @@
     {
       "name": "selfgraph",
       "source": "./plugins/selfgraph",
-      "description": "Build and grow a personal markdown ontology, then render resumes, cover letters, portfolios, and an interactive graph viz from the same vault.",
+      "description": "Build and grow a personal markdown ontology, then render resumes, cover letters, and an interactive graph viz from the same vault. v1.0 (Beta).",
       "category": "productivity",
-      "tags": ["knowledge-graph", "ontology", "career", "resume", "cover-letter", "obsidian"],
+      "tags": ["knowledge-graph", "ontology", "career", "resume", "cover-letter", "obsidian", "korean", "beta"],
       "license": "MIT",
       "homepage": "https://github.com/daypunk/selfgraph",
       "repository": "https://github.com/daypunk/selfgraph"

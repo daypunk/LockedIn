@@ -11,7 +11,6 @@ from selfgraph.commands.init import init_from_fixture
 from selfgraph.commands.template import template
 from selfgraph.storage.notes import read_entity
 
-
 # ----- init --fixture --------------------------------------------------------
 
 

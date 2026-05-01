@@ -45,7 +45,7 @@ except Exception:  # noqa: BLE001 — any import-time issue → use fallback
 
 # --- self-contained fallback ------------------------------------------------
 
-VERSION = "0.0.1"
+VERSION = "1.0.0"
 
 DEFAULT_5H_LIMIT = 50
 DEFAULT_WK_LIMIT = 350

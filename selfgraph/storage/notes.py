@@ -50,9 +50,7 @@ def _needs_quoting(s: str) -> bool:
         return True
     if s[0] in "-?":
         return True
-    if re.search(r"[:\[\]{},&*#?|<>=!%@`\n\"']", s):
-        return True
-    return False
+    return bool(re.search(r"[:\[\]{},&*#?|<>=!%@`\n\"']", s))
 
 
 def _format_value(value: Any) -> str:
@@ -65,7 +63,7 @@ def _format_value(value: Any) -> str:
         return "true" if value else "false"
     if value is None:
         return "null"
-    if isinstance(value, (int, float)):
+    if isinstance(value, (int, float)):  # noqa: UP038 — keep tuple for Python 3.8 fallback
         return json.dumps(value)
     # dict / list → JSON flow-style (valid YAML too)
     return json.dumps(value, ensure_ascii=False, sort_keys=True)

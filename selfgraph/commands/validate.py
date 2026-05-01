@@ -67,7 +67,7 @@ def _check_field_value(value: Any, spec: FieldSpec) -> str | None:
     if t == "int":
         return None if isinstance(value, int) and not isinstance(value, bool) else "expected int"
     if t == "float":
-        return None if isinstance(value, (int, float)) and not isinstance(value, bool) else "expected float"
+        return None if isinstance(value, (int, float)) and not isinstance(value, bool) else "expected float"  # noqa: UP038 — Python 3.8 fallback
     if t == "bool":
         return None if isinstance(value, bool) else "expected boolean"
     if t == "list[string]":
