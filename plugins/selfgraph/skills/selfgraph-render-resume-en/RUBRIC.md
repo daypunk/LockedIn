@@ -120,6 +120,27 @@ Reduced (user-side).
 
 Otherwise the writer turn gets one revision cycle (max).
 
+## Evidence recall (informational)
+
+In addition to the five dimensions, the reviewer turn computes
+`evidence_recall` (range 0.0 to 1.0). This measures how much of the
+user's relevant vault evidence the draft actually leveraged.
+
+`evidence_recall = cited_entities / max(matched_entities, 1)` where:
+
+- `matched_entities` is the count of vault entities relevant to the
+  persona slice (for us-tech-senior: role, achievement, project; for
+  us-tech-mid: project, achievement, role; for pm-product: project,
+  decision, achievement)
+- `cited_entities` is the count of unique `[[type/slug]]` references
+  in the draft that resolve to relevant entities
+
+This is not a pass/fail gate. The five dimensions decide pass/fail.
+Recall surfaces a separate signal: a draft with a perfect rubric
+score but recall 0.3 may have over-relied on a few prominent entities
+and missed others. Useful for the user to see, and useful for trend
+tracking via `~/.selfgraph/metrics/`.
+
 ## Persona-specific weighting notes
 
 For `pm-product`, treat the metric in dimension 1 as user-outcome

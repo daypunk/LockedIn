@@ -1,18 +1,12 @@
 # selfgraph
 
-**English** · [한국어](README.ko.md)
+**English** | [한국어](README.ko.md)
 
-> **Personal experience knowledge graph for Claude Code. Zero learning curve.**
-> Don't learn schemas. Don't learn commands. Talk to Claude — selfgraph
-> structures your experience and renders any artifact you ask for.
-
-[![Status](https://img.shields.io/badge/status-beta-blue.svg)]()
-[![Version](https://img.shields.io/badge/version-1.0.0--beta-blue.svg)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+selfgraph is a Claude Code plugin that organizes your career experience into a structured knowledge graph. You feed it your projects, roles, achievements, and learning over time. It writes your resumes, your Korean cover letters, and renders an interactive graph from the same source.
 
 ## Install
 
-Inside Claude Code, three commands:
+Inside Claude Code, run three commands.
 
 ```
 /plugin marketplace add daypunk/selfgraph
@@ -20,79 +14,58 @@ Inside Claude Code, three commands:
 /selfgraph:setup
 ```
 
-The third one is a one-time wizard (HUD wiring + a couple of preferences).
-After it restarts your Claude Code window, the bottom of the chat shows
-a status line with your Claude Code usage and vault state, and the
-skill activates on natural language.
+The third command runs a one-time wizard. It wires the heads-up display, picks your default interview language, and chooses where your vault lives.
 
-## Use it
+## How you use it
 
-Just say what you want.
+selfgraph activates when you talk to Claude Code about your experience. There are no commands to memorize.
 
-Capture experience:
+When you want to capture experience:
 
-- *"start organizing my experience"*
-- *"log today's meeting with the design team"*
-- *"absorb this resume.pdf"*
-- *"add what I learned this week from the LLM agents paper"*
+- "start organizing my experience"
+- "log today's meeting with the design team"
+- "absorb this resume.pdf"
+- "add what I learned this week from the LLM agents paper"
 
-Render from what's already there:
+When you want to produce something from what is already captured:
 
-- *"make me a resume targeted at us-tech-senior"*
-- *"write me a Korean cover letter for company X, question 1"*
-- *"summarize last quarter's decisions"*
-- *"show me my graph"*
+- "make me a resume targeted at us-tech-senior"
+- "write me a Korean cover letter for company X, question 1"
+- "summarize last quarter's decisions"
+- "show me my graph"
 
-selfgraph picks the right flow and asks one question at a time when it
-needs more from you. Slash commands (`/selfgraph init`, `/selfgraph
-render resume`, …) work too if you prefer them.
+selfgraph asks one question at a time when it needs more from you, and it stops when it has enough.
 
-## The two stores
+## Why it exists
 
-<!-- diagram-store-ab : leave this block empty for the image to be inserted -->
+Most career tools regenerate every artifact from scratch. The artifact is the point, the source is forgotten. selfgraph treats the source as the point. Your structured experience lives at `~/.selfgraph/` as plain markdown that you own. Resumes, cover letters, and graph visualizations are queries against that memory, not the memory itself.
 
-## Why this exists
+## How it works
 
-selfgraph is a tool for **organizing experience**. Meetings, learning,
-work, side projects, decisions — every domain becomes a folder of
-typed markdown notes you own. Once that structured store exists,
-downstream uses are queries against it: a resume, a cover letter,
-talking points, a quarterly retrospective, an idea derived from past
-work.
+The vault is plain markdown with frontmatter. Every entity becomes one file. There are fifteen entity types covering people, companies, roles, projects, achievements, skills, education, certificates, publications, volunteer work, languages, documents, meetings, decisions, and topics. Relationships between entities are stored as links inside frontmatter, and the schema enforces which type can connect to which.
 
-Most tools regenerate every artifact from scratch. The artifact isn't
-the truth — **the structured experience behind it is**.
+When you ask for a render, selfgraph queries the vault, drafts the output in one Claude turn, and then reviews the draft against a calibrated rubric in a separate Claude turn. The two-turn split is intentional. Self evaluation in the same context inflates scores by about one point.
 
-## Features
+selfgraph runs on your existing Claude Code subscription. It does not require an Anthropic API key, and it does not phone home.
 
-- **Talk to it.** Natural-language activation. No commands required.
-- **One graph, many renders.** English resume, Korean cover letter,
-  interactive graph viz — all from the same vault.
-- **Two-turn writer/reviewer.** Renderers self-evaluate in separate
-  Claude turns against a rubric. JSON score tells you if a draft is
-  good before you submit.
-- **Subscription, not API keys.** Reasoning runs through Claude Code
-  skills. Lowest-viable model tier per task — small for diff sniff,
-  mid for drafting, large only when nuance demands it.
-- **You own everything.** Plain markdown on your disk at
-  `~/.selfgraph/`. Obsidian-compatible. Portable. No phone-home.
+## Skills
 
-## Status
+| Skill | Role |
+|---|---|
+| `selfgraph` | Main skill. Routes natural language requests, runs the Q&A interview that seeds your vault, coordinates ingest and render flows. |
+| `selfgraph-render-jaso` | Korean cover letter renderer with a five-dimension rubric (<!-- ko-example -->두괄식, 구조화, 구체성, 표현, 적합성<!-- /ko-example -->). Cross-source confirmed banned phrase list. Two-turn writer and reviewer with a hard guard for fresh rubric loading. |
+| `selfgraph-render-resume-en` | English resume renderer. Five dimensions: metric density, action verb quality, structural adherence, banned phrase cleanliness, persona fit. Three personas: us-tech-senior, us-tech-mid, pm-product. |
 
-**v1.0 (Beta)**. First public release. Renderers ship with
-research-based calibration (cross-source consensus across 20+ guides
-per domain). Named human domain reviewer engagement is the v1.1
-target. Ontology is v0.2 (15 entity types, 15 edge predicates, JSON
-Resume / Schema.org / FOAF aligned).
+## Documentation
 
-## Advanced
-
-Power-user CLI, statusLine HUD, vault schema, architecture, ontology
-alignment, orchestration plan — see `docs/`:
-
-- `docs/architecture.md` · `docs/ontology-spec.md` · `docs/ontology-mapping.md`
-- `docs/orchestration.md` · `docs/hud.md` · `docs/cli.md`
-- `docs/adr/` — architecture decisions (viz library, …)
+| File | Purpose |
+|---|---|
+| [`docs/architecture.md`](./docs/architecture.md) | How the pieces fit together |
+| [`docs/ontology-spec.md`](./docs/ontology-spec.md) | The frontmatter contract |
+| [`docs/ontology-mapping.md`](./docs/ontology-mapping.md) | Cross-walk to JSON Resume, Schema.org, FOAF |
+| [`docs/orchestration.md`](./docs/orchestration.md) | Render and ingest pipelines |
+| [`docs/cli.md`](./docs/cli.md) | Optional power-user CLI |
+| [`docs/hud.md`](./docs/hud.md) | Status line integration |
 
 ## License
 

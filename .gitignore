@@ -39,6 +39,12 @@ coverage.xml
 # Local working notes / state directory.
 .omc/
 
+# Inter-session working artifacts (handoff, Q&A rounds, scratch).
+handoff.md
+Answer.md
+Round*.md
+round*.md
+
 # Local agent / tool outputs.
 .agent-os/
 

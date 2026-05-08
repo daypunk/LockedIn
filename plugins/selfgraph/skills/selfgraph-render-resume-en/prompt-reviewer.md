@@ -35,10 +35,18 @@ inflates scores by ~1 point.
    unverifiable).
 4. **Persona check** — verify the resume voice matches the persona
    flag (see RUBRIC.md dimension 5 definitions).
-5. **Score each dimension** independently on a 0.0–5.0 scale.
-6. **Decide `revisions_required`** — `true` if any dimension < 4.0
+5. **Evidence recall (informational)** — re-enumerate vault entities
+   relevant to the persona slice. For us-tech-senior this is role,
+   achievement, project; for us-tech-mid it is project, achievement,
+   role; for pm-product it is project, decision, achievement.
+   Compute `matched_entities` (count of relevant entities in vault)
+   and `cited_entities` (unique resolving `[[type/slug]]` in draft).
+   Then `evidence_recall = cited_entities / max(matched_entities, 1)`,
+   range 0.0 to 1.0. This is informational, not a pass/fail gate.
+6. **Score each dimension** independently on a 0.0–5.0 scale.
+7. **Decide `revisions_required`** — `true` if any dimension < 4.0
    OR `banned_phrase_hits` non-empty OR `missing_slugs` non-empty.
-7. **Emit JSON** in the exact schema below. No prose around it.
+8. **Emit JSON** in the exact schema below. No prose around it.
 
 ## Output schema (strict)
 
@@ -49,6 +57,7 @@ inflates scores by ~1 point.
   "structural_adherence": 0.0,
   "banned_phrase_cleanliness": 0.0,
   "persona_fit": 0.0,
+  "evidence_recall": 0.0,
   "notes": [
     "metric_density: <one short sentence on why this score>",
     "action_verb_quality: <one short sentence>",
@@ -70,7 +79,9 @@ inflates scores by ~1 point.
   `["responsible for|... was responsible for production deploys ..."]`.
 - `missing_slugs` lists `[[type/slug]]` references that do not
   resolve in the vault.
-- `revisions_required` follows the gate rules in step 6.
+- `evidence_recall` is informational (range 0.0 to 1.0). Not a gate.
+  See `RUBRIC.md` "Evidence recall (informational)" for definition.
+- `revisions_required` follows the gate rules in step 7.
 
 ## Revision feedback
 

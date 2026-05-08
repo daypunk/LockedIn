@@ -16,11 +16,10 @@ description: |
 
 # render-resume-en
 
-Status: **v1.0** — research-based calibration; ships with full rubric,
-writer/reviewer prompts, and banned-phrase regex list. Dimension
+Research-based calibration. Ships with full rubric, writer and
+reviewer prompts, and a banned-phrase regex list. Dimension
 definitions derived from cross-source consensus across 20+ US tech
-resume guides (see `research-notes.md`). Named human domain reviewer
-recommended for v1.1.
+resume guides. See `research-notes.md` for citations.
 
 ## Use this when
 

@@ -15,10 +15,11 @@ description: |
 
 # render-jaso
 
-Status: **v1.0 (Beta)** — research-based calibration. RUBRIC.md (5
-dimensions × score bands), prompt-writer.md, prompt-reviewer.md, and
+Research-based calibration. RUBRIC.md ships with five dimensions and
+score bands. prompt-writer.md, prompt-reviewer.md, and
 banned_phrases.json (28 cross-source-confirmed entries) all ship.
-Named human domain reviewer awaited for v1.1 (see `reviewers.md`).
+Named human domain reviewer engagement is in progress. See
+`reviewers.md` for the engagement format.
 
 ## Use this when
 

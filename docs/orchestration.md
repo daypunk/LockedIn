@@ -111,14 +111,14 @@ respect the cheat sheet in `selfgraph/skill/selfgraph/TOOLS.md`. The
 dispatch is *suggested* by SKILL.md instructions, not enforced by the
 skill — Claude Code chooses based on its own routing.
 
-## Sequencing for v0.2 → v0.3
+## Sequencing
 
 | Version | Flow | Orchestration depth |
 | --- | --- | --- |
-| v0.2 (now) | render | writer → reviewer (2 turns) — already shipped |
-| v0.3 | render | full 5-step pipeline above |
-| v0.3 | bulk ingest | dispatcher + parallel parsers |
-| v0.4 | graph curator | first quarterly run |
+| v1.0 (now) | render | writer and reviewer two turns, already shipped |
+| v1.2 | render | full 5-step pipeline above |
+| v1.2 | bulk ingest | dispatcher and parallel parsers |
+| v1.3 | graph curator | first quarterly run |
 
 Each step is shipped as a behavior change in the skill files (more
 explicit pipeline instructions in SKILL.md / AGENTS.md). The CLI does

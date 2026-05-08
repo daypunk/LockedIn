@@ -1,7 +1,7 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin.json",
   "name": "selfgraph",
-  "description": "Personal experience knowledge graph for Claude Code. Build the graph by talking; render resumes, cover letters, and an interactive graph viz from the same vault. v1.0 (Beta).",
+  "description": "Personal experience knowledge graph for Claude Code. Build the graph by talking; render resumes, cover letters, and an interactive graph viz from the same vault.",
   "version": "1.0.0",
   "author": {
     "name": "daypunk",

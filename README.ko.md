@@ -1,18 +1,12 @@
 # selfgraph
 
-[English](README.md) · **한국어**
+[English](README.md) | **한국어**
 
-> **Claude Code 위에서 동작하는 개인 경험 지식 그래프. Zero learning curve.**
-> 스키마 배울 필요 없음. 커맨드 외울 필요 없음. Claude에게 말 걸면
-> selfgraph가 경험을 구조화하고 원하는 산출물을 만든다.
-
-[![Status](https://img.shields.io/badge/status-beta-blue.svg)]()
-[![Version](https://img.shields.io/badge/version-1.0.0--beta-blue.svg)]()
-[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](./LICENSE)
+selfgraph는 Claude Code 안에서 동작하는 플러그인입니다. 사용자의 경력 경험을 구조화된 지식 그래프로 정리하고, 그 그래프를 바탕으로 영문 이력서, 한국어 자소서, 인터랙티브 그래프 뷰를 만듭니다. 시간이 지날수록 그래프가 자라며, 산출물은 항상 그 그래프에 대한 질의로 만들어집니다.
 
 ## 설치
 
-Claude Code 안에서 세 줄:
+Claude Code 안에서 다음 세 명령을 차례로 실행합니다.
 
 ```
 /plugin marketplace add daypunk/selfgraph
@@ -20,74 +14,58 @@ Claude Code 안에서 세 줄:
 /selfgraph:setup
 ```
 
-세 번째는 일회성 wizard (HUD 연결 + 환경설정 두 가지). wizard 끝나고
-Claude Code를 재시작하면 채팅 하단에 Claude Code 사용량 + vault 상태
-한 줄이 노출되고, 스킬은 자연어에 자동으로 활성화된다.
+세 번째 명령은 한 번만 실행하는 위자드입니다. 채팅 하단의 상태 표시줄을 연결하고, 기본 인터뷰 언어를 선택하고, vault 위치를 정합니다.
 
-## 쓰기
+## 사용법
 
-원하는 걸 말하면 된다.
+selfgraph는 Claude Code에서 자신의 경험에 대해 자연어로 이야기할 때 자동으로 활성화됩니다. 외워야 할 명령은 없습니다.
 
-경험을 기록:
+경험을 기록하고 싶을 때 쓰는 표현:
 
-- *"내 경험 정리 시작"*
-- *"오늘 디자인팀 미팅 정리해줘"*
-- *"이 PDF 이력서 흡수해줘"*
-- *"이번 주 LLM 에이전트 논문 학습한 내용 추가"*
+- "내 경험 정리 시작"
+- "오늘 디자인팀 미팅 정리해줘"
+- "이 이력서 PDF 흡수해줘"
+- "이번 주 LLM 에이전트 논문에서 배운 거 추가"
 
-이미 쌓인 것에서 뽑기:
+이미 쌓인 vault에서 산출물을 만들고 싶을 때 쓰는 표현:
 
-- *"us-tech-senior 타겟으로 영문 이력서 만들어줘"*
-- *"X 회사 자소서 1번 문항 써줘"*
-- *"지난 분기 의사결정 요약해줘"*
-- *"내 그래프 보여줘"*
+- "us-tech-senior 타겟으로 영문 이력서 만들어줘"
+- "X 회사 자소서 1번 문항 써줘"
+- "지난 분기 의사결정 요약해줘"
+- "내 그래프 보여줘"
 
-selfgraph가 알아서 적합한 흐름을 골라 실행하고, 필요할 때 한 번에 한
-질문씩만 물어본다. 슬래시 커맨드(`/selfgraph init`, `/selfgraph render
-resume` 등)도 동작한다.
+selfgraph는 추가 정보가 필요할 때 한 번에 한 질문씩만 묻고, 충분해지면 멈춥니다.
 
-## 두 개의 저장소
+## 왜 만들었나
 
-<!-- diagram-store-ab : leave this block empty for the image to be inserted -->
+대부분의 커리어 도구는 산출물을 매번 처음부터 다시 만듭니다. 산출물이 목적이고, 그 기반은 잊힙니다. selfgraph는 그 순서를 뒤집습니다. 구조화된 경험은 사용자 디스크의 `~/.selfgraph/`에 마크다운 파일로 쌓이며, 사용자가 직접 소유하고 다른 도구로 가져갈 수 있습니다. 이력서, 자소서, 그래프 시각화는 그 기억에 대한 질의이지 기억 자체가 아닙니다.
 
-## 왜 이걸 만드나
+## 작동 방식
 
-selfgraph는 **경험을 정리하는 도구**다. 회의·학습·일·사이드 프로젝트·
-의사결정 — 모든 도메인이 본인이 소유하는 typed 마크다운 노트 폴더가
-된다. 그 구조화된 저장소가 생기면 후속 작업은 그것에 대한 쿼리에
-불과하다: 이력서, 자소서, 면접 토킹포인트, 분기 회고, 과거 작업에서
-유도한 새 아이디어.
+Vault는 frontmatter가 붙은 평범한 마크다운 파일들입니다. 모든 entity가 하나의 파일이 됩니다. Entity 타입은 15개입니다. person, company, role, project, achievement, skill, education, certificate, publication, volunteer, language, document, meeting, decision, topic. Entity 사이의 관계는 frontmatter 안의 link로 저장되며, schema가 어떤 타입에서 어떤 타입으로 연결될 수 있는지 검증합니다.
 
-대부분 도구는 매번 산출물을 처음부터 다시 만든다. 진짜 자료는 글이
-아니라 **글 뒤의 구조화된 경험**이다.
+렌더 요청이 들어오면 selfgraph는 vault를 조회하고, 한 Claude turn에서 초안을 작성한 뒤, 별도의 Claude turn에서 calibrated 평가표 기준으로 초안을 검토합니다. 두 turn을 분리하는 이유는, 같은 컨텍스트에서 자기 평가를 하면 점수가 약 1점 부풀려진다는 사실 때문입니다.
 
-## Features
+selfgraph는 사용자가 이미 가진 Claude Code 구독으로 동작합니다. Anthropic API key가 필요하지 않으며, 어떤 데이터도 외부로 전송하지 않습니다.
 
-- **말 걸면 동작.** 자연어 활성화. 커맨드 외울 필요 없다.
-- **하나의 그래프, 여러 렌더.** 영문 이력서, 한국 자소서, 인터랙티브
-  그래프 viz — 모두 같은 vault에서.
-- **Two-turn writer / reviewer.** 렌더러가 분리된 Claude turn에서 rubric에
-  맞춰 자기 평가. JSON 점수로 제출 전에 괜찮은지 안다.
-- **구독으로 동작, API key 불필요.** 추론은 Claude Code 스킬을 통해. 작업
-  종류에 따라 가장 작은 모델 tier 자동 선택.
-- **모든 것을 본인이 소유.** `~/.selfgraph/`의 평범한 마크다운. Obsidian
-  호환, 이식 가능, 외부 송신 없음.
+## 스킬
 
-## 상태
+| 스킬 | 역할 |
+|---|---|
+| `selfgraph` | 메인 스킬. 자연어 요청을 적절한 하위 흐름으로 라우팅하고, vault를 채우는 Q&A 인터뷰를 주도하며, ingest와 render 흐름을 조율합니다. |
+| `selfgraph-render-jaso` | 한국어 자소서 렌더러. 다섯 차원으로 평가합니다. 두괄식, 구조화, 구체성, 표현, 적합성. 여러 출처에서 교차 확인된 진부 표현 사전을 갖고 있고, 작성 turn과 검토 turn을 분리해 평가표를 새로 로드합니다. |
+| `selfgraph-render-resume-en` | 영문 이력서 렌더러. 다섯 차원으로 평가합니다. metric density, action verb quality, structural adherence, banned phrase cleanliness, persona fit. 세 가지 페르소나를 지원합니다. us-tech-senior, us-tech-mid, pm-product. |
 
-**v1.0 (Beta)**. 첫 공개 릴리스. 렌더러는 도메인당 20+ 가이드의
-cross-source 합의 신호로 research-based calibration 적용. 실명 도메인
-리뷰어 engagement은 v1.1 타겟. Ontology는 v0.2 (15 entity types, 15
-edge predicates, JSON Resume / Schema.org / FOAF 정렬).
+## 문서
 
-## Advanced
-
-power-user CLI, statusLine HUD, vault 스키마, 아키텍처, ontology 정렬,
-오케스트레이션 — `docs/` 참조:
-
-- `docs/architecture.md` · `docs/ontology-spec.md` · `docs/ontology-mapping.md`
-- `docs/orchestration.md` · `docs/hud.md` · `docs/cli.md`
-- `docs/adr/` — 아키텍처 의사결정 기록
+| 파일 | 내용 |
+|---|---|
+| [`docs/architecture.md`](./docs/architecture.md) | 구성 요소가 어떻게 맞물리는지 |
+| [`docs/ontology-spec.md`](./docs/ontology-spec.md) | Frontmatter 계약 |
+| [`docs/ontology-mapping.md`](./docs/ontology-mapping.md) | JSON Resume, Schema.org, FOAF와의 매핑 |
+| [`docs/orchestration.md`](./docs/orchestration.md) | 렌더와 ingest 파이프라인 |
+| [`docs/cli.md`](./docs/cli.md) | 선택적인 파워 유저 CLI |
+| [`docs/hud.md`](./docs/hud.md) | 상태 표시줄 연동 |
 
 ## License
 

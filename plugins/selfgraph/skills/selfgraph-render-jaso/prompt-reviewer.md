@@ -29,9 +29,17 @@ scores by ~1 point.
 3. **Slug verification** — for every `[[type/slug]]` reference in the
    draft, confirm the slug exists in the vault. Missing slugs reduce
    the 구체성 dimension.
-4. **Score each dimension** independently on a 0.0–5.0 scale.
-5. **Decide `revisions_required`** — `true` if any dimension < 4.0.
-6. **Emit JSON** in the exact schema below. No prose around it.
+4. **Evidence recall (informational)** — re-enumerate vault entities
+   relevant to the prompt slot. For 자소서, this is person, role,
+   project, skill, and company entities connected to the user.
+   Compute `matched_entities` (count of relevant entities in vault)
+   and `cited_entities` (unique resolving `[[type/slug]]` in draft).
+   Then `evidence_recall = cited_entities / max(matched_entities, 1)`,
+   range 0.0 to 1.0. This is informational, not a pass/fail gate.
+5. **Score each dimension** independently on a 0.0–5.0 scale.
+6. **Decide `revisions_required`** — `true` if any dimension < 4.0
+   OR `banned_phrase_hits` non-empty OR `missing_slugs` non-empty.
+7. **Emit JSON** in the exact schema below. No prose around it.
 
 ## Output schema (strict)
 
@@ -42,6 +50,7 @@ scores by ~1 point.
   "구체성": 0.0,
   "표현": 0.0,
   "적합성": 0.0,
+  "evidence_recall": 0.0,
   "notes": [
     "두괄식: <one short sentence on why this score>",
     "구조화: <one short sentence on why this score>",
@@ -61,6 +70,8 @@ scores by ~1 point.
   sentence: `["열정적으로|... 열정적으로 임했습니다 ..."]` (pipe-separated).
 - `missing_slugs` lists `[[type/slug]]` references that do not resolve
   in the vault.
+- `evidence_recall` is informational (range 0.0 to 1.0). Not a gate.
+  See `RUBRIC.md` "Evidence recall (informational)" for definition.
 - `revisions_required` is `true` if any dimension < 4.0 OR
   `banned_phrase_hits` non-empty OR `missing_slugs` non-empty.
 
