@@ -8,7 +8,7 @@
 
 *Before LinkedIn, get Locked In.*
 
-Drop in a resume PDF or answer a handful of questions to structure your experience once. After that, you just ask. English resumes, Korean cover letters, interview answers, and new project ideas all come from the same source.
+Drop a resume into Claude Code or answer a handful of questions to structure your experience once. After that, you just ask. English résumés, Korean cover letters, interview answers, and new project ideas all come out of calibrated skills.
 
 ## Install
 
