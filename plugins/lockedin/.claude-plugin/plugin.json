@@ -2,7 +2,7 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin.json",
   "name": "lockedin",
   "description": "Personal experience knowledge graph for Claude Code. Build the graph by talking. Renders English resumes and Korean cover letters from the same vault.",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "author": {
     "name": "daypunk",
     "email": "daehee216@naver.com"

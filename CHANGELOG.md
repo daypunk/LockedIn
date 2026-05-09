@@ -1,12 +1,14 @@
 # Changelog
 
-## [1.1.0] — in progress
+## [1.1.0] — 2026-05-09
 
 Rebrand to LockedIn plus targeted improvements based on first-user
 testing of 1.0. Documentation, identifiers, and vault path all changed.
-The render-graph artifact was retired. The HUD started showing real
-Anthropic OAuth utilization instead of a heuristic. Renderer outputs
-got slug resolution and a logical-flow guard.
+The render-graph artifact was retired. The HUD now shows real
+Anthropic OAuth utilization with reset countdowns instead of a
+heuristic. Renderer outputs gained slug resolution and a
+logical-flow guard. Two new renderer skills landed: render-interview
+and render-ideas.
 
 ### Rebrand
 

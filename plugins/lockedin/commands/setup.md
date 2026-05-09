@@ -80,7 +80,7 @@ Merge into `lockedin/config.json`:
 ```json
 {
   "setup_completed": "<ISO-8601 timestamp>",
-  "setup_version": "1.0.0"
+  "setup_version": "1.1.0"
 }
 ```
 

@@ -45,6 +45,14 @@ LockedIn asks one question at a time when it needs more from you, and it stops w
 
 Most career tools regenerate every artifact from scratch. The artifact is the point, the source evaporates. LockedIn treats the source as the point. Your structured experience accumulates at `~/Documents/LockedIn/` as plain markdown files that you own and can carry to other tools. Resumes, cover letters, and meeting notes are artifacts of that memory, not the memory itself.
 
+## Features
+
+- **Natural-language activation.** No commands to memorize. Talk to Claude Code the way you already do and LockedIn picks up the thread.
+- **One vault, four artifacts.** English resumes, Korean cover letters, interview answers, and new project ideas all come from the same experience source.
+- **Quality guard built in.** Drafting and scoring run as two separate Claude turns. Self-evaluation in one turn inflates scores by about a point; the split removes the inflation. Every artifact comes with a JSON rubric score so you see quality before you submit.
+- **Subscription, not API keys.** All reasoning runs on your existing Claude Code subscription. No extra keys, no extra billing.
+- **You own everything.** The vault is plain markdown at `~/Documents/LockedIn/`. Obsidian-compatible, portable to other tools, no data leaves your machine.
+
 ## Architecture at a glance
 
 <p align="center">
@@ -70,8 +78,8 @@ LockedIn runs on your existing Claude Code subscription. It does not require an 
 | `lockedin` | Main skill. Routes natural language requests, runs the Q&A interview that seeds your vault, coordinates ingest and render flows. |
 | `lockedin-render-jaso` | Korean cover letter renderer with a five-dimension rubric (<!-- ko-example -->두괄식, 구조화, 구체성, 표현, 적합성<!-- /ko-example -->). Cross-source confirmed banned phrase list. Two-turn writer and reviewer with a hard guard for fresh rubric loading. |
 | `lockedin-render-resume-en` | English resume renderer. Five dimensions: metric density, action verb quality, structural adherence, banned phrase cleanliness, persona fit. Built-in personas are us-tech-senior, us-tech-mid, and pm-product, and targeting other roles also works. The five dimensions apply regardless of target. The persona fit dimension is calibrated against the built-in three, so scores may be conservative for outside-set roles. |
-| `lockedin-render-interview` | Interview answer renderer. STAR or PAR shape with one experience per paragraph. Five dimensions: clarity, evidence density, persona fit, conciseness, tone. v1.1 ships the prompts and rubric scaffold; cross-source calibration with a fixture corpus is a v1.2 target. |
-| `lockedin-render-ideas` | Surfaces 3 to 5 next-project or career-move ideas grounded in your vault. Each idea is one paragraph: pitch sentence plus rationale that cites real entities. Five dimensions: feasibility, novelty, evidence ground, scope match, motivation alignment. v1.1 ships the prompts and rubric scaffold; calibration is a v1.2 target. |
+| `lockedin-render-interview` | Interview answer renderer. STAR or PAR shape with one experience per paragraph and explicit transitions between paragraphs. Five dimensions: clarity, evidence density, persona fit, conciseness, tone. |
+| `lockedin-render-ideas` | Surfaces 3 to 5 next-project or career-move ideas grounded in your vault. Each idea is one paragraph: pitch sentence plus rationale that cites real entities. Five dimensions: feasibility, novelty, evidence ground, scope match, motivation alignment. |
 
 ## Documentation
 
