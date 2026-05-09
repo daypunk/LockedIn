@@ -63,7 +63,7 @@ def _walk(path: Path) -> list[Path]:
     ]
 
 
-def ingest_dry_run(path_arg: str, *, domain: str = "career") -> int:
+def ingest_dry_run(path_arg: str, *, domain: str = "experience") -> int:
     path = Path(path_arg).expanduser()
     if not path.exists():
         print(f"path not found: {path}")

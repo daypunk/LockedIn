@@ -16,7 +16,7 @@ Every entity is one markdown file at:
 ```
 
 `<vault>` defaults to `~/Documents/LockedIn/`. `<domain>` matches the ontology
-template (`career`, `meeting`, `project`, `learning`, …). `<slug>` is a
+template (`experience`, `meeting`, `project`, `learning`, …). `<slug>` is a
 URL-safe lowercase identifier derived from the note's `title:` field.
 
 ## Frontmatter contract

@@ -161,13 +161,13 @@ def _render(vault: Path, color: bool) -> str:
         )
         parts.append(usage)
 
-    # 3. vault state
+    # 3. experience state
     if vault.exists():
         nodes, edges, slugs, targets = _walk_vault(vault)
         if nodes == 0:
-            parts.append(_ansi("vault empty", C_DIM, color))
+            parts.append(_ansi("experience empty", C_DIM, color))
         else:
-            label = _ansi("vault:", C_DIM, color)
+            label = _ansi("experience:", C_DIM, color)
             counts = _ansi(f"{nodes}n · {edges}e", C_CYAN, color)
             dangling = len(targets - slugs)
             if dangling:

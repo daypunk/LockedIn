@@ -11,9 +11,9 @@ from __future__ import annotations
 import os
 from pathlib import Path
 
-DEFAULT_VAULT_DIR = Path.home() / ".lockedin"
+DEFAULT_VAULT_DIR = Path.home() / "Documents" / "LockedIn"
 DEFAULT_OUTPUTS_DIRNAME = "outputs"
-DEFAULT_TEMPLATE = "career"
+DEFAULT_TEMPLATE = "experience"
 ENV_VAULT = "LOCKEDIN_VAULT"
 ENV_ALLOW_API_KEY = "LOCKEDIN_ALLOW_API_KEY"
 

@@ -80,8 +80,8 @@ notes round-trip, validate). CI enforces this via the parity test.
 ## The vault is the contract
 
 ```
-~/Documents/LockedIn/                       ← user-owned, Obsidian-compatible
-├── career/                         ← default template (vault folder)
+~/Documents/LockedIn/                ← user-owned, Obsidian-compatible
+├── experience/                     ← default template (vault folder)
 │   ├── person/<slug>.md            ← entity notes, frontmatter has type+links
 │   ├── company/<slug>.md
 │   ├── role/<slug>.md

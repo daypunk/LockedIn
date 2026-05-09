@@ -16,7 +16,7 @@ from lockedin.storage.notes import read_entity
 
 SAMPLE_FIXTURE = """\
 schema_version: 1
-template: career
+template: experience
 entities:
   - type: person
     title: Sample User
@@ -41,11 +41,11 @@ def test_init_from_fixture_writes_entities(tmp_path: Path, monkeypatch, capsys) 
     assert rc == 0
     out = capsys.readouterr().out
     assert "wrote 2 entities" in out
-    person = read_entity(tmp_path / "career" / "person" / "sample-user.md")
+    person = read_entity(tmp_path / "experience" / "person" / "sample-user.md")
     assert person.title == "Sample User"
     assert person.fields["current_role"] == "PM"
     assert person.links[0]["object"] == "project-a"
-    assert (tmp_path / "career" / "project" / "project-a.md").exists()
+    assert (tmp_path / "experience" / "project" / "project-a.md").exists()
 
 
 def test_init_from_fixture_missing_file(tmp_path: Path, capsys) -> None:
@@ -60,7 +60,7 @@ def test_init_from_fixture_skips_malformed_entries(tmp_path: Path, monkeypatch, 
     monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     fixture = tmp_path / "seed.yaml"
     fixture.write_text(
-        "template: career\n"
+        "template: experience\n"
         "entities:\n"
         "  - type: person\n"
         "    title: OK\n"
@@ -72,7 +72,7 @@ def test_init_from_fixture_skips_malformed_entries(tmp_path: Path, monkeypatch, 
     assert rc == 0  # at least one entity written
     err = capsys.readouterr().err
     assert "skipped" in err
-    assert (tmp_path / "career" / "person" / "ok.md").exists()
+    assert (tmp_path / "experience" / "person" / "ok.md").exists()
 
 
 def test_example_fixture_loads(tmp_path: Path, monkeypatch) -> None:
@@ -86,8 +86,8 @@ def test_example_fixture_loads(tmp_path: Path, monkeypatch) -> None:
     rc = init_from_fixture(str(fixture))
     assert rc == 0
     # at least the canonical entities should exist
-    assert (tmp_path / "career" / "person" / "sample-user.md").exists()
-    assert (tmp_path / "career" / "achievement" / "achievement-payments-uplift.md").exists()
+    assert (tmp_path / "experience" / "person" / "sample-user.md").exists()
+    assert (tmp_path / "experience" / "achievement" / "achievement-payments-uplift.md").exists()
 
 
 # ----- template list/add/remove ----------------------------------------------

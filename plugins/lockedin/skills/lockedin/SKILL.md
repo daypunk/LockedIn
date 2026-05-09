@@ -77,7 +77,7 @@ will not appear until the user wires it.
 
 1. **Init** — `/lockedin init` (or natural language) runs a Q&A
    interview that seeds the vault with the user's first ontology nodes
-   (career template by default).
+   (experience template by default).
 2. **Ingest** — `/lockedin ingest <path>` reads `.pdf` / `.docx` /
    `.md` / `.txt`, emits a typed diff, asks the user about ambiguities
    one at a time, then merges.

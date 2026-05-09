@@ -87,7 +87,7 @@ def _parse_value(text: str) -> Any:
     return s
 
 
-def vault_path_for(vault: Path, entity: Entity, *, domain: str = "career") -> Path:
+def vault_path_for(vault: Path, entity: Entity, *, domain: str = "experience") -> Path:
     """Return the canonical disk path for an entity inside a vault."""
     return vault / domain / entity.type / f"{entity.slug}.md"
 
@@ -110,7 +110,7 @@ def _serialize(entity: Entity) -> str:
     return "\n".join(lines) + "\n" + body
 
 
-def write_entity(vault: Path, entity: Entity, *, domain: str = "career") -> Path:
+def write_entity(vault: Path, entity: Entity, *, domain: str = "experience") -> Path:
     """Write entity to its canonical path inside the vault.
 
     Mutates ``entity.created`` / ``entity.updated`` only when they were

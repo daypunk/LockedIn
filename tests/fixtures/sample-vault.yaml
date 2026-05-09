@@ -3,7 +3,7 @@
 # implemented. Until then, this is a placeholder so AC-3 / AC-1 / AC-1b CI
 # recipes have a known target path.
 schema_version: 1
-template: career
+template: experience
 person:
   name: Sample User
   current_role: PM at Sample Co.

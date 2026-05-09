@@ -81,7 +81,7 @@ def _build_parser() -> argparse.ArgumentParser:
         help="parse documents into the ontology (skill). With --dry-run: deterministic diff.",
     )
     p_ingest.add_argument("path", help="file or directory to ingest")
-    p_ingest.add_argument("--domain", default="career")
+    p_ingest.add_argument("--domain", default="experience")
     p_ingest.add_argument("--dry-run", action="store_true")
 
     p_render = sub.add_parser(

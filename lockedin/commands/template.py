@@ -12,7 +12,7 @@ from pathlib import Path
 
 from lockedin.config import resolve_vault
 
-BUILTIN_TEMPLATES = ("career", "meeting", "project", "learning")
+BUILTIN_TEMPLATES = ("experience", "meeting", "project", "learning")
 RESERVED_DIRS = {"outputs"}
 
 

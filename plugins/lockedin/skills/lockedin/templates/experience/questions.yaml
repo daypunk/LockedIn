@@ -36,7 +36,7 @@
 # follow-ups.
 
 version: 1
-template: career
+template: experience
 lang_default: en
 
 sections:

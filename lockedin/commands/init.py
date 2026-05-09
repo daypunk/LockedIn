@@ -77,7 +77,7 @@ def init_from_fixture(
     Fixture shape::
 
         schema_version: 1
-        template: career
+        template: experience
         entities:
           - type: person
             title: Sample User
@@ -112,7 +112,7 @@ def init_from_fixture(
         )
         return 1
 
-    template = str(data.get("template") or "career")
+    template = str(data.get("template") or "experience")
     entities_raw = data.get("entities") or []
     if not isinstance(entities_raw, list):
         print("fixture 'entities' must be a list", file=sys.stderr)

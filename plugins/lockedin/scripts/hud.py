@@ -2,14 +2,14 @@
 """lockedin HUD — self-contained statusLine emitter.
 
 Output (one line, exit 0):
-    lockedin X.Y.Z │ 5h:NN% · wk:NN% │ vault: Nn · Me
+    lockedin X.Y.Z │ 5h:NN% · wk:NN% │ experience: Nn · Me
 
 Order, left to right:
     1. service name + version (cyan)
     2. Claude Code usage in the rolling 5-hour and 7-day windows (color
        grades green→yellow→red as % rises). Counted as user turns from
        Claude's session JSONL files at ~/.claude/projects/*/*.jsonl.
-    3. vault state — node count, edge count, dangling references.
+    3. experience state — node count, edge count, dangling references.
 
 Defaults assume rough Pro-tier thresholds (50 user turns / 5h, 350 /
 week). Override with LOCKEDIN_HUD_5H_LIMIT and LOCKEDIN_HUD_WK_LIMIT.
@@ -213,14 +213,14 @@ def _render() -> str:
         )
         parts.append(usage)
 
-    # 3. vault state
+    # 3. experience state
     vault = _resolve_vault()
     if vault.exists():
         nodes, edges, slugs, targets = _walk_vault(vault)
         if nodes == 0:
-            parts.append(_ansi("vault empty", C_DIM, color))
+            parts.append(_ansi("experience empty", C_DIM, color))
         else:
-            label = _ansi("vault:", C_DIM, color)
+            label = _ansi("experience:", C_DIM, color)
             counts = _ansi(f"{nodes}n · {edges}e", C_CYAN, color)
             dangling = len(targets - slugs)
             if dangling:

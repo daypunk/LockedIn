@@ -34,7 +34,7 @@ def test_hud_empty_vault_says_empty(tmp_path: Path, monkeypatch, capsys) -> None
     rc = hud(["--no-color"])
     assert rc == 0
     out = capsys.readouterr().out.strip()
-    assert "vault empty" in out
+    assert "experience empty" in out
 
 
 def test_hud_reports_node_and_edge_counts(tmp_path: Path, monkeypatch, capsys) -> None:

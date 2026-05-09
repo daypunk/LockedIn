@@ -7,7 +7,7 @@
 # Schema reference: docs/ontology-spec.md and docs/ontology-mapping.md.
 
 schema_version: 2
-template: career
+template: experience
 
 entities:
   - type: person

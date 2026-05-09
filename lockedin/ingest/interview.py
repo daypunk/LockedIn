@@ -142,7 +142,7 @@ def _ask(prompt: str) -> str:
 
 
 def run(
-    template: str = "career",
+    template: str = "experience",
     non_interactive: bool = False,
     lang: str = "en",
 ) -> list[Entity]:
