@@ -207,17 +207,20 @@ def _fetch_usage(token: str) -> dict[str, Any] | None:
         return None
 
 
-def _normalize_payload(raw: dict[str, Any]) -> dict[str, float] | None:
-    """Pick out the two utilization values we render. Range 0.0 to 1.0.
+def _normalize_payload(raw: dict[str, Any]) -> dict[str, Any] | None:
+    """Pick out the two utilization values and their reset timestamps.
 
-    The API returns either floats (0.27) or integer percentages (27).
-    We coerce both to a 0-1 float so the HUD's color thresholds work
-    consistently. If neither key is present, return None.
+    The API returns either floats (0.27) or integer percentages (27)
+    for utilization. We coerce both to a 0-1 float so the HUD's color
+    thresholds work consistently. The reset timestamp comes through as
+    an ISO-8601 string in the ``resets_at`` field; we keep it as a
+    string and let the renderer format it. If neither window is
+    present, return None.
     """
     if not isinstance(raw, dict):
         return None
 
-    def _pull(value: Any) -> float | None:
+    def _pull_util(value: Any) -> float | None:
         if isinstance(value, dict):
             value = value.get("utilization")
         if isinstance(value, (int, float)):  # noqa: UP038 — Python 3.8 fallback
@@ -225,26 +228,43 @@ def _normalize_payload(raw: dict[str, Any]) -> dict[str, float] | None:
             return v / 100 if v > 1.5 else v
         return None
 
-    five = _pull(raw.get("five_hour")) if "five_hour" in raw else _pull(
-        raw.get("fiveHour")
-    )
-    seven = _pull(raw.get("seven_day")) if "seven_day" in raw else _pull(
-        raw.get("sevenDay")
-    )
+    def _pull_reset(value: Any) -> str | None:
+        if isinstance(value, dict):
+            r = value.get("resets_at") or value.get("reset_time")
+            if isinstance(r, str) and r.strip():
+                return r.strip()
+        return None
+
+    five_raw = raw.get("five_hour") if "five_hour" in raw else raw.get("fiveHour")
+    seven_raw = raw.get("seven_day") if "seven_day" in raw else raw.get("sevenDay")
+    five = _pull_util(five_raw)
+    seven = _pull_util(seven_raw)
     if five is None and seven is None:
         return None
     return {
         "five_hour": five if five is not None else 0.0,
         "seven_day": seven if seven is not None else 0.0,
+        "five_hour_resets_at": _pull_reset(five_raw),
+        "seven_day_resets_at": _pull_reset(seven_raw),
     }
 
 
-def get_usage() -> dict[str, float] | None:
-    """Return ``{"five_hour": 0.x, "seven_day": 0.x}`` or ``None``.
+def get_usage() -> dict[str, Any] | None:
+    """Return the parsed usage payload or ``None``.
 
-    None means "OAuth path unavailable, the HUD should fall back to
-    vault-only display". The function never raises and never crashes
-    the statusLine.
+    Shape::
+
+        {
+            "five_hour": 0.45,
+            "seven_day": 0.33,
+            "five_hour_resets_at": "2026-05-09T18:30:00Z",
+            "seven_day_resets_at": "2026-05-13T13:59:59Z",
+        }
+
+    Reset fields are optional and may be ``None``. ``None`` for the
+    whole return value means OAuth path is unavailable; the HUD then
+    falls back to its vault-only display. The function never raises
+    and never crashes the statusLine.
     """
     cached = _read_cache()
     if cached is not None:

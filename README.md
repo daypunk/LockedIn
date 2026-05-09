@@ -59,7 +59,7 @@ Your experiences are stored as plain markdown files with frontmatter. Every enti
 
 When you ask for a render, LockedIn queries the vault, drafts the output in one Claude turn, and then reviews the draft against a calibrated rubric in a separate Claude turn. The split prevents self-evaluation bias. When the same Claude call both writes and scores, it tends to be lenient with itself by about one point. The reviewer turn runs separately and reloads the rubric from scratch, which removes the inflation.
 
-A master view file `EXPERIENCE.md` is automatically maintained at your vault root. It lists every entity grouped by type so you can scan your whole vault at a glance without navigating per-type folders.
+A master file `EXPERIENCE.md` is automatically maintained at the vault root (`~/Documents/LockedIn/`). Your entries live in per-type subfolders (person, company, role, project, and so on); instead of opening each folder, you can open this one file to scan the whole vault at a glance. If you edited markdown by hand and the master view feels stale, `lockedin refresh` rebuilds it.
 
 LockedIn runs on your existing Claude Code subscription. It does not require an Anthropic API key, and it does not phone home.
 
@@ -70,6 +70,8 @@ LockedIn runs on your existing Claude Code subscription. It does not require an 
 | `lockedin` | Main skill. Routes natural language requests, runs the Q&A interview that seeds your vault, coordinates ingest and render flows. |
 | `lockedin-render-jaso` | Korean cover letter renderer with a five-dimension rubric (<!-- ko-example -->두괄식, 구조화, 구체성, 표현, 적합성<!-- /ko-example -->). Cross-source confirmed banned phrase list. Two-turn writer and reviewer with a hard guard for fresh rubric loading. |
 | `lockedin-render-resume-en` | English resume renderer. Five dimensions: metric density, action verb quality, structural adherence, banned phrase cleanliness, persona fit. Built-in personas are us-tech-senior, us-tech-mid, and pm-product, and targeting other roles also works. The five dimensions apply regardless of target. The persona fit dimension is calibrated against the built-in three, so scores may be conservative for outside-set roles. |
+| `lockedin-render-interview` | Interview answer renderer. STAR or PAR shape with one experience per paragraph. Five dimensions: clarity, evidence density, persona fit, conciseness, tone. v1.1 ships the prompts and rubric scaffold; cross-source calibration with a fixture corpus is a v1.2 target. |
+| `lockedin-render-ideas` | Surfaces 3 to 5 next-project or career-move ideas grounded in your vault. Each idea is one paragraph: pitch sentence plus rationale that cites real entities. Five dimensions: feasibility, novelty, evidence ground, scope match, motivation alignment. v1.1 ships the prompts and rubric scaffold; calibration is a v1.2 target. |
 
 ## Documentation
 

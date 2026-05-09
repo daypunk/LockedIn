@@ -30,19 +30,42 @@ def isolated_creds(tmp_path, monkeypatch):
 def test_normalize_payload_handles_floats():
     raw = {"five_hour": {"utilization": 0.27}, "seven_day": {"utilization": 0.42}}
     out = ou._normalize_payload(raw)
-    assert out == {"five_hour": 0.27, "seven_day": 0.42}
+    assert out["five_hour"] == 0.27
+    assert out["seven_day"] == 0.42
+    # No reset timestamps in this raw input, so the corresponding fields
+    # are present but None.
+    assert out["five_hour_resets_at"] is None
+    assert out["seven_day_resets_at"] is None
 
 
 def test_normalize_payload_handles_percentages():
     raw = {"five_hour": {"utilization": 27}, "seven_day": {"utilization": 42}}
     out = ou._normalize_payload(raw)
-    assert out == {"five_hour": 0.27, "seven_day": 0.42}
+    assert out["five_hour"] == 0.27
+    assert out["seven_day"] == 0.42
 
 
 def test_normalize_payload_handles_camelcase():
     raw = {"fiveHour": {"utilization": 0.5}, "sevenDay": {"utilization": 0.6}}
     out = ou._normalize_payload(raw)
-    assert out == {"five_hour": 0.5, "seven_day": 0.6}
+    assert out["five_hour"] == 0.5
+    assert out["seven_day"] == 0.6
+
+
+def test_normalize_payload_extracts_reset_timestamps():
+    raw = {
+        "five_hour": {
+            "utilization": 0.45,
+            "resets_at": "2026-05-09T18:30:00Z",
+        },
+        "seven_day": {
+            "utilization": 0.33,
+            "resets_at": "2026-05-13T13:59:59Z",
+        },
+    }
+    out = ou._normalize_payload(raw)
+    assert out["five_hour_resets_at"] == "2026-05-09T18:30:00Z"
+    assert out["seven_day_resets_at"] == "2026-05-13T13:59:59Z"
 
 
 def test_normalize_payload_returns_none_when_keys_missing():
@@ -106,7 +129,8 @@ def test_get_usage_succeeds_when_credentials_and_fetch_work(
         lambda token: {"five_hour": {"utilization": 0.18}, "seven_day": {"utilization": 0.24}},
     )
     out = ou.get_usage()
-    assert out == {"five_hour": 0.18, "seven_day": 0.24}
+    assert out["five_hour"] == 0.18
+    assert out["seven_day"] == 0.24
     # Cache should have been written.
     assert (isolated_cache / "usage.json").exists()
 

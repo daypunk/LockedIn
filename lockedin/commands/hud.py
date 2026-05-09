@@ -44,6 +44,40 @@ C_DIM = "2"
 C_GREEN = "32"
 C_YELLOW = "33"
 C_RED = "31"
+C_ORANGE = "38;5;208"  # 256-color orange for the brand version label
+
+
+def _format_reset_delta(iso_string: str | None) -> str:
+    """Turn an ISO-8601 reset timestamp into a compact countdown.
+
+    Examples: "3h12m" for 3 hours 12 minutes from now; "2d4h" for 2
+    days 4 hours; "<1m" for sub-minute. Returns empty string when the
+    input is None or unparseable so the renderer can simply skip the
+    suffix.
+    """
+    if not iso_string:
+        return ""
+    try:
+        ts = datetime.fromisoformat(iso_string.replace("Z", "+00:00"))
+        if ts.tzinfo is None:
+            ts = ts.replace(tzinfo=timezone.utc)
+        now = datetime.now(timezone.utc)
+        delta = ts - now
+        total_seconds = int(delta.total_seconds())
+        if total_seconds <= 0:
+            return "now"
+        if total_seconds < 60:
+            return "<1m"
+        minutes = total_seconds // 60
+        hours = minutes // 60
+        days = hours // 24
+        if days >= 1:
+            return f"{days}d{hours - days * 24}h"
+        if hours >= 1:
+            return f"{hours}h{minutes - hours * 60}m"
+        return f"{minutes}m"
+    except (ValueError, TypeError):
+        return ""
 
 
 def _is_vault_note(path: Path) -> bool:
@@ -149,17 +183,23 @@ def _render(vault: Path, color: bool) -> str:
     parts: list[str] = []
 
     # 1. service + version (brand display in user-facing HUD)
-    parts.append(_ansi(f"LockedIn {__version__}", C_CYAN, color))
+    parts.append(_ansi(f"LockedIn {__version__}", C_ORANGE, color))
 
     # 2. Claude usage. Prefer Anthropic OAuth utilization when
     # available; fall back to the legacy heuristic counting session
-    # JSONL user turns.
+    # JSONL user turns. When OAuth gives us a reset timestamp we
+    # render it next to the percentage in dim grey so the user sees
+    # how long until the window rolls over.
     pct_5h: int | None = None
     pct_wk: int | None = None
+    reset_5h = ""
+    reset_wk = ""
     oauth_payload = get_usage()
     if oauth_payload is not None:
         pct_5h = min(999, round(100 * oauth_payload.get("five_hour", 0)))
         pct_wk = min(999, round(100 * oauth_payload.get("seven_day", 0)))
+        reset_5h = _format_reset_delta(oauth_payload.get("five_hour_resets_at"))
+        reset_wk = _format_reset_delta(oauth_payload.get("seven_day_resets_at"))
     else:
         limit_5h = max(1, int(os.environ.get("LOCKEDIN_HUD_5H_LIMIT", DEFAULT_5H_LIMIT)))
         limit_wk = max(1, int(os.environ.get("LOCKEDIN_HUD_WK_LIMIT", DEFAULT_WK_LIMIT)))
@@ -169,12 +209,13 @@ def _render(vault: Path, color: bool) -> str:
             pct_5h = min(999, round(100 * used_5h / limit_5h))
             pct_wk = min(999, round(100 * used_wk / limit_wk))
     if pct_5h is not None and pct_wk is not None:
-        usage = (
-            _ansi(f"5h:{pct_5h}%", _usage_color(pct_5h), color)
-            + _ansi(" · ", C_DIM, color)
-            + _ansi(f"wk:{pct_wk}%", _usage_color(pct_wk), color)
-        )
-        parts.append(usage)
+        five_text = _ansi(f"5h:{pct_5h}%", _usage_color(pct_5h), color)
+        if reset_5h:
+            five_text += _ansi(f" ({reset_5h})", C_DIM, color)
+        wk_text = _ansi(f"wk:{pct_wk}%", _usage_color(pct_wk), color)
+        if reset_wk:
+            wk_text += _ansi(f" ({reset_wk})", C_DIM, color)
+        parts.append(five_text + _ansi(" · ", C_DIM, color) + wk_text)
 
     # 3. experience state
     if vault.exists():

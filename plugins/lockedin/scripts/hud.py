@@ -51,11 +51,43 @@ DEFAULT_5H_LIMIT = 50
 DEFAULT_WK_LIMIT = 350
 
 # ANSI color codes
-C_CYAN = "96"     # service name
-C_DIM = "2"       # separators / labels
+C_CYAN = "96"     # entity counts
+C_DIM = "2"       # separators / labels / reset countdowns
 C_GREEN = "32"    # safe usage
 C_YELLOW = "33"   # mid usage
 C_RED = "31"      # high usage
+C_ORANGE = "38;5;208"  # 256-color orange for the brand version label
+
+
+def _format_reset_delta(iso_string):
+    """Turn an ISO-8601 reset timestamp into a compact countdown.
+
+    Examples: "3h12m" for 3 hours 12 minutes from now; "2d4h" for 2
+    days 4 hours; "<1m" for sub-minute. Returns empty string when the
+    input is None or unparseable.
+    """
+    if not iso_string:
+        return ""
+    try:
+        ts = datetime.fromisoformat(iso_string.replace("Z", "+00:00"))
+        if ts.tzinfo is None:
+            ts = ts.replace(tzinfo=timezone.utc)
+        delta = ts - datetime.now(timezone.utc)
+        total_seconds = int(delta.total_seconds())
+        if total_seconds <= 0:
+            return "now"
+        if total_seconds < 60:
+            return "<1m"
+        minutes = total_seconds // 60
+        hours = minutes // 60
+        days = hours // 24
+        if days >= 1:
+            return f"{days}d{hours - days * 24}h"
+        if hours >= 1:
+            return f"{hours}h{minutes - hours * 60}m"
+        return f"{minutes}m"
+    except (ValueError, TypeError):
+        return ""
 
 _FRONTMATTER_RE = re.compile(r"\A---\n(.*?)\n---\n", re.S)
 
@@ -318,13 +350,24 @@ def _normalize_oauth_payload(raw):
             return v / 100 if v > 1.5 else v
         return None
 
-    five = _pull(raw.get("five_hour")) if "five_hour" in raw else _pull(raw.get("fiveHour"))
-    seven = _pull(raw.get("seven_day")) if "seven_day" in raw else _pull(raw.get("sevenDay"))
+    def _pull_reset(value):
+        if isinstance(value, dict):
+            r = value.get("resets_at") or value.get("reset_time")
+            if isinstance(r, str) and r.strip():
+                return r.strip()
+        return None
+
+    five_raw = raw.get("five_hour") if "five_hour" in raw else raw.get("fiveHour")
+    seven_raw = raw.get("seven_day") if "seven_day" in raw else raw.get("sevenDay")
+    five = _pull(five_raw)
+    seven = _pull(seven_raw)
     if five is None and seven is None:
         return None
     return {
         "five_hour": five if five is not None else 0.0,
         "seven_day": seven if seven is not None else 0.0,
+        "five_hour_resets_at": _pull_reset(five_raw),
+        "seven_day_resets_at": _pull_reset(seven_raw),
     }
 
 
@@ -400,16 +443,23 @@ def _render() -> str:
     parts: list[str] = []
 
     # 1. service + version (brand display in user-facing HUD)
-    parts.append(_ansi(f"LockedIn {VERSION}", C_CYAN, color))
+    parts.append(_ansi(f"LockedIn {VERSION}", C_ORANGE, color))
 
     # 2. Claude usage. Prefer Anthropic OAuth utilization when available;
     # fall back to the legacy heuristic counting session JSONL user turns.
+    # When OAuth gives us a reset timestamp we render it next to the
+    # percentage in dim grey so the user sees how long until the window
+    # rolls over.
     pct_5h = None
     pct_wk = None
+    reset_5h = ""
+    reset_wk = ""
     oauth_payload = _oauth_usage()
     if oauth_payload is not None:
         pct_5h = min(999, round(100 * oauth_payload.get("five_hour", 0)))
         pct_wk = min(999, round(100 * oauth_payload.get("seven_day", 0)))
+        reset_5h = _format_reset_delta(oauth_payload.get("five_hour_resets_at"))
+        reset_wk = _format_reset_delta(oauth_payload.get("seven_day_resets_at"))
     else:
         limit_5h = max(1, int(os.environ.get("LOCKEDIN_HUD_5H_LIMIT", DEFAULT_5H_LIMIT)))
         limit_wk = max(1, int(os.environ.get("LOCKEDIN_HUD_WK_LIMIT", DEFAULT_WK_LIMIT)))
@@ -419,12 +469,13 @@ def _render() -> str:
             pct_5h = min(999, round(100 * used_5h / limit_5h))
             pct_wk = min(999, round(100 * used_wk / limit_wk))
     if pct_5h is not None and pct_wk is not None:
-        usage = (
-            _ansi(f"5h:{pct_5h}%", _usage_color(pct_5h), color)
-            + _ansi(" · ", C_DIM, color)
-            + _ansi(f"wk:{pct_wk}%", _usage_color(pct_wk), color)
-        )
-        parts.append(usage)
+        five_text = _ansi(f"5h:{pct_5h}%", _usage_color(pct_5h), color)
+        if reset_5h:
+            five_text += _ansi(f" ({reset_5h})", C_DIM, color)
+        wk_text = _ansi(f"wk:{pct_wk}%", _usage_color(pct_wk), color)
+        if reset_wk:
+            wk_text += _ansi(f" ({reset_wk})", C_DIM, color)
+        parts.append(five_text + _ansi(" · ", C_DIM, color) + wk_text)
 
     # 3. experience state
     vault = _resolve_vault()
