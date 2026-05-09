@@ -399,8 +399,8 @@ def _render() -> str:
     color = _wants_color()
     parts: list[str] = []
 
-    # 1. service + version (always present)
-    parts.append(_ansi(f"lockedin {VERSION}", C_CYAN, color))
+    # 1. service + version (brand display in user-facing HUD)
+    parts.append(_ansi(f"LockedIn {VERSION}", C_CYAN, color))
 
     # 2. Claude usage. Prefer Anthropic OAuth utilization when available;
     # fall back to the legacy heuristic counting session JSONL user turns.

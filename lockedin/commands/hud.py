@@ -148,8 +148,8 @@ def _walk_vault(vault: Path) -> tuple[int, int, set[str], set[str]]:
 def _render(vault: Path, color: bool) -> str:
     parts: list[str] = []
 
-    # 1. service + version
-    parts.append(_ansi(f"lockedin {__version__}", C_CYAN, color))
+    # 1. service + version (brand display in user-facing HUD)
+    parts.append(_ansi(f"LockedIn {__version__}", C_CYAN, color))
 
     # 2. Claude usage. Prefer Anthropic OAuth utilization when
     # available; fall back to the legacy heuristic counting session
