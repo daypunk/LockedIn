@@ -3,12 +3,16 @@
 Order, left to right (separated by `│`):
   1. service name + version (cyan)
   2. Claude Code usage in rolling 5-hour and 7-day windows (color-graded)
-  3. vault state — node count, edge count, dangling references
+  3. experience state — node count, edge count, dangling references
 
-Counts user turns from Claude's session JSONL files at
-``~/.claude/projects/*/*.jsonl``. Defaults assume rough Pro-tier
-thresholds; override via ``LOCKEDIN_HUD_5H_LIMIT`` and
-``LOCKEDIN_HUD_WK_LIMIT``.
+Usage values are pulled from Anthropic's OAuth usage endpoint when
+the user's Claude Code OAuth credentials are available. macOS reads
+the credential from Keychain; Linux and Windows from
+``~/.claude/.credentials.json``. If the OAuth path is unavailable,
+the legacy heuristic that counted user turns from session JSONL
+files is used as a fallback. The legacy heuristic uses
+``LOCKEDIN_HUD_5H_LIMIT`` and ``LOCKEDIN_HUD_WK_LIMIT`` as turn
+thresholds.
 
 Color is on by default. Disable via ``NO_COLOR`` or
 ``LOCKEDIN_HUD_COLOR=0``.
@@ -28,6 +32,7 @@ from pathlib import Path
 
 from lockedin import __version__
 from lockedin.config import resolve_vault
+from lockedin.hud import get_usage
 from lockedin.storage.notes import read_entity
 
 DEFAULT_5H_LIMIT = 50
@@ -146,14 +151,24 @@ def _render(vault: Path, color: bool) -> str:
     # 1. service + version
     parts.append(_ansi(f"lockedin {__version__}", C_CYAN, color))
 
-    # 2. Claude usage (best-effort)
-    limit_5h = max(1, int(os.environ.get("LOCKEDIN_HUD_5H_LIMIT", DEFAULT_5H_LIMIT)))
-    limit_wk = max(1, int(os.environ.get("LOCKEDIN_HUD_WK_LIMIT", DEFAULT_WK_LIMIT)))
-    now = datetime.now(timezone.utc)
-    used_5h, used_wk = _count_user_turns(now)
-    if used_5h or used_wk:
-        pct_5h = min(999, round(100 * used_5h / limit_5h))
-        pct_wk = min(999, round(100 * used_wk / limit_wk))
+    # 2. Claude usage. Prefer Anthropic OAuth utilization when
+    # available; fall back to the legacy heuristic counting session
+    # JSONL user turns.
+    pct_5h: int | None = None
+    pct_wk: int | None = None
+    oauth_payload = get_usage()
+    if oauth_payload is not None:
+        pct_5h = min(999, round(100 * oauth_payload.get("five_hour", 0)))
+        pct_wk = min(999, round(100 * oauth_payload.get("seven_day", 0)))
+    else:
+        limit_5h = max(1, int(os.environ.get("LOCKEDIN_HUD_5H_LIMIT", DEFAULT_5H_LIMIT)))
+        limit_wk = max(1, int(os.environ.get("LOCKEDIN_HUD_WK_LIMIT", DEFAULT_WK_LIMIT)))
+        now = datetime.now(timezone.utc)
+        used_5h, used_wk = _count_user_turns(now)
+        if used_5h or used_wk:
+            pct_5h = min(999, round(100 * used_5h / limit_5h))
+            pct_wk = min(999, round(100 * used_wk / limit_wk))
+    if pct_5h is not None and pct_wk is not None:
         usage = (
             _ansi(f"5h:{pct_5h}%", _usage_color(pct_5h), color)
             + _ansi(" · ", C_DIM, color)
