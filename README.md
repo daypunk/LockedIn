@@ -1,12 +1,12 @@
 <p align="center">
-  <img src="docs/assets/logo.png" alt="LockedIn" width="200" />
+  <img src="docs/assets/logo.png" alt="LockedIn" width="100%" />
 </p>
 
 # LockedIn
 
 **English** | [한국어](README.ko.md)
 
-*Before LinkedIn, get Locked In.*
+> ***Before LinkedIn, get Locked In.***
 
 Drop a resume into Claude Code or answer a handful of questions to structure your experience once. After that, you just ask. English résumés, Korean cover letters, interview answers, and new project ideas all come out of calibrated skills.
 
