@@ -51,7 +51,6 @@ Most career tools regenerate every artifact from scratch. The artifact is the po
 - **One vault, four artifacts.** Resumes, cover letters, interview answers, and project ideas all come from the same source.
 - **Quality guard built in.** Drafting and scoring run as two separate Claude turns and every artifact ships with a JSON rubric score.
 - **Subscription, not API keys.** Everything runs on your existing Claude Code subscription.
-- **You own everything.** The vault is Obsidian-compatible plain markdown that never leaves your machine.
 
 ## Architecture at a glance
 
