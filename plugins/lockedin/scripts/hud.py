@@ -152,6 +152,210 @@ def _claude_projects_dir() -> Path:
     return Path.home() / ".claude" / "projects"
 
 
+# --- inline Anthropic OAuth utilization (mirrors lockedin.hud.oauth_usage) ----
+#
+# The standalone script may run on a machine where the lockedin Python package
+# is not on sys.path. The package import at the top of this file then fails
+# silently and we fall through to this fallback section. To keep the HUD
+# accurate even in that case, we duplicate the OAuth path here. The package
+# version remains the source of truth and the test surface; this copy follows
+# it.
+
+_USAGE_URL = "https://api.anthropic.com/api/oauth/usage"
+_KEYCHAIN_SERVICE = "Claude Code-credentials"
+_OAUTH_CACHE_TTL_SECONDS = 60
+_OAUTH_REQUEST_TIMEOUT_SECONDS = 5
+
+
+def _claude_config_dir() -> Path:
+    explicit = os.environ.get("CLAUDE_CONFIG_DIR")
+    if explicit:
+        return Path(explicit).expanduser()
+    return Path.home() / ".claude"
+
+
+def _credentials_path_filesystem() -> Path:
+    return _claude_config_dir() / ".credentials.json"
+
+
+def _oauth_cache_dir() -> Path:
+    if sys.platform == "darwin":
+        return Path.home() / "Library" / "Caches" / "lockedin"
+    if sys.platform == "win32":
+        local = os.environ.get("LOCALAPPDATA")
+        if local:
+            return Path(local) / "lockedin" / "Cache"
+        return Path.home() / "AppData" / "Local" / "lockedin" / "Cache"
+    xdg = os.environ.get("XDG_CACHE_HOME")
+    if xdg:
+        return Path(xdg) / "lockedin"
+    return Path.home() / ".cache" / "lockedin"
+
+
+def _oauth_cache_path() -> Path:
+    return _oauth_cache_dir() / "usage.json"
+
+
+def _read_oauth_cache():
+    import time
+    try:
+        path = _oauth_cache_path()
+        if not path.exists():
+            return None
+        raw = json.loads(path.read_text(encoding="utf-8"))
+        ts = raw.get("ts")
+        payload = raw.get("payload")
+        if not isinstance(ts, (int, float)) or not isinstance(payload, dict):  # noqa: UP038
+            return None
+        if time.time() - ts > _OAUTH_CACHE_TTL_SECONDS:
+            return None
+        return payload
+    except (OSError, ValueError):
+        return None
+
+
+def _write_oauth_cache(payload: dict) -> None:
+    import time
+    try:
+        path = _oauth_cache_path()
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(
+            json.dumps({"ts": time.time(), "payload": payload}),
+            encoding="utf-8",
+        )
+    except OSError:
+        return
+
+
+def _read_credentials_keychain_macos():
+    import shutil
+    import subprocess
+    if shutil.which("security") is None:
+        return None
+    try:
+        result = subprocess.run(
+            ["security", "find-generic-password", "-s", _KEYCHAIN_SERVICE, "-w"],
+            capture_output=True,
+            text=True,
+            timeout=2,
+            check=False,
+        )
+    except (OSError, subprocess.SubprocessError):
+        return None
+    if result.returncode != 0:
+        return None
+    blob = result.stdout.strip()
+    if not blob:
+        return None
+    try:
+        return json.loads(blob)
+    except ValueError:
+        return None
+
+
+def _read_credentials_filesystem():
+    path = _credentials_path_filesystem()
+    if not path.exists():
+        return None
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return None
+
+
+def _read_credentials():
+    if sys.platform == "darwin":
+        creds = _read_credentials_keychain_macos()
+        if creds is not None:
+            return creds
+        return _read_credentials_filesystem()
+    return _read_credentials_filesystem()
+
+
+def _extract_access_token(creds):
+    if not isinstance(creds, dict):
+        return None
+    candidates = []
+    oauth = creds.get("claudeAiOauth")
+    if isinstance(oauth, dict):
+        candidates.append(oauth.get("accessToken"))
+    candidates.append(creds.get("access_token"))
+    candidates.append(creds.get("accessToken"))
+    for candidate in candidates:
+        if isinstance(candidate, str) and candidate.strip():
+            return candidate.strip()
+    return None
+
+
+def _fetch_oauth_usage(token: str):
+    import urllib.error
+    import urllib.request
+    request = urllib.request.Request(
+        _USAGE_URL,
+        headers={
+            "Authorization": f"Bearer {token}",
+            "Accept": "application/json",
+            "User-Agent": "lockedin-hud/1.1",
+        },
+        method="GET",
+    )
+    try:
+        with urllib.request.urlopen(request, timeout=_OAUTH_REQUEST_TIMEOUT_SECONDS) as resp:
+            return json.loads(resp.read().decode("utf-8"))
+    except (urllib.error.URLError, ValueError, TimeoutError, OSError):
+        return None
+
+
+def _normalize_oauth_payload(raw):
+    if not isinstance(raw, dict):
+        return None
+
+    def _pull(value):
+        if isinstance(value, dict):
+            value = value.get("utilization")
+        if isinstance(value, (int, float)):  # noqa: UP038
+            v = float(value)
+            return v / 100 if v > 1.5 else v
+        return None
+
+    five = _pull(raw.get("five_hour")) if "five_hour" in raw else _pull(raw.get("fiveHour"))
+    seven = _pull(raw.get("seven_day")) if "seven_day" in raw else _pull(raw.get("sevenDay"))
+    if five is None and seven is None:
+        return None
+    return {
+        "five_hour": five if five is not None else 0.0,
+        "seven_day": seven if seven is not None else 0.0,
+    }
+
+
+def _oauth_usage():
+    """Return {'five_hour': 0.x, 'seven_day': 0.x} or None.
+
+    None means OAuth path unavailable; the caller should fall back to the
+    legacy turn-counting heuristic.
+    """
+    cached = _read_oauth_cache()
+    if cached is not None:
+        return cached
+    try:
+        creds = _read_credentials()
+        if creds is None:
+            return None
+        token = _extract_access_token(creds)
+        if token is None:
+            return None
+        raw = _fetch_oauth_usage(token)
+        if raw is None:
+            return None
+        payload = _normalize_oauth_payload(raw)
+        if payload is None:
+            return None
+        _write_oauth_cache(payload)
+        return payload
+    except Exception:  # noqa: BLE001 — HUD must NEVER crash
+        return None
+
+
 def _count_user_turns_within(now: datetime) -> tuple[int, int]:
     """Return (user-turns within 5h, user-turns within 7d) across all sessions."""
     proj_dir = _claude_projects_dir()
@@ -198,14 +402,23 @@ def _render() -> str:
     # 1. service + version (always present)
     parts.append(_ansi(f"lockedin {VERSION}", C_CYAN, color))
 
-    # 2. Claude usage (best-effort)
-    limit_5h = max(1, int(os.environ.get("LOCKEDIN_HUD_5H_LIMIT", DEFAULT_5H_LIMIT)))
-    limit_wk = max(1, int(os.environ.get("LOCKEDIN_HUD_WK_LIMIT", DEFAULT_WK_LIMIT)))
-    now = datetime.now(timezone.utc)
-    used_5h, used_wk = _count_user_turns_within(now)
-    if used_5h or used_wk:
-        pct_5h = min(999, round(100 * used_5h / limit_5h))
-        pct_wk = min(999, round(100 * used_wk / limit_wk))
+    # 2. Claude usage. Prefer Anthropic OAuth utilization when available;
+    # fall back to the legacy heuristic counting session JSONL user turns.
+    pct_5h = None
+    pct_wk = None
+    oauth_payload = _oauth_usage()
+    if oauth_payload is not None:
+        pct_5h = min(999, round(100 * oauth_payload.get("five_hour", 0)))
+        pct_wk = min(999, round(100 * oauth_payload.get("seven_day", 0)))
+    else:
+        limit_5h = max(1, int(os.environ.get("LOCKEDIN_HUD_5H_LIMIT", DEFAULT_5H_LIMIT)))
+        limit_wk = max(1, int(os.environ.get("LOCKEDIN_HUD_WK_LIMIT", DEFAULT_WK_LIMIT)))
+        now = datetime.now(timezone.utc)
+        used_5h, used_wk = _count_user_turns_within(now)
+        if used_5h or used_wk:
+            pct_5h = min(999, round(100 * used_5h / limit_5h))
+            pct_wk = min(999, round(100 * used_wk / limit_wk))
+    if pct_5h is not None and pct_wk is not None:
         usage = (
             _ansi(f"5h:{pct_5h}%", _usage_color(pct_5h), color)
             + _ansi(" · ", C_DIM, color)

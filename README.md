@@ -6,9 +6,9 @@
 
 **English** | [한국어](README.ko.md)
 
-*Before LinkedIn, get Locked In.*
+*Before Linked In, get Locked In.*
 
-Lock yourself in first. Organize your career experience into one source you own. When the job hunt starts, your resume, your Korean cover letter, and your interview answers are queries against that one source rather than blank pages you fill from memory.
+Lock yourself in first with Claude Code. Organize your career experience into one source you own. When the job hunt starts, your resume, your Korean cover letter, and your interview answers are queries against that one source rather than blank pages you fill from memory.
 
 ## Install
 
