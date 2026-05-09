@@ -47,11 +47,11 @@ Most career tools regenerate every artifact from scratch. The artifact is the po
 
 ## Features
 
-- **Natural-language activation.** No commands to memorize. Talk to Claude Code the way you already do and LockedIn picks up the thread.
-- **One vault, four artifacts.** English resumes, Korean cover letters, interview answers, and new project ideas all come from the same experience source.
-- **Quality guard built in.** Drafting and scoring run as two separate Claude turns. Self-evaluation in one turn inflates scores by about a point; the split removes the inflation. Every artifact comes with a JSON rubric score so you see quality before you submit.
-- **Subscription, not API keys.** All reasoning runs on your existing Claude Code subscription. No extra keys, no extra billing.
-- **You own everything.** The vault is plain markdown at `~/Documents/LockedIn/`. Obsidian-compatible, portable to other tools, no data leaves your machine.
+- **Natural-language activation.** Talk to Claude Code the way you already do.
+- **One vault, four artifacts.** Resumes, cover letters, interview answers, and project ideas all come from the same source.
+- **Quality guard built in.** Drafting and scoring run as two separate Claude turns and every artifact ships with a JSON rubric score.
+- **Subscription, not API keys.** Everything runs on your existing Claude Code subscription.
+- **You own everything.** The vault is Obsidian-compatible plain markdown that never leaves your machine.
 
 ## Architecture at a glance
 
