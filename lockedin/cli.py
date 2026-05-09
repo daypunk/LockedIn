@@ -139,6 +139,12 @@ def _build_parser() -> argparse.ArgumentParser:
     )
     p_experience.add_argument("--vault")
 
+    p_refresh = sub.add_parser(
+        "refresh",
+        help="(CLI) regenerate the master EXPERIENCE.md at the vault root",
+    )
+    p_refresh.add_argument("--vault")
+
     p_hud = sub.add_parser(
         "hud",
         help="(CLI) emit a one-line statusLine snippet for Claude Code",
@@ -206,6 +212,15 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "experience":
         from lockedin.commands.experience import experience
         return experience(args.slug, time_range=args.time_range, vault_arg=args.vault)
+
+    if args.cmd == "refresh":
+        from lockedin.render.master_view import refresh_master_view
+        target = refresh_master_view(args.vault)
+        if target is None:
+            print("vault does not exist; nothing to refresh.", file=sys.stderr)
+            return 1
+        print(f"refreshed {target}")
+        return 0
 
     if args.cmd == "install":
         from lockedin.commands.install import (

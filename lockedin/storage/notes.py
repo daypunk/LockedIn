@@ -115,6 +115,11 @@ def write_entity(vault: Path, entity: Entity, *, domain: str = "experience") -> 
 
     Mutates ``entity.created`` / ``entity.updated`` only when they were
     ``None`` so that a read → write cycle stays byte-identical.
+
+    After the write succeeds, the master view at
+    ``<vault>/EXPERIENCE.md`` is refreshed so the human-readable
+    summary stays in lockstep with the typed source. The refresh is
+    best-effort and never raises into the caller.
     """
     if entity.created is None:
         entity.created = _now_iso()
@@ -123,6 +128,14 @@ def write_entity(vault: Path, entity: Entity, *, domain: str = "experience") -> 
     path = vault_path_for(vault, entity, domain=domain)
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(_serialize(entity), encoding="utf-8")
+    # Regenerate master view. Lazy import to avoid a circular dependency
+    # (master_view reads entities, which reads notes).
+    try:
+        from lockedin.render.master_view import refresh_master_view
+
+        refresh_master_view(vault)
+    except Exception:  # noqa: BLE001 — never block a successful write
+        pass
     return path
 
 

@@ -36,6 +36,10 @@ _URL_RE = re.compile(r"^https?://", re.I)
 def _is_vault_note(path: Path) -> bool:
     if path.name.startswith("."):
         return False
+    if path.name == "EXPERIENCE.md":
+        # Master view at the vault root is auto-generated and not an
+        # ontology entity. Skip it during validation.
+        return False
     parts = path.parts
     return "outputs" not in parts and "templates" not in parts
 

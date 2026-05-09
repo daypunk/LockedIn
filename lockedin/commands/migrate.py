@@ -28,6 +28,8 @@ from lockedin.storage.notes import read_entity, write_entity
 def _is_vault_note(path: Path) -> bool:
     if path.name.startswith("."):
         return False
+    if path.name == "EXPERIENCE.md":
+        return False
     parts = path.parts
     return "outputs" not in parts and "templates" not in parts
 

@@ -25,6 +25,8 @@ _DATE_RE = re.compile(r"^(\d{4})(?:-(\d{2})(?:-(\d{2}))?)?$")
 def _is_vault_note(path: Path) -> bool:
     if path.name.startswith("."):
         return False
+    if path.name == "EXPERIENCE.md":
+        return False
     parts = path.parts
     return "outputs" not in parts and "templates" not in parts
 

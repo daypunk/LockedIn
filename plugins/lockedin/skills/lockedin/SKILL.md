@@ -114,12 +114,28 @@ it will warn unless the user explicitly opts in via
 - Architecture: `docs/architecture.md`
 - Vault contract: `docs/ontology-spec.md`
 
+## Master view at the vault root
+
+Every vault write also regenerates `<vault>/EXPERIENCE.md`, a
+single human-readable markdown file that lists all entities grouped
+by type. The user can open this file in any markdown viewer to see
+their whole vault at a glance without navigating per-type folders.
+This is automatic and does not require an explicit step from the
+skill — `lockedin/storage/notes.py::write_entity` invokes
+`lockedin/render/master_view.py::refresh_master_view` after every
+successful write. If the user manually edits a frontmatter file in
+their editor, point them at `lockedin refresh` to regenerate the
+master view.
+
 ## Final checklist (self-verify before declaring a flow done)
 
 - Vault writes only happened with user confirmation (or via deterministic
   CLI fixture path).
 - Renderer ran writer turn → reviewer turn (RUBRIC.md re-loaded fresh).
 - For `render-jaso`: banned-phrase regex check ran before rubric scoring.
-- Concrete ontology nodes (slugs) quoted in rendered text, not vague
-  generalities.
+- Concrete ontology nodes (slugs) quoted in rendered draft; resolved to
+  natural-language labels in the final artifact via
+  `lockedin/render/resolve_slugs.py::resolve_file`.
 - Output artifact written under `<vault>/outputs/` with timestamp slug.
+- Master view at `<vault>/EXPERIENCE.md` is current (auto-refreshed by
+  `write_entity`, but check it once at the end of multi-step flows).
