@@ -1,8 +1,14 @@
+<p align="center">
+  <img src="docs/assets/logo.png" alt="LockedIn" width="200" />
+</p>
+
 # LockedIn
 
 **English** | [한국어](README.ko.md)
 
-LockedIn is a Claude Code plugin that organizes your career experience into a structured knowledge graph. You feed it your projects, roles, achievements, and learning over time. It writes your English resumes and your Korean cover letters from the same source.
+*Before LinkedIn, get Locked In.*
+
+Lock yourself in first. Organize your career experience into one source you own. When the job hunt starts, your resume, your Korean cover letter, and your interview answers are queries against that one source rather than blank pages you fill from memory.
 
 ## Install
 
@@ -39,11 +45,21 @@ LockedIn asks one question at a time when it needs more from you, and it stops w
 
 Most career tools regenerate every artifact from scratch. The artifact is the point, the source evaporates. LockedIn treats the source as the point. Your structured experience accumulates at `~/Documents/LockedIn/` as plain markdown files that you own and can carry to other tools. Resumes, cover letters, and meeting notes are artifacts of that memory, not the memory itself.
 
+## Architecture at a glance
+
+<p align="center">
+  <img src="docs/assets/architecture.png" alt="LockedIn architecture" width="720" />
+</p>
+
+The diagram is rendered from the layout reference at [`docs/diagram-reference.md`](./docs/diagram-reference.md).
+
 ## How it works
 
 Your experiences are stored as plain markdown files with frontmatter. Every entity becomes one file. There are fifteen entity types covering people, companies, roles, projects, achievements, skills, education, certificates, publications, volunteer work, languages, documents, meetings, decisions, and topics. Relationships between entities are stored as links inside frontmatter, and the schema enforces which type can connect to which.
 
 When you ask for a render, LockedIn queries the vault, drafts the output in one Claude turn, and then reviews the draft against a calibrated rubric in a separate Claude turn. The split prevents self-evaluation bias. When the same Claude call both writes and scores, it tends to be lenient with itself by about one point. The reviewer turn runs separately and reloads the rubric from scratch, which removes the inflation.
+
+A master view file `EXPERIENCE.md` is automatically maintained at your vault root. It lists every entity grouped by type so you can scan your whole vault at a glance without navigating per-type folders.
 
 LockedIn runs on your existing Claude Code subscription. It does not require an Anthropic API key, and it does not phone home.
 
@@ -60,6 +76,7 @@ LockedIn runs on your existing Claude Code subscription. It does not require an 
 | File | Purpose |
 |---|---|
 | [`docs/architecture.md`](./docs/architecture.md) | How the pieces fit together |
+| [`docs/diagram-reference.md`](./docs/diagram-reference.md) | ASCII source for the architecture image above |
 | [`docs/ontology-spec.md`](./docs/ontology-spec.md) | The frontmatter contract |
 | [`docs/ontology-mapping.md`](./docs/ontology-mapping.md) | Cross-walk to JSON Resume, Schema.org, FOAF |
 | [`docs/orchestration.md`](./docs/orchestration.md) | Render and ingest pipelines |
