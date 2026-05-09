@@ -42,9 +42,24 @@ target. Specifically:
 - **STAR or PAR per paragraph**. Each body paragraph has Situation /
   Task / Action / Result (or Problem / Action / Result). Implicit S/T
   is fine if context is clear.
-- **Quote ontology slugs.** Reference concrete entities by slug in
-  square brackets, e.g. `[[role/lead-pm-fintech-2024]]`. The reviewer
-  rewards this.
+- **One experience per paragraph (load-bearing).** When the slot pulls
+  in more than one experience, write each in its own paragraph and
+  add an explicit transition sentence between them. Mixing two
+  experiences in a single paragraph creates reader cognitive load and
+  is a quality bug. The transition can be one sentence ("이 경험에서
+  배운 시각이 다음 프로젝트에서도 이어졌습니다.") that names the
+  thread connecting the two paragraphs.
+- **Quote ontology slugs while drafting.** Reference concrete entities
+  by slug in square brackets, e.g. `[[role/lead-pm-fintech-2024]]`.
+  The reviewer turn uses these to verify provenance against the
+  vault. **The user-facing artifact must NOT contain raw slug
+  notation.** After your draft is complete, replace every
+  `[[type/slug]]` with the entity's natural-language label (the
+  entity's `name`, `title`, or `headline` field). A helper
+  (`lockedin/render/resolve_slugs.py`) does this deterministically;
+  the calling skill runs it after this turn finishes. If you cannot
+  resolve a slug in the vault, ask the user to confirm the entity
+  before continuing.
 - **Active voice. Concrete metrics.** Numbers (`30%`, `8주`, `매출
   N억`), named projects, named technologies.
 - **No banned phrases.** Before returning the draft, scan it against
@@ -59,15 +74,23 @@ target. Specifically:
 
 ## Output
 
-A single Korean 자소서 answer in markdown, no headers. Cite ontology
-slugs in `[[type/slug]]` form so the reviewer turn can verify them.
+A single Korean 자소서 answer in markdown, no headers. Two output
+forms:
+
+1. **Draft form** (handed to the reviewer turn): cite ontology slugs
+   in `[[type/slug]]` form so the reviewer can verify them against
+   the vault.
+2. **Final form** (saved to `<vault>/outputs/`): every slug token has
+   been resolved to natural language. The skill orchestrator runs
+   `lockedin.render.resolve_slugs.resolve_file()` after this turn
+   finishes; do not emit raw slug notation in user-visible text.
 
 After producing the draft, run the banned-phrase check yourself:
 
 ```bash
 python3 -c "
 import json, re, sys
-banned = json.load(open('lockedin/skill/render-jaso/banned_phrases.json'))['phrases']
+banned = json.load(open('plugins/lockedin/skills/lockedin-render-jaso/banned_phrases.json'))['phrases']
 draft = open('/tmp/draft.txt', encoding='utf-8').read()
 hits = [p for p in banned if re.search(re.escape(p), draft)]
 sys.exit(0 if not hits else 1)

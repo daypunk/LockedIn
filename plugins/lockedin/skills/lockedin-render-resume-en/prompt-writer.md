@@ -52,10 +52,22 @@ question to fill the gap before drafting. Do not invent ontology data.
 - **One to two lines per bullet, 20–25 words max.** If a bullet
   exceeds, split or compress.
 - **3–6 bullets per recent role.** 2–3 per older roles.
-- **Quote ontology slugs.** Reference concrete entities by slug in
-  square brackets, e.g. `[[role/staff-eng-stripe-2023]]` or
-  `[[project/checkout-migration-2024]]`. The reviewer rewards this
-  and uses slug resolution to verify metric claims.
+- **One experience per bullet (load-bearing).** A single bullet must
+  describe one experience. If two distinct experiences want to share
+  a slot, write each as its own bullet, in chronological order.
+  Prose paragraphs in the Summary section follow the same rule:
+  one experience per paragraph, with an explicit transition sentence
+  between paragraphs that name the thread connecting them. Mixing
+  experiences in one bullet or paragraph creates reader cognitive
+  load and is a quality bug.
+- **Quote ontology slugs while drafting.** Reference concrete entities
+  by slug in square brackets, e.g. `[[role/staff-eng-stripe-2023]]`
+  or `[[project/checkout-migration-2024]]`. The reviewer turn uses
+  these to verify metric claims against the vault. **The user-facing
+  artifact must NOT contain raw slug notation.** After your draft is
+  complete, replace every `[[type/slug]]` with the entity's
+  natural-language label. The skill orchestrator runs
+  `lockedin.render.resolve_slugs.resolve_file()` after this turn.
 - **No banned phrases.** Before returning the draft, scan against
   `banned_phrases.json`. If any match, replace with a stronger active
   alternative (Built / Led / Drove / Shipped + metric).
@@ -77,6 +89,11 @@ question to fill the gap before drafting. Do not invent ontology data.
   graders flag as low-signal.
 
 ## Output
+
+Two output forms: draft (handed to reviewer with slug tokens
+intact) and final (saved to `<vault>/outputs/`, slug tokens
+resolved). The skill orchestrator runs the resolver between the
+two. Do not emit raw slug notation in the final artifact.
 
 A single English resume in plain markdown. Sections:
 
