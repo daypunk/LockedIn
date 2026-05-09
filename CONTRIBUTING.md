@@ -1,10 +1,10 @@
-# Contributing to lockedin
+# Contributing to LockedIn
 
-Thanks for considering a contribution. lockedin is a Claude Code
+Thanks for considering a contribution. LockedIn is a Claude Code
 plugin that organizes personal experience into a typed markdown vault
-and renders artifacts (resume, cover letter, portfolio, graph viz)
-from the same source. The project is small and intentionally so —
-authoring quality matters more than feature breadth.
+and renders text artifacts (English resume, Korean cover letter) from
+the same source. The project is small and intentionally so. Authoring
+quality matters more than feature breadth.
 
 This guide covers what we accept, how to set up locally, and the
 specific contribution paths that need outside help right now.
@@ -59,7 +59,7 @@ pytest -q                                                       # full suite
 pytest tests/test_validate.py -q                                # one file
 LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin init --fixture examples/sample-vault.yaml
 LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin validate
-LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin render graph
+LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin migrate
 ```
 
 CI gates:
@@ -143,9 +143,9 @@ needs:
 - `research-notes.md` — citations with URL + ISO date + 2-sentence
   gloss per source.
 
-Open an issue first if you are proposing a new renderer; the
-two-renderer plus graph plus portfolio surface is intentionally
-narrow for v1.
+Open an issue first if you are proposing a new renderer. The two
+text renderers (Korean cover letter, English resume) form an
+intentionally narrow surface, and the bar to add a third is high.
 
 ## Language policy
 

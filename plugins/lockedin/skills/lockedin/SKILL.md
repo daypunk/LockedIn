@@ -4,9 +4,8 @@ description: |
   Personal experience knowledge graph for Claude Code. Build and grow
   a markdown ontology from Q&A interviews and document ingestion (PDF,
   DOCX, MD, TXT), then render English resumes, Korean cover letters,
-  meeting notes, and an interactive graph visualization from the same
-  vault. Runs entirely on the user's Claude Code subscription — never
-  calls the Anthropic API directly.
+  and meeting notes from the same vault. Runs entirely on the user's
+  Claude Code subscription — never calls the Anthropic API directly.
 
   Activate when the user mentions lockedin by name, asks to set up or
   update a personal career / experience graph, asks to render a resume
@@ -46,7 +45,7 @@ Reasoning runs **inside Claude Code** on the user's subscription; the
 | Surface | Runs there | When |
 |---|---|---|
 | Skill (host AI) | Q&A interview, ingest ambiguity resolution, render writer + reviewer turns, NL query interpretation | Every user-in-the-loop flow |
-| CLI utility | install, doctor, validate, template, render graph, init --fixture, ingest --dry-run, PDF/DOCX text extraction, hud | Deterministic; called by skill via Bash, or by user directly |
+| CLI utility | install, doctor, validate, migrate, template, init --fixture, ingest --dry-run, experience, PDF/DOCX text extraction, hud | Deterministic; called by skill via Bash, or by user directly |
 
 If a skill-only command (`render jaso/resume`, interactive `init`,
 smart `ingest`, `query`) is typed in a plain terminal, the CLI prints
@@ -111,7 +110,7 @@ it will warn unless the user explicitly opts in via
 
 ## Source of truth
 
-- Schema: `lockedin/ontology/schema.py` (11 entity types, 12 edge predicates)
+- Schema: `lockedin/ontology/schema.py` (15 entity types, 15 edge predicates, schema v3)
 - Architecture: `docs/architecture.md`
 - Vault contract: `docs/ontology-spec.md`
 

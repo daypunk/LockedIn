@@ -65,7 +65,7 @@ Why it helps: parsing 50 PDFs serially is several minutes; in
 parallel under 30 seconds. The user never has to say "wait, is it
 still going?"
 
-### 3. Graph curator (low-priority, quarterly use)
+### 3. Vault curator (low-priority, quarterly use)
 
 Today: not implemented.
 Target:
@@ -83,9 +83,9 @@ Target:
      duplicates
 ```
 
-Why it helps: drift is the single biggest cause of stale graphs.
-A periodic curator keeps the graph clean without manual review of
-every node.
+Why it helps: drift is the single biggest cause of a stale vault. A
+periodic curator keeps the vault clean without manual review of every
+node.
 
 ## Non-goals
 
@@ -118,7 +118,7 @@ skill — Claude Code chooses based on its own routing.
 | v1.0 (now) | render | writer and reviewer two turns, already shipped |
 | v1.2 | render | full 5-step pipeline above |
 | v1.2 | bulk ingest | dispatcher and parallel parsers |
-| v1.3 | graph curator | first quarterly run |
+| v1.3 | vault curator | first quarterly run |
 
 Each step is shipped as a behavior change in the skill files (more
 explicit pipeline instructions in SKILL.md / AGENTS.md). The CLI does

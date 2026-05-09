@@ -1,48 +1,102 @@
 # Changelog
 
+## [1.1.0] — in progress
+
+Rebrand to LockedIn plus targeted improvements based on first-user
+testing of 1.0. Documentation, identifiers, and vault path all changed.
+The render-graph artifact was retired. The HUD started showing real
+Anthropic OAuth utilization instead of a heuristic. Renderer outputs
+got slug resolution and a logical-flow guard.
+
+### Rebrand
+
+- Product name: selfgraph to LockedIn. The selfgraph identifier slot is
+  reserved for a future v2 product targeting a wider experience domain.
+- GitHub repo: daypunk/selfgraph renamed to daypunk/LockedIn (history
+  and v1.0.0 tag follow).
+- Naming convention: brand `LockedIn`, machine identifier `lockedin`,
+  slash command `/lockedin:setup`.
+- Vault default: `~/.selfgraph/` to `~/Documents/LockedIn/`. The
+  dot-prefixed home directory was hidden from Finder and Explorer.
+- Env vars: `SELFGRAPH_*` to `LOCKEDIN_*` (`LOCKEDIN_VAULT`,
+  `LOCKEDIN_HUD_5H_LIMIT`, `LOCKEDIN_HUD_WK_LIMIT`,
+  `LOCKEDIN_HUD_COLOR`, `LOCKEDIN_ALLOW_API_KEY`).
+- Default template: `career` to `experience`. The umbrella covers
+  meetings, decisions, learning, and side projects, not only career
+  history. `lockedin migrate` auto-renames `<vault>/career/` to
+  `<vault>/experience/` for users on the earlier layout.
+
+### Removed
+
+- **render-graph**: retired. First-user testing showed the auto-rendered
+  force-graph HTML did not deliver clear value and risked anchoring the
+  product's perceived quality on a weak surface. See ADR-0001 for the
+  full disposition. Files removed:
+  `lockedin/commands/render_graph.py`,
+  `lockedin/render/graph_html.py`,
+  `plugins/lockedin/scripts/vendor/force-graph.min.js` (~178 KB).
+
+### Renderer quality
+
+- `[[type/slug]]` references in renderer output are now resolved to
+  natural-language labels before the artifact is shown to the user.
+  See `prompt-writer.md` and the new resolver helper.
+- Logical-flow guard added to both `prompt-writer.md` files. One
+  experience per paragraph and explicit transition between
+  experiences. Prevents reader cognitive load when more than one
+  experience is implied per slot.
+
+### HUD
+
+- Anthropic OAuth `api.anthropic.com/api/oauth/usage` integration. HUD
+  now shows real `five_hour.utilization` and `seven_day.utilization`
+  instead of a heuristic counted from session JSONL. macOS reads
+  credentials from Keychain. Linux reads
+  `~/.claude/.credentials.json`. Windows reads
+  `%USERPROFILE%\.claude\.credentials.json`.
+- HUD label: `vault: Nn · Me` to `experience: Nn · Me` to match the
+  renamed default template.
+- Falls back to vault-only display when OAuth is unavailable.
+
+### Documentation
+
+- README.md and README.ko.md rewritten with LockedIn brand display.
+- CLAUDE.md, CHANGELOG.md, docs/, CONTRIBUTING.md, plugin and
+  marketplace manifests, ISSUE_TEMPLATE all updated.
+
 ## [1.0.0] — 2026-05-01
 
 Initial release. Distribution via the Claude Code plugin marketplace
-as `daypunk/lockedin`. Renderers ship with research-based
-calibration. Named human reviewer engagement and fixture buildout are
-explicit v1.1 targets, listed in Future work below.
+as `daypunk/selfgraph` (later renamed to `daypunk/LockedIn` in 1.1).
+Renderers ship with research-based calibration. Named human reviewer
+engagement and fixture buildout are explicit follow-up targets.
 
 ### Plugin distribution
 
 - Marketplace catalog at `.claude-plugin/marketplace.json`.
-- Plugin manifest at `plugins/lockedin/.claude-plugin/plugin.json`.
-- Skills under `plugins/lockedin/skills/{lockedin,
-  lockedin-render-jaso, lockedin-render-resume-en}/`.
-- One-time setup wizard at `plugins/lockedin/commands/setup.md`
-  (`/lockedin:setup`). It wires the HUD, picks a default Q&A
-  language, and picks a vault path.
+- Plugin manifest at `plugins/<plugin>/.claude-plugin/plugin.json`.
+- One-time setup wizard.
 
 ### Ontology v0.2
 
 - 15 entity types: person, company, role, project, achievement,
   skill, education, certificate, publication, volunteer, language,
   document, meeting, decision, topic.
-- 15 edge predicates with domain, range, and inverse: works_on,
-  held_role_at, has_role, produced, uses_skill, studied_at, earned,
-  attended, made, covers, mentions, derived_from, volunteered_at,
-  speaks, authored.
+- 15 edge predicates with domain, range, and inverse.
 - Per-entity-type field contracts (required and optional, 9 field
   types).
-- Edge domain and range constraints. `lockedin validate` rejects
+- Edge domain and range constraints. Validate command rejects
   type-mismatched edges.
-- External vocabulary aliases (`schema:Person`, `foaf:Organization`,
-  `jsonresume:work`, …) per `docs/ontology-mapping.md`.
+- External vocabulary aliases (schema.org, FOAF, JSON Resume) per
+  `docs/ontology-mapping.md`.
 - Schema versioning. `SCHEMA_VERSION = 2`.
 
 ### Renderers
 
-- **render-graph**: interactive single-file `graph.html` using
-  vendored force-graph 1.51.4 (~178 KB, MIT). See
-  `docs/adr/0001-viz-library.md`.
 - **render-jaso**: Korean cover letter renderer with calibrated
   rubric.
-  - `RUBRIC.md`: five dimensions (두괄식, 구조화, 구체성, 표현,
-    적합성) with 0 to 5 score bands and pass criterion.
+  - Five dimensions (두괄식, 구조화, 구체성, 표현, 적합성) with 0 to
+    5 score bands and pass criterion.
   - `prompt-writer.md` and `prompt-reviewer.md`: two-turn writer and
     reviewer split.
   - `banned_phrases.json`: 28 cross-source confirmed entries.
@@ -50,28 +104,18 @@ explicit v1.1 targets, listed in Future work below.
     책임감 28.5%, 솔선수범 21.8%, 창의적 21.8%, 도전적 13.4%).
   - `research-notes.md`: citations across 워크넷, 잡코리아, 사람인,
     링커리어, 캐치, 하이잡, arXiv, Google Scholar.
-  - `reviewers.md`: research-based calibration documented. Named
-    human reviewer awaited via
-    `.github/ISSUE_TEMPLATE/korean_reviewer_onboarding.yml`.
   - 5 pass and 5 fail golden fixtures across IT 대기업, 외국계, 금융,
-    제조, 스타트업 industries plus the five canonical failure modes
-    (templated phrasing, passive voice, generic content, missing
-    structure, missing metrics).
+    제조, 스타트업 industries.
 - **render-resume-en**: English resume renderer with calibrated
   rubric.
-  - `RUBRIC.md`: five dimensions (metric_density,
-    action_verb_quality, structural_adherence,
-    banned_phrase_cleanliness, persona_fit) with 0 to 5 score bands.
-  - `prompt-writer.md` and `prompt-reviewer.md`: two-turn split.
-  - `banned_phrases.json`: 44 cross-source confirmed phrases plus 5
-    soft-overuse entries. Sources include The Pragmatic Engineer,
-    Lenny's Newsletter, MIT CAPD, Harvard FAS Mignone Center, Yale
-    OCS, Workology, Tealhq, ResumeWorded, IGotAnOffer, Toptal, plus
-    academic resume linguistics literature.
-  - 3 personas: us-tech-senior, us-tech-mid, pm-product. Each carries
-    its own emphasis. Senior surfaces ownership, scope, and
-    influence. Mid surfaces shipping cadence. PM surfaces
-    user-outcome metrics (activation, retention, revenue, NPS).
+  - Five dimensions: metric_density, action_verb_quality,
+    structural_adherence, banned_phrase_cleanliness, persona_fit.
+  - Two-turn writer and reviewer split.
+  - 44 cross-source confirmed banned phrases plus 5 soft-overuse
+    entries. Sources include The Pragmatic Engineer, Lenny's
+    Newsletter, MIT CAPD, Harvard FAS Mignone Center, Yale OCS,
+    Workology, Tealhq, ResumeWorded, IGotAnOffer, Toptal.
+  - 3 personas: us-tech-senior, us-tech-mid, pm-product.
 
 ### CLI utilities (deterministic, no LLM)
 
@@ -79,109 +123,49 @@ explicit v1.1 targets, listed in Future work below.
   (hash-aware refusal of user-modified files), `--uninstall`,
   `--setup-hud`, `--remove-hud`.
 - `lockedin init --non-interactive --fixture <yaml>`: deterministic
-  vault seed from a YAML fixture. PyYAML date and datetime values are
-  auto-coerced to ISO strings.
+  vault seed from a YAML fixture.
 - `lockedin ingest <path> --dry-run`: parses `.pdf`, `.docx`, `.md`,
-  `.txt` and emits a diff report. No vault writes.
-- `lockedin validate`: three-layer check (frontmatter shape, field
-  contracts, edge constraints).
-- `lockedin render graph`: graph.json plus interactive graph.html.
+  `.txt` and emits a diff report.
+- `lockedin validate`: three-layer check.
 - `lockedin template list / add / remove`.
-- `lockedin doctor`: runtime, skill install, and API key state
-  check.
+- `lockedin doctor`: runtime, skill install, and API key state check.
 - `lockedin hud`: one-line statusLine snippet.
 
 ### HUD (statusLine)
 
-- Three-segment output: `lockedin X.Y.Z │ 5h:NN% · wk:NN% │ vault:
-  Nn · Me`.
-- Claude Code usage counted from `~/.claude/projects/*/*.jsonl` user
-  turns within the rolling 5-hour and 7-day windows. Default
-  thresholds tuned for the Pro tier. Override with
-  `LOCKEDIN_HUD_5H_LIMIT` and `LOCKEDIN_HUD_WK_LIMIT`.
-- Color graded green, yellow, red as percentage rises. On by default.
-  Disable via `NO_COLOR` or `LOCKEDIN_HUD_COLOR=0`.
-- Wired automatically by `/lockedin:setup` (or `lockedin install
-  --setup-hud`). Reversible via `lockedin install --remove-hud`.
+- Heuristic three-segment output (replaced in 1.1 with OAuth).
+- Color graded green, yellow, red as percentage rises.
 
 ### OSS infrastructure
 
-- `CONTRIBUTING.md`: dev setup, accepted contribution paths, Korean
-  fixture authoring rules, domain reviewer onboarding, language
-  policy, CI gates, commit style.
-- `CODE_OF_CONDUCT.md`: adopts Contributor Covenant v2.1 by
-  reference. Maintainer contact at
-  [daehee216@naver.com](mailto:daehee216@naver.com).
-- `.github/ISSUE_TEMPLATE/`: structured YAML forms for `bug_report`,
-  `feature_request`, `korean_reviewer_onboarding`, plus `config.yml`
-  linking to Discussions and disabling blank issues.
-
-### Documentation
-
-- `README.md` and `README.ko.md`: install, use, why, how it works,
-  skills, license. Language switcher at top of both.
-- `CLAUDE.md`: fresh-session bootstrap (project state, working
-  agreements, repo layout, what to never do, verification quick
-  reference, resume protocol).
-- `docs/architecture.md`: execution model and skill plus CLI split.
-- `docs/ontology-spec.md`: frontmatter contract.
-- `docs/ontology-mapping.md`: cross-walk to JSON Resume, Schema.org,
-  FOAF.
-- `docs/orchestration.md`: pipeline plan for render, bulk ingest, and
-  graph curator.
-- `docs/hud.md`: statusLine integration.
-- `docs/cli.md`: optional CLI surface.
-- `docs/adr/0001-viz-library.md`: ACCEPTED, vendored force-graph.
+- `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` (Contributor Covenant v2.1),
+  `.github/ISSUE_TEMPLATE/`.
 
 ### Tests
 
-52+ tests across import, ontology, storage round-trip, command
-lifecycle (install, doctor, validate v0.2 contracts, render graph,
-init from fixture, template, ingest dry-run, hud), plus the non-LLM
-portion of jaso fixture validation against the 5 pass and 5 fail
-golden set.
-
-## Removed in this release
-
-- **render-portfolio**: removed from scope. Portfolio sites belong to
-  dedicated design and web-publishing tooling (Figma, dedicated
-  static-site generators, hand-curated PDF) where the quality bar
-  exceeds what a markdown-vault render can deliver. lockedin stays
-  focused on text artifacts (resume, 자소서) and the graph
-  visualization.
+52 tests across import, ontology, storage round-trip, command
+lifecycle, plus the non-LLM portion of jaso fixture validation
+against the 5 pass and 5 fail golden set.
 
 ## Future work
 
-- **Q&A interview buildout**: v1.0 ships
-  `plugins/lockedin/skills/lockedin/templates/career/questions.yaml`
-  as a 3-section, 6-question skeleton. v1.1 target is 9 sections
-  (identity, companies and roles, projects, education, skills,
-  decisions, learning, certificates, publications) with 5 or more
-  questions each, branching, follow-up probing on weak answers, and
-  ontology completeness checks. Vault quality depends on interview
-  depth, which makes this the highest-leverage v1.1 work.
-- **render-jaso human reviewer**: `reviewers.md` placeholder is open
-  for v1.1 calibration. Onboard via
-  `.github/ISSUE_TEMPLATE/korean_reviewer_onboarding.yml`.
+- **Q&A interview buildout**: 1.1 ships a 3-section, 6-question
+  skeleton. The next target is 9 sections (identity, companies and
+  roles, projects, education, skills, decisions, learning,
+  certificates, publications) with 5 or more questions each,
+  branching, follow-up probing on weak answers, and ontology
+  completeness checks.
+- **render-jaso human reviewer**: `reviewers.md` is open for
+  calibration. Onboard via the Korean reviewer issue template.
 - **render-resume-en fixture set**: 5 pass and 5 fail per persona to
   match render-jaso coverage.
 - **render-resume-en human reviewer**: senior US tech recruiter or
   hiring manager walks through the fixture set.
-- **Quick-start path**: PDF-first onboarding and demo vault loading
-  so a fresh user reaches a first artifact in under two minutes.
-- **Automatic LOCKEDIN_REPORT.md**: single file at
-  `~/Documents/LockedIn/outputs/LOCKEDIN_REPORT.md` regenerated when the
-  vault changes. Surfaces god nodes, coverage gaps, evidence recall
-  trend, recent ingest summary.
-- **Provenance tags**: `provenance` field on every vault entry
-  (interview, pdf_ingest, docx_ingest, user_edit, inferred). Enables
-  the user to trace where each fact came from.
-- **Evidence recall instrumentation**: reviewer JSON gains an
-  `evidence_recall` field (range 0.0 to 1.0). See `RUBRIC.md`
-  "Evidence recall (informational)" in each renderer.
-- **`lockedin migrate`**: schema migration command for users on
-  earlier vaults.
+- **Quick-start path**: PDF-first onboarding so a fresh user reaches
+  a first artifact in under two minutes.
+- **Automatic LOCKEDIN_REPORT.md and master EXPERIENCE.md**: a single
+  file at the vault root that lists all experiences in human-readable
+  form, regenerated as the vault changes.
 - **v1.2 orchestration**: explicit 5-step render pipeline plus
-  parallel bulk-ingest dispatcher (designed in
-  `docs/orchestration.md`).
-- **v1.3 graph curator**: quarterly duplicate-merge agent.
+  parallel bulk-ingest dispatcher.
+- **v1.3 vault curator**: quarterly duplicate-merge agent.

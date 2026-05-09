@@ -3,8 +3,8 @@
 Two execution surfaces, deliberately separated:
 
 * **Pure CLI utilities** (deterministic, run anywhere — no LLM, no
-  subscription needed): `install`, `doctor`, `validate`, `template`,
-  `render graph`, `init --non-interactive --fixture FILE`,
+  subscription needed): `install`, `doctor`, `validate`, `migrate`,
+  `experience`, `template`, `init --non-interactive --fixture FILE`,
   `ingest --dry-run`.
 
 * **Claude Code skill commands** (need an LLM in the loop, run inside
@@ -39,10 +39,11 @@ Or use natural language. Examples:
     "자소서 1번 문항 써줘"      → /lockedin render jaso
 
 Pure-CLI alternatives that work outside Claude Code (no LLM):
-    lockedin render graph                                # graph.html
     lockedin init --non-interactive --fixture seed.yaml  # deterministic seed
     lockedin ingest <path> --dry-run                     # diff preview only
     lockedin validate                                    # check vault schema
+    lockedin migrate                                     # upgrade vault schema
+    lockedin experience <slug>                           # denormalized view
     lockedin doctor                                      # diagnose runtime
     lockedin install [--check|--upgrade|--uninstall]     # skill registration
 """
@@ -85,15 +86,15 @@ def _build_parser() -> argparse.ArgumentParser:
 
     p_render = sub.add_parser(
         "render",
-        help="render an artifact. graph: deterministic CLI. jaso/resume: skill.",
+        help="render an artifact. jaso/resume: skill.",
     )
-    p_render.add_argument("kind", choices=["jaso", "resume", "graph"])
+    p_render.add_argument("kind", choices=["jaso", "resume"])
     p_render.add_argument("--target", help="renderer profile (e.g. us-tech-senior)")
     p_render.add_argument("--company", help="company name (jaso only)")
     p_render.add_argument("--question", help="question id or text (jaso only)")
     p_render.add_argument("--self-evaluate", action="store_true")
 
-    p_query = sub.add_parser("query", help="natural-language graph query (skill).")
+    p_query = sub.add_parser("query", help="natural-language vault query (skill).")
     p_query.add_argument("text")
 
     # ── pure CLI utilities (deterministic) ──────────────────────────────────
@@ -174,11 +175,8 @@ def main(argv: list[str] | None = None) -> int:
             return ingest_dry_run(args.path, domain=args.domain)
         return _redirect("ingest", f"ingest {args.path}")
 
-    # render: graph is deterministic; jaso/resume need the skill
+    # render: jaso/resume need the skill
     if args.cmd == "render":
-        if args.kind == "graph":
-            from lockedin.commands.render_graph import run_render_graph
-            return run_render_graph(None)
         invocation_parts = ["render", args.kind]
         if args.target:
             invocation_parts += ["--target", args.target]

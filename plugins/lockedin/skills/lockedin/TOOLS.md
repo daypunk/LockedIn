@@ -22,7 +22,7 @@ Skill-only (LLM in the loop, Claude Code session required):
 | Ingester | `/lockedin ingest <path> [--domain DOMAIN]` | resolves ambiguities by asking |
 | Renderer (jaso) | `/lockedin render jaso [--company C] [--question Q] [--self-evaluate]` | two-turn writer/reviewer |
 | Renderer (resume) | `/lockedin render resume [--target T] [--self-evaluate]` | two-turn writer/reviewer |
-| Query | `/lockedin query "<text>"` | natural-language graph query |
+| Query | `/lockedin query "<text>"` | natural-language vault query |
 
 If the user types these as bare `lockedin ...` in a plain terminal, the
 CLI prints a redirect message and exits with code 3.
@@ -33,8 +33,9 @@ Pure CLI (deterministic, no LLM, run anywhere):
 | --- | --- | --- |
 | Interviewer (seed) | `lockedin init --non-interactive --fixture FILE [--vault PATH]` | YAML fixture → markdown vault, no LLM |
 | Ingester (preview) | `lockedin ingest <path> --dry-run [--domain DOMAIN]` | parse .pdf/.docx/.md/.txt and emit diff only |
-| Renderer (graph) | `lockedin render graph` | static HTML generation from `graph.json` |
-| GraphCurator | `lockedin validate [--vault PATH]` | exits 0 on conformant vault, 1 with offending path on first violation |
+| Migration | `lockedin migrate [--vault PATH] [--dry-run]` | upgrade vault frontmatter to the latest schema version (idempotent) |
+| Experience view | `lockedin experience <slug> [--time-range YYYY-MM/YYYY-MM] [--vault PATH]` | denormalized view per person, traversing temporal edges |
+| Validator | `lockedin validate [--vault PATH]` | exits 0 on conformant vault, 1 with offending path on first violation |
 | Installer | `lockedin install [--auto-register \| --upgrade \| --uninstall \| --check] [--target PATH] [--force]` | hash-aware; `--upgrade` refuses to clobber user-modified files without `--force` |
 | Doctor | `lockedin doctor` | prints subscription / API-key / skill-install state; exits non-zero on misconfig |
 | Template | `lockedin template {list,add,remove} [name]` | manage ontology templates |
@@ -46,12 +47,12 @@ vendored helpers directly:
 
 ```
 python3 ~/.claude/skills/lockedin/helpers/init.py --fixture ... --vault ...
-python3 ~/.claude/skills/lockedin/helpers/render_graph.py --vault ... --out ...
+python3 ~/.claude/skills/lockedin/helpers/migrate.py --vault ...
 ```
 
-The helpers MUST stay in lockstep with `lockedin/cli.py` — CI runs the
-parity test on every PR. If you add a new subcommand to `cli.py`, also add
-a helper script for the same behavior in `lockedin/skill/helpers/`.
+The helpers MUST stay in lockstep with `lockedin/cli.py`. If you add a new
+subcommand to `cli.py`, also add a helper script for the same behaviour in
+`lockedin/skill/helpers/`.
 
 ## Tool selection cheat sheet
 
@@ -75,7 +76,7 @@ selection matters for token spend on their plan. Default tiers:
 | Render resume_en (writer turn) | sonnet |
 | Render resume_en (reviewer turn) | sonnet (reviewer) |
 | Cultural review of jaso (deep cases) | opus |
-| Graph derivation / validate | haiku |
+| Validate / migrate / experience view | haiku |
 
 Bump to opus only when the user explicitly asks for "best quality" or the
 template requires nuanced judgment (e.g. cultural fit reviewer pass for

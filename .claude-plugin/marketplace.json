@@ -10,12 +10,12 @@
     {
       "name": "lockedin",
       "source": "./plugins/lockedin",
-      "description": "Build and grow a personal markdown ontology, then render resumes, cover letters, and an interactive graph viz from the same vault.",
+      "description": "Build and grow a personal markdown ontology, then render English resumes and Korean cover letters from the same vault.",
       "category": "productivity",
       "tags": ["knowledge-graph", "ontology", "career", "resume", "cover-letter", "obsidian", "korean"],
       "license": "MIT",
-      "homepage": "https://github.com/daypunk/lockedin",
-      "repository": "https://github.com/daypunk/lockedin"
+      "homepage": "https://github.com/daypunk/LockedIn",
+      "repository": "https://github.com/daypunk/LockedIn"
     }
   ]
 }

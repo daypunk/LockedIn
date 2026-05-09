@@ -41,9 +41,9 @@ dev = [
 lockedin = "lockedin.cli:main"
 
 [project.urls]
-Homepage = "https://github.com/daypunk/lockedin"
-Repository = "https://github.com/daypunk/lockedin"
-Issues = "https://github.com/daypunk/lockedin/issues"
+Homepage = "https://github.com/daypunk/LockedIn"
+Repository = "https://github.com/daypunk/LockedIn"
+Issues = "https://github.com/daypunk/LockedIn/issues"
 
 [tool.hatch.build.targets.wheel]
 packages = ["lockedin"]

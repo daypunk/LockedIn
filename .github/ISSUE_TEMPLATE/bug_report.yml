@@ -14,7 +14,7 @@ body:
     attributes:
       label: Summary
       description: One or two sentences describing what went wrong.
-      placeholder: "lockedin render graph crashes on a vault with no edges."
+      placeholder: "lockedin validate flags a fresh fixture vault as invalid."
     validations:
       required: true
 
@@ -25,8 +25,7 @@ body:
       description: Exact commands or actions, in order.
       placeholder: |
         1. LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin init --fixture examples/sample-vault.yaml
-        2. rm /tmp/sg/edges.md
-        3. python3 -m lockedin render graph
+        2. python3 -m lockedin validate
     validations:
       required: true
 
@@ -34,7 +33,7 @@ body:
     id: expected
     attributes:
       label: Expected behavior
-      placeholder: "graph.html generated with the empty-vault notice."
+      placeholder: "validate exits 0 with the message 'OK: 12 entities valid in /tmp/sg.'"
     validations:
       required: true
 

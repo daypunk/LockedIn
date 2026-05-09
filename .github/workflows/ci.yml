@@ -75,7 +75,7 @@ jobs:
   skill-only-smoke:
     name: skill-only path smoke
     runs-on: ubuntu-latest
-    if: ${{ false }}  # enables when helpers/init.py and helpers/render_graph.py exist
+    if: ${{ false }}  # enables when helpers/init.py and helpers/migrate.py exist
     steps:
       - uses: actions/checkout@v4
       - run: echo "Skill-only Docker recipe enables once helpers ship."

@@ -22,9 +22,9 @@ Python CLI is a deterministic helper, not a parallel runtime.
 │     └─ GraphCurator: surface dangling references in batches          │
 │                                                                      │
 │   When deterministic work is needed, the skill issues a Bash call:   │
-│      python3 ~/.claude/skills/lockedin/helpers/render_graph.py ...  │
 │      lockedin validate                                              │
-│      lockedin render graph                                          │
+│      lockedin migrate                                               │
+│      lockedin experience <slug>                                     │
 │      lockedin install --check                                       │
 │                                                                      │
 └──────────────────────────────────────────────────────────────────────┘
@@ -32,10 +32,10 @@ Python CLI is a deterministic helper, not a parallel runtime.
 ┌──────────────────────────────────────────────────────────────────────┐
 │  Pure CLI utilities (no LLM, run anywhere)                           │
 │                                                                      │
-│   lockedin render graph                # graph.html from graph.json │
 │   lockedin init --non-interactive --fixture FILE                    │
 │   lockedin ingest <path> --dry-run     # diff preview, no merge     │
-│   lockedin validate / doctor / install / template add/remove        │
+│   lockedin validate / doctor / install / template add/remove       │
+│   lockedin migrate / experience <slug>                             │
 │                                                                      │
 │   Skill-required commands typed here print a redirect (exit 3).      │
 └──────────────────────────────────────────────────────────────────────┘
@@ -43,11 +43,8 @@ Python CLI is a deterministic helper, not a parallel runtime.
 
 **Why this split exists.** Claude's reasoning is the expensive resource
 (tokens). Anything that does not need it (file I/O, AST/PDF/DOCX text
-extraction, graph JSON walking, HTML templating) belongs in the CLI so
-the skill stays focused on the parts that genuinely require an LLM. This
-also means the renderer's "interactive graph viz" deliverable is just an
-HTML file you open in a browser — Claude Code's TUI itself is closed and
-we don't try to render visuals inside it.
+extraction, frontmatter parsing) belongs in the CLI so the skill stays
+focused on the parts that genuinely require an LLM.
 
 
 
@@ -78,7 +75,7 @@ lockedin ships as a single repo with **two install paths**:
 ```
 
 Both paths produce **byte-identical output** on shared fixtures (`init`,
-notes round-trip, graph derivation). CI enforces this via the parity test.
+notes round-trip, validate). CI enforces this via the parity test.
 
 ## The vault is the contract
 
@@ -92,16 +89,14 @@ notes round-trip, graph derivation). CI enforces this via the parity test.
 ├── meeting/                        ← optional template (lockedin template add meeting)
 │   └── ...
 └── outputs/                        ← rendered artifacts
-    ├── graph.json
-    ├── graph.html                  ← single-file viz, the project's hero asset
     ├── resume-us-tech-senior.md
     └── jaso-<slug>-1.md
 ```
 
 Every entity is one markdown file. Every edge is one entry in a note's
-`links:` frontmatter. `graph.json` is derived; the markdown is the source
-of truth. `lockedin validate` walks the vault and reports any frontmatter
-that does not conform to `lockedin/ontology/schema.py`.
+`links:` frontmatter. The markdown is the source of truth. `lockedin
+validate` walks the vault and reports any frontmatter that does not
+conform to `lockedin/ontology/schema.py`.
 
 ## Renderer two-turn pattern
 
@@ -130,7 +125,7 @@ via `LOCKEDIN_ALLOW_API_KEY=1`.
 
 - Repo + ontology schema + CLI surface (current)
 - Q&A interview engine + storage layer
-- Document ingestion (.pdf / .docx / .md / .txt) + graph derivation + graph.html
+- Document ingestion (.pdf / .docx / .md / .txt)
 - Renderer skills with research-driven prompts and rubrics
 - Skill polish + two-recipe CI
 - Demo recording, README polish, soft launch

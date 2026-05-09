@@ -13,7 +13,6 @@ from lockedin.commands.install import (
     install_uninstall,
     install_upgrade,
 )
-from lockedin.commands.render_graph import run_render_graph
 from lockedin.commands.validate import validate
 from lockedin.ontology import Entity
 from lockedin.storage.notes import write_entity
@@ -192,53 +191,6 @@ def test_validate_catches_dangling_reference(tmp_path: Path, monkeypatch, capsys
     assert rc == 1
     out = capsys.readouterr().out
     assert "dangling reference" in out
-
-
-def test_render_graph_emits_json_and_html(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
-    write_entity(
-        tmp_path,
-        Entity(
-            type="person",
-            title="Sample",
-            slug="sample",
-            created="2026-04-30T10:00:00Z",
-            updated="2026-04-30T10:00:00Z",
-        ),
-    )
-    rc = run_render_graph(None)
-    assert rc == 0
-    json_path = tmp_path / "outputs" / "graph.json"
-    html_path = tmp_path / "outputs" / "graph.html"
-    assert json_path.exists()
-    assert html_path.exists()
-    html = html_path.read_text(encoding="utf-8")
-    assert "<!doctype html>" in html
-    assert "sample" in html
-    # Force-graph bundle is embedded inline (interactive HTML).
-    assert "ForceGraph" in html
-    # Bundle is real (not the placeholder fallback).
-    assert "force-graph" in html
-    # Total size stays under the AC ceiling (600 KB).
-    assert html_path.stat().st_size < 600_000
-
-
-def test_render_graph_html_handles_empty_vault_gracefully(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
-    rc = run_render_graph(None)
-    assert rc == 0
-    html = (tmp_path / "outputs" / "graph.html").read_text(encoding="utf-8")
-    # Empty vault renders a friendly notice, not the force-graph init script.
-    assert "vault is empty" in html
-    # The bundle still ships (so the page loads cleanly).
-    assert "ForceGraph" in html
-
-
-def test_render_graph_fails_when_vault_missing(tmp_path: Path, monkeypatch, capsys) -> None:
-    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path / "no-such"))
-    rc = run_render_graph(None)
-    assert rc == 1
-    assert "does not exist" in capsys.readouterr().out
 
 
 # ----- install --setup-hud / --remove-hud ----------------------------------
