@@ -44,6 +44,10 @@ When you want to produce something from what is already captured:
 
 LockedIn asks one question at a time when it needs more from you, and it stops when it has enough.
 
+<p align="center">
+  <img src="docs/assets/architecture.png" alt="LockedIn architecture" width="100%" />
+</p>
+
 ## Why it exists
 
 Most career tools regenerate every artifact from scratch. The artifact is the point, the source evaporates. LockedIn treats the source as the point. Your structured experience accumulates at `~/Documents/LockedIn/` as plain markdown files that you own and can carry to other tools. Resumes, cover letters, and meeting notes are artifacts of that memory, not the memory itself.
@@ -54,14 +58,6 @@ Most career tools regenerate every artifact from scratch. The artifact is the po
 - **One vault, four artifacts.** Resumes, cover letters, interview answers, and project ideas all come from the same source.
 - **Quality guard built in.** Drafting and scoring run as two separate Claude turns and every artifact ships with a JSON rubric score.
 - **Subscription, not API keys.** Everything runs on your existing Claude Code subscription.
-
-## Architecture at a glance
-
-<p align="center">
-  <img src="docs/assets/architecture.png" alt="LockedIn architecture" width="720" />
-</p>
-
-The diagram is rendered from the layout reference at [`docs/diagram-reference.md`](./docs/diagram-reference.md).
 
 ## How it works
 
@@ -88,7 +84,6 @@ LockedIn runs on your existing Claude Code subscription. It does not require an 
 | File | Purpose |
 |---|---|
 | [`docs/architecture.md`](./docs/architecture.md) | How the pieces fit together |
-| [`docs/diagram-reference.md`](./docs/diagram-reference.md) | ASCII source for the architecture image above |
 | [`docs/ontology-spec.md`](./docs/ontology-spec.md) | The frontmatter contract |
 | [`docs/ontology-mapping.md`](./docs/ontology-mapping.md) | Cross-walk to JSON Resume, Schema.org, FOAF |
 | [`docs/orchestration.md`](./docs/orchestration.md) | Render and ingest pipelines |
