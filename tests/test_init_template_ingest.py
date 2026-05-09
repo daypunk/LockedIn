@@ -6,10 +6,10 @@ from pathlib import Path
 
 import pytest
 
-from selfgraph.commands.ingest_dry import ingest_dry_run
-from selfgraph.commands.init import init_from_fixture
-from selfgraph.commands.template import template
-from selfgraph.storage.notes import read_entity
+from lockedin.commands.ingest_dry import ingest_dry_run
+from lockedin.commands.init import init_from_fixture
+from lockedin.commands.template import template
+from lockedin.storage.notes import read_entity
 
 # ----- init --fixture --------------------------------------------------------
 
@@ -33,7 +33,7 @@ entities:
 
 def test_init_from_fixture_writes_entities(tmp_path: Path, monkeypatch, capsys) -> None:
     pytest.importorskip("yaml")
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     fixture = tmp_path / "seed.yaml"
     fixture.write_text(SAMPLE_FIXTURE, encoding="utf-8")
 
@@ -57,7 +57,7 @@ def test_init_from_fixture_missing_file(tmp_path: Path, capsys) -> None:
 
 def test_init_from_fixture_skips_malformed_entries(tmp_path: Path, monkeypatch, capsys) -> None:
     pytest.importorskip("yaml")
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     fixture = tmp_path / "seed.yaml"
     fixture.write_text(
         "template: career\n"
@@ -78,7 +78,7 @@ def test_init_from_fixture_skips_malformed_entries(tmp_path: Path, monkeypatch, 
 def test_example_fixture_loads(tmp_path: Path, monkeypatch) -> None:
     """Sanity check the bundled examples/sample-vault.yaml round-trips."""
     pytest.importorskip("yaml")
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     repo_root = Path(__file__).resolve().parent.parent
     fixture = repo_root / "examples" / "sample-vault.yaml"
     if not fixture.exists():
@@ -94,7 +94,7 @@ def test_example_fixture_loads(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_template_list_on_empty_vault(tmp_path: Path, monkeypatch, capsys) -> None:
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     tmp_path.mkdir(exist_ok=True)
     rc = template("list")
     assert rc == 0
@@ -103,7 +103,7 @@ def test_template_list_on_empty_vault(tmp_path: Path, monkeypatch, capsys) -> No
 
 
 def test_template_add_then_list_then_remove(tmp_path: Path, monkeypatch, capsys) -> None:
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     rc = template("add", "research")
     assert rc == 0
     assert (tmp_path / "research").is_dir()
@@ -124,7 +124,7 @@ def test_template_add_then_list_then_remove(tmp_path: Path, monkeypatch, capsys)
 
 
 def test_template_remove_refuses_non_empty(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     template("add", "ops")
     (tmp_path / "ops" / "user-note.md").write_text("hi", encoding="utf-8")
     rc = template("remove", "ops")
@@ -133,7 +133,7 @@ def test_template_remove_refuses_non_empty(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_template_rejects_invalid_names(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     assert template("add", "with/slash") == 1
     assert template("add", ".dotted") == 1
     assert template("add", "outputs") == 1  # reserved
@@ -151,7 +151,7 @@ def test_ingest_dry_run_reports_md_and_txt(tmp_path: Path, capsys) -> None:
     assert "parsed: 2" in out
     assert "doc.md" in out and "notes.txt" in out
     # next-step pointer present
-    assert "/selfgraph ingest" in out
+    assert "/lockedin ingest" in out
 
 
 def test_ingest_dry_run_path_missing(tmp_path: Path, capsys) -> None:

@@ -5,7 +5,7 @@
 
 ## Context
 
-selfgraph's interactive `graph.html` is the highest-leverage visual asset
+lockedin's interactive `graph.html` is the highest-leverage visual asset
 for launch. Library choice is functionally irreversible after v1 ships
 (URLs, embed shapes, bundled JS, all baked in).
 
@@ -42,10 +42,10 @@ the generated `graph.html`.** Three reasons:
 The bundle lives at:
 
 ```
-plugins/selfgraph/scripts/vendor/force-graph.min.js
+plugins/lockedin/scripts/vendor/force-graph.min.js
 ```
 
-`selfgraph/commands/render_graph.py` reads this file at render time and
+`lockedin/commands/render_graph.py` reads this file at render time and
 embeds the JS inline in a `<script>` block, followed by an
 initialization script that wires:
 
@@ -70,7 +70,7 @@ issue, but the script doesn't crash).
 - Library lock-in: switching later requires editing
   `_interactive_html()` / `_init_script()` in `render_graph.py` and
   swapping the vendor bundle. Not free, but not dramatic either.
-- License: MIT — compatible with selfgraph's MIT.
+- License: MIT — compatible with lockedin's MIT.
 
 ## Update protocol
 
@@ -85,9 +85,9 @@ This ADR is ACCEPTED. Trigger a follow-up ADR (e.g.
 
 ## Verification
 
-- `selfgraph render graph` on a 10-node fixture vault → 182 KB
+- `lockedin render graph` on a 10-node fixture vault → 182 KB
   graph.html, opens cleanly in Chrome/Firefox/Safari.
-- `selfgraph render graph` on an empty vault → smaller HTML with the
+- `lockedin render graph` on an empty vault → smaller HTML with the
   "vault is empty" notice; bundle still ships so the page loads.
 - Test: `tests/test_commands.py::test_render_graph_emits_json_and_html`
   asserts the bundle marker is present and the file is < 600 KB.

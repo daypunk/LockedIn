@@ -48,5 +48,9 @@ round*.md
 # Local agent / tool outputs.
 .agent-os/
 
-# Defensive: rendered outputs (real outputs go to ~/.selfgraph/outputs/)
+# Defensive: rendered outputs (real outputs go to ~/Documents/LockedIn/outputs/)
 outputs/
+
+# User test artifacts that may land at repo root by mistake
+경험_*.md
+경력_*.md

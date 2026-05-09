@@ -1,8 +1,8 @@
 # Optional CLI
 
 The recommended install path is the Claude Code plugin marketplace
-(`/plugin marketplace add daypunk/selfgraph` / `/plugin install
-selfgraph@selfgraph`). Most users never need anything below.
+(`/plugin marketplace add daypunk/lockedin` / `/plugin install
+lockedin@lockedin`). Most users never need anything below.
 
 This document is for power users who want a deterministic CLI for:
 
@@ -14,10 +14,10 @@ This document is for power users who want a deterministic CLI for:
 ## Install
 
 ```bash
-uv tool install selfgraph
+uv tool install lockedin
 ```
 
-(Or `pipx install selfgraph` if you prefer.)
+(Or `pipx install lockedin` if you prefer.)
 
 ## Surfaces
 
@@ -31,26 +31,26 @@ The CLI splits cleanly into two groups:
 ### Pure CLI utilities
 
 ```bash
-selfgraph render graph                       # interactive graph.html
-selfgraph init --fixture seed.yaml           # deterministic vault seed
-selfgraph ingest <path> --dry-run            # diff preview only
-selfgraph validate                           # check vault against schema
-selfgraph doctor                             # diagnose runtime
-selfgraph hud                                # one-line statusLine snippet
-selfgraph install --check                    # manual fallback skill installer
+lockedin render graph                       # interactive graph.html
+lockedin init --fixture seed.yaml           # deterministic vault seed
+lockedin ingest <path> --dry-run            # diff preview only
+lockedin validate                           # check vault against schema
+lockedin doctor                             # diagnose runtime
+lockedin hud                                # one-line statusLine snippet
+lockedin install --check                    # manual fallback skill installer
 ```
 
-Default vault path: `~/.selfgraph/`. Override with `--vault PATH` or
-`SELFGRAPH_VAULT`.
+Default vault path: `~/Documents/LockedIn/`. Override with `--vault PATH` or
+`LOCKEDIN_VAULT`.
 
 ### Skill-only (redirect when used outside Claude Code)
 
 ```bash
-selfgraph init                               # interactive Q&A
-selfgraph ingest <path>                      # smart ingest with ambiguity Q&A
-selfgraph render resume --target ...         # writer + reviewer turns
-selfgraph render jaso --company ...          # writer + reviewer turns
-selfgraph query "<text>"                     # natural-language graph query
+lockedin init                               # interactive Q&A
+lockedin ingest <path>                      # smart ingest with ambiguity Q&A
+lockedin render resume --target ...         # writer + reviewer turns
+lockedin render jaso --company ...          # writer + reviewer turns
+lockedin query "<text>"                     # natural-language graph query
 ```
 
 ## Architecture split
@@ -71,7 +71,7 @@ previews) need to run as plain Python.
 ## Versioning
 
 The CLI version tracks the plugin version. Manual install commands
-(`selfgraph install --auto-register`) write a `.selfgraph-manifest.json`
+(`lockedin install --auto-register`) write a `.lockedin-manifest.json`
 in the installed skill directory; this is hash-aware so `--upgrade` will
 refuse to overwrite locally-edited skill files without `--force`. The
 plugin marketplace install handles versioning natively.

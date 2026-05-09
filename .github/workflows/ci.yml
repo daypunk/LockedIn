@@ -25,7 +25,7 @@ jobs:
           source $HOME/.local/bin/env || true
           uv pip install --system -e ".[dev]"
       - name: lint
-        run: ruff check selfgraph tests
+        run: ruff check lockedin tests
       - name: test
         run: pytest -q
 
@@ -36,16 +36,16 @@ jobs:
       - uses: actions/checkout@v4
       - name: reject CJK in skill meta files
         # English-only enforcement for the main skill, render-resume-en,
-        # and README.md. The selfgraph-render-jaso skill is exempt because
+        # and README.md. The lockedin-render-jaso skill is exempt because
         # its domain IS Korean output.
         # CJK elsewhere is allowed only inside fenced
         # <!-- ko-example -->...<!-- /ko-example --> blocks.
         run: |
           set -e
-          for f in $(find plugins/selfgraph/skills \
+          for f in $(find plugins/lockedin/skills \
                        \( -name 'SKILL.md' -o -name 'AGENTS.md' \
                           -o -name 'TOOLS.md' -o -name 'RUBRIC.md' \) \
-                     | grep -v '/selfgraph-render-jaso/') README.md; do
+                     | grep -v '/lockedin-render-jaso/') README.md; do
             [ -f "$f" ] || continue
             python3 - "$f" <<'PY'
           import re, sys

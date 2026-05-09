@@ -1,6 +1,6 @@
 # Orchestration design
 
-selfgraph today is a single Claude Code skill that does most flows in
+lockedin today is a single Claude Code skill that does most flows in
 one or two turns. This document plans where multi-agent orchestration
 genuinely earns its keep, and what the rollout looks like.
 
@@ -90,7 +90,7 @@ every node.
 ## Non-goals
 
 - A full agent framework like autopilot or a generic team
-  orchestrator. selfgraph orchestration is **task-specific** —
+  orchestrator. lockedin orchestration is **task-specific** —
   each pipeline is a small DAG hardcoded for one flow, not a generic
   orchestration engine.
 - Always-parallel execution. Many flows still run as one Claude turn;
@@ -102,12 +102,12 @@ every node.
 ## Tools
 
 Claude Code's `Task` tool spawns sub-agents with their own system
-prompts. selfgraph's pipelines call `Task(subagent_type="explore" |
+prompts. lockedin's pipelines call `Task(subagent_type="explore" |
 "executor" | …)` for each step that needs an LLM, in parallel where
 possible.
 
 For the model tier dispatch (haiku vs sonnet vs opus), pipelines
-respect the cheat sheet in `selfgraph/skill/selfgraph/TOOLS.md`. The
+respect the cheat sheet in `lockedin/skill/lockedin/TOOLS.md`. The
 dispatch is *suggested* by SKILL.md instructions, not enforced by the
 skill — Claude Code chooses based on its own routing.
 

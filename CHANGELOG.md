@@ -3,18 +3,18 @@
 ## [1.0.0] — 2026-05-01
 
 Initial release. Distribution via the Claude Code plugin marketplace
-as `daypunk/selfgraph`. Renderers ship with research-based
+as `daypunk/lockedin`. Renderers ship with research-based
 calibration. Named human reviewer engagement and fixture buildout are
 explicit v1.1 targets, listed in Future work below.
 
 ### Plugin distribution
 
 - Marketplace catalog at `.claude-plugin/marketplace.json`.
-- Plugin manifest at `plugins/selfgraph/.claude-plugin/plugin.json`.
-- Skills under `plugins/selfgraph/skills/{selfgraph,
-  selfgraph-render-jaso, selfgraph-render-resume-en}/`.
-- One-time setup wizard at `plugins/selfgraph/commands/setup.md`
-  (`/selfgraph:setup`). It wires the HUD, picks a default Q&A
+- Plugin manifest at `plugins/lockedin/.claude-plugin/plugin.json`.
+- Skills under `plugins/lockedin/skills/{lockedin,
+  lockedin-render-jaso, lockedin-render-resume-en}/`.
+- One-time setup wizard at `plugins/lockedin/commands/setup.md`
+  (`/lockedin:setup`). It wires the HUD, picks a default Q&A
   language, and picks a vault path.
 
 ### Ontology v0.2
@@ -28,7 +28,7 @@ explicit v1.1 targets, listed in Future work below.
   speaks, authored.
 - Per-entity-type field contracts (required and optional, 9 field
   types).
-- Edge domain and range constraints. `selfgraph validate` rejects
+- Edge domain and range constraints. `lockedin validate` rejects
   type-mismatched edges.
 - External vocabulary aliases (`schema:Person`, `foaf:Organization`,
   `jsonresume:work`, …) per `docs/ontology-mapping.md`.
@@ -75,34 +75,34 @@ explicit v1.1 targets, listed in Future work below.
 
 ### CLI utilities (deterministic, no LLM)
 
-- `selfgraph install`: `--auto-register`, `--check`, `--upgrade`
+- `lockedin install`: `--auto-register`, `--check`, `--upgrade`
   (hash-aware refusal of user-modified files), `--uninstall`,
   `--setup-hud`, `--remove-hud`.
-- `selfgraph init --non-interactive --fixture <yaml>`: deterministic
+- `lockedin init --non-interactive --fixture <yaml>`: deterministic
   vault seed from a YAML fixture. PyYAML date and datetime values are
   auto-coerced to ISO strings.
-- `selfgraph ingest <path> --dry-run`: parses `.pdf`, `.docx`, `.md`,
+- `lockedin ingest <path> --dry-run`: parses `.pdf`, `.docx`, `.md`,
   `.txt` and emits a diff report. No vault writes.
-- `selfgraph validate`: three-layer check (frontmatter shape, field
+- `lockedin validate`: three-layer check (frontmatter shape, field
   contracts, edge constraints).
-- `selfgraph render graph`: graph.json plus interactive graph.html.
-- `selfgraph template list / add / remove`.
-- `selfgraph doctor`: runtime, skill install, and API key state
+- `lockedin render graph`: graph.json plus interactive graph.html.
+- `lockedin template list / add / remove`.
+- `lockedin doctor`: runtime, skill install, and API key state
   check.
-- `selfgraph hud`: one-line statusLine snippet.
+- `lockedin hud`: one-line statusLine snippet.
 
 ### HUD (statusLine)
 
-- Three-segment output: `selfgraph X.Y.Z │ 5h:NN% · wk:NN% │ vault:
+- Three-segment output: `lockedin X.Y.Z │ 5h:NN% · wk:NN% │ vault:
   Nn · Me`.
 - Claude Code usage counted from `~/.claude/projects/*/*.jsonl` user
   turns within the rolling 5-hour and 7-day windows. Default
   thresholds tuned for the Pro tier. Override with
-  `SELFGRAPH_HUD_5H_LIMIT` and `SELFGRAPH_HUD_WK_LIMIT`.
+  `LOCKEDIN_HUD_5H_LIMIT` and `LOCKEDIN_HUD_WK_LIMIT`.
 - Color graded green, yellow, red as percentage rises. On by default.
-  Disable via `NO_COLOR` or `SELFGRAPH_HUD_COLOR=0`.
-- Wired automatically by `/selfgraph:setup` (or `selfgraph install
-  --setup-hud`). Reversible via `selfgraph install --remove-hud`.
+  Disable via `NO_COLOR` or `LOCKEDIN_HUD_COLOR=0`.
+- Wired automatically by `/lockedin:setup` (or `lockedin install
+  --setup-hud`). Reversible via `lockedin install --remove-hud`.
 
 ### OSS infrastructure
 
@@ -146,14 +146,14 @@ golden set.
 - **render-portfolio**: removed from scope. Portfolio sites belong to
   dedicated design and web-publishing tooling (Figma, dedicated
   static-site generators, hand-curated PDF) where the quality bar
-  exceeds what a markdown-vault render can deliver. selfgraph stays
+  exceeds what a markdown-vault render can deliver. lockedin stays
   focused on text artifacts (resume, 자소서) and the graph
   visualization.
 
 ## Future work
 
 - **Q&A interview buildout**: v1.0 ships
-  `plugins/selfgraph/skills/selfgraph/templates/career/questions.yaml`
+  `plugins/lockedin/skills/lockedin/templates/career/questions.yaml`
   as a 3-section, 6-question skeleton. v1.1 target is 9 sections
   (identity, companies and roles, projects, education, skills,
   decisions, learning, certificates, publications) with 5 or more
@@ -169,8 +169,8 @@ golden set.
   hiring manager walks through the fixture set.
 - **Quick-start path**: PDF-first onboarding and demo vault loading
   so a fresh user reaches a first artifact in under two minutes.
-- **Automatic SELFGRAPH_REPORT.md**: single file at
-  `~/.selfgraph/outputs/SELFGRAPH_REPORT.md` regenerated when the
+- **Automatic LOCKEDIN_REPORT.md**: single file at
+  `~/Documents/LockedIn/outputs/LOCKEDIN_REPORT.md` regenerated when the
   vault changes. Surfaces god nodes, coverage gaps, evidence recall
   trend, recent ingest summary.
 - **Provenance tags**: `provenance` field on every vault entry
@@ -179,7 +179,7 @@ golden set.
 - **Evidence recall instrumentation**: reviewer JSON gains an
   `evidence_recall` field (range 0.0 to 1.0). See `RUBRIC.md`
   "Evidence recall (informational)" in each renderer.
-- **`selfgraph migrate`**: schema migration command for users on
+- **`lockedin migrate`**: schema migration command for users on
   earlier vaults.
 - **v1.2 orchestration**: explicit 5-step render pipeline plus
   parallel bulk-ingest dispatcher (designed in

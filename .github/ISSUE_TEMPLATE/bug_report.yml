@@ -14,7 +14,7 @@ body:
     attributes:
       label: Summary
       description: One or two sentences describing what went wrong.
-      placeholder: "selfgraph render graph crashes on a vault with no edges."
+      placeholder: "lockedin render graph crashes on a vault with no edges."
     validations:
       required: true
 
@@ -24,9 +24,9 @@ body:
       label: Steps to reproduce
       description: Exact commands or actions, in order.
       placeholder: |
-        1. SELFGRAPH_VAULT=/tmp/sg python3 -m selfgraph init --fixture examples/sample-vault.yaml
+        1. LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin init --fixture examples/sample-vault.yaml
         2. rm /tmp/sg/edges.md
-        3. python3 -m selfgraph render graph
+        3. python3 -m lockedin render graph
     validations:
       required: true
 
@@ -49,9 +49,9 @@ body:
   - type: input
     id: version
     attributes:
-      label: selfgraph version
-      description: Output of `python3 -m selfgraph --version`.
-      placeholder: "selfgraph 1.0.0"
+      label: lockedin version
+      description: Output of `python3 -m lockedin --version`.
+      placeholder: "lockedin 1.0.0"
     validations:
       required: true
 
@@ -89,7 +89,7 @@ body:
     attributes:
       label: Checks
       options:
-        - label: I ran `python3 -m selfgraph doctor` and reviewed its output.
+        - label: I ran `python3 -m lockedin doctor` and reviewed its output.
           required: true
         - label: I confirmed this is not the user's vault state being protected (the design rule).
           required: true

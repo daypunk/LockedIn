@@ -1,24 +1,24 @@
-# selfgraph
+# LockedIn
 
 **English** | [한국어](README.ko.md)
 
-selfgraph is a Claude Code plugin that organizes your career experience into a structured knowledge graph. You feed it your projects, roles, achievements, and learning over time. It writes your resumes, your Korean cover letters, and renders an interactive graph from the same source.
+LockedIn is a Claude Code plugin that organizes your career experience into a structured knowledge graph. You feed it your projects, roles, achievements, and learning over time. It writes your English resumes and your Korean cover letters from the same source.
 
 ## Install
 
 Inside Claude Code, run three commands.
 
 ```
-/plugin marketplace add daypunk/selfgraph
-/plugin install selfgraph@selfgraph
-/selfgraph:setup
+/plugin marketplace add daypunk/LockedIn
+/plugin install lockedin@lockedin
+/lockedin:setup
 ```
 
 The third command runs a one-time wizard. It wires the heads-up display, picks your default interview language, and chooses where to save your experience.
 
 ## How you use it
 
-selfgraph activates when you talk to Claude Code about your experience. There are no commands to memorize.
+LockedIn activates when you talk to Claude Code about your experience. There are no commands to memorize.
 
 When you want to capture experience:
 
@@ -32,29 +32,28 @@ When you want to produce something from what is already captured:
 - "make me an English resume"
 - "I'm applying to company X for role Y, write the answer to question Z"
 - "summarize last quarter's decisions"
-- "show me my graph"
 
-selfgraph asks one question at a time when it needs more from you, and it stops when it has enough.
+LockedIn asks one question at a time when it needs more from you, and it stops when it has enough.
 
 ## Why it exists
 
-Most career tools regenerate every artifact from scratch. The artifact is the point, the source evaporates. selfgraph treats the source as the point. Your structured experience accumulates at `~/.selfgraph/` as plain markdown files that you own and can carry to other tools. Resumes, cover letters, and meeting notes are artifacts of that memory, not the memory itself.
+Most career tools regenerate every artifact from scratch. The artifact is the point, the source evaporates. LockedIn treats the source as the point. Your structured experience accumulates at `~/Documents/LockedIn/` as plain markdown files that you own and can carry to other tools. Resumes, cover letters, and meeting notes are artifacts of that memory, not the memory itself.
 
 ## How it works
 
 Your experiences are stored as plain markdown files with frontmatter. Every entity becomes one file. There are fifteen entity types covering people, companies, roles, projects, achievements, skills, education, certificates, publications, volunteer work, languages, documents, meetings, decisions, and topics. Relationships between entities are stored as links inside frontmatter, and the schema enforces which type can connect to which.
 
-When you ask for a render, selfgraph queries the vault, drafts the output in one Claude turn, and then reviews the draft against a calibrated rubric in a separate Claude turn. The split prevents self-evaluation bias. When the same Claude call both writes and scores, it tends to be lenient with itself by about one point. The reviewer turn runs separately and reloads the rubric from scratch, which removes the inflation.
+When you ask for a render, LockedIn queries the vault, drafts the output in one Claude turn, and then reviews the draft against a calibrated rubric in a separate Claude turn. The split prevents self-evaluation bias. When the same Claude call both writes and scores, it tends to be lenient with itself by about one point. The reviewer turn runs separately and reloads the rubric from scratch, which removes the inflation.
 
-selfgraph runs on your existing Claude Code subscription. It does not require an Anthropic API key, and it does not phone home.
+LockedIn runs on your existing Claude Code subscription. It does not require an Anthropic API key, and it does not phone home.
 
 ## Skills
 
 | Skill | Role |
 |---|---|
-| `selfgraph` | Main skill. Routes natural language requests, runs the Q&A interview that seeds your vault, coordinates ingest and render flows. |
-| `selfgraph-render-jaso` | Korean cover letter renderer with a five-dimension rubric (<!-- ko-example -->두괄식, 구조화, 구체성, 표현, 적합성<!-- /ko-example -->). Cross-source confirmed banned phrase list. Two-turn writer and reviewer with a hard guard for fresh rubric loading. |
-| `selfgraph-render-resume-en` | English resume renderer. Five dimensions: metric density, action verb quality, structural adherence, banned phrase cleanliness, persona fit. Built-in personas are us-tech-senior, us-tech-mid, and pm-product, and targeting other roles also works. The five dimensions apply regardless of target. The persona fit dimension is calibrated against the built-in three, so scores may be conservative for outside-set roles. |
+| `lockedin` | Main skill. Routes natural language requests, runs the Q&A interview that seeds your vault, coordinates ingest and render flows. |
+| `lockedin-render-jaso` | Korean cover letter renderer with a five-dimension rubric (<!-- ko-example -->두괄식, 구조화, 구체성, 표현, 적합성<!-- /ko-example -->). Cross-source confirmed banned phrase list. Two-turn writer and reviewer with a hard guard for fresh rubric loading. |
+| `lockedin-render-resume-en` | English resume renderer. Five dimensions: metric density, action verb quality, structural adherence, banned phrase cleanliness, persona fit. Built-in personas are us-tech-senior, us-tech-mid, and pm-product, and targeting other roles also works. The five dimensions apply regardless of target. The persona fit dimension is calibrated against the built-in three, so scores may be conservative for outside-set roles. |
 
 ## Documentation
 

@@ -7,31 +7,31 @@ enough that you can resume without prior conversation context.
 
 ## What this is
 
-`selfgraph` is a Claude Code plugin that organizes a user's experience
+`lockedin` is a Claude Code plugin that organizes a user's experience
 (career, meetings, projects, learning) into a typed markdown ontology
-they own at `~/.selfgraph/`, then renders artifacts (resume, cover
+they own at `~/Documents/LockedIn/`, then renders artifacts (resume, cover
 letter, graph viz) from the same vault. Two stores by design.
 **Store A** is the user's input, structured into the vault.
-**Store B** is `~/.selfgraph/outputs/`, the artifacts rendered from A.
+**Store B** is `~/Documents/LockedIn/outputs/`, the artifacts rendered from A.
 
 This repo holds the engine. It contains the plugin manifests, skill
 files, CLI helpers, and tests. Users' actual data lives at
-`~/.selfgraph/`, never in this repo.
+`~/Documents/LockedIn/`, never in this repo.
 
 Tagline: *Personal experience knowledge graph for Claude Code. Zero
 learning curve.* Distribution is the Claude Code plugin marketplace
-(`/plugin marketplace add daypunk/selfgraph`).
+(`/plugin marketplace add daypunk/lockedin`).
 
 ## Current state
 
 | Layer | State |
 | --- | --- |
-| Plugin marketplace | manifests at `.claude-plugin/marketplace.json` and `plugins/selfgraph/.claude-plugin/plugin.json` |
-| One-time setup wizard | `/selfgraph:setup` at `plugins/selfgraph/commands/setup.md` (HUD wiring, Q&A language, vault path) |
-| Ontology | **v0.2**. 15 entity types, 15 edge predicates, JSON Resume / Schema.org / FOAF aligned. Per-type field contracts and edge domain and range enforced by `selfgraph validate`. See `selfgraph/ontology/schema.py`. |
-| Render skills | `selfgraph` (main), `selfgraph-render-jaso` (calibrated, 5 pass + 5 fail fixtures), `selfgraph-render-resume-en` (calibrated, 3 personas). All under `plugins/selfgraph/skills/`. |
-| Render graph | Done. Vendored force-graph 1.51.4 UMD bundle (~178 KB) in `plugins/selfgraph/scripts/vendor/force-graph.min.js`. Single-file interactive `graph.html` ~182 KB total. See `docs/adr/0001-viz-library.md`. |
-| HUD | `selfgraph X.Y.Z │ 5h:NN% · wk:NN% │ vault: Nn · Me`. Counts user turns from `~/.claude/projects/*/*.jsonl`. Color on by default. Same script in two places (`plugins/selfgraph/scripts/hud.py` standalone, `selfgraph/commands/hud.py` package). The standalone defers to the package when available. |
+| Plugin marketplace | manifests at `.claude-plugin/marketplace.json` and `plugins/lockedin/.claude-plugin/plugin.json` |
+| One-time setup wizard | `/lockedin:setup` at `plugins/lockedin/commands/setup.md` (HUD wiring, Q&A language, vault path) |
+| Ontology | **v0.2**. 15 entity types, 15 edge predicates, JSON Resume / Schema.org / FOAF aligned. Per-type field contracts and edge domain and range enforced by `lockedin validate`. See `lockedin/ontology/schema.py`. |
+| Render skills | `lockedin` (main), `lockedin-render-jaso` (calibrated, 5 pass + 5 fail fixtures), `lockedin-render-resume-en` (calibrated, 3 personas). All under `plugins/lockedin/skills/`. |
+| Render graph | Done. Vendored force-graph 1.51.4 UMD bundle (~178 KB) in `plugins/lockedin/scripts/vendor/force-graph.min.js`. Single-file interactive `graph.html` ~182 KB total. See `docs/adr/0001-viz-library.md`. |
+| HUD | `lockedin X.Y.Z │ 5h:NN% · wk:NN% │ vault: Nn · Me`. Counts user turns from `~/.claude/projects/*/*.jsonl`. Color on by default. Same script in two places (`plugins/lockedin/scripts/hud.py` standalone, `lockedin/commands/hud.py` package). The standalone defers to the package when available. |
 | Deterministic CLI | `install` (with `--setup-hud`, `--remove-hud`, lifecycle), `init --fixture FILE`, `ingest --dry-run`, `render graph`, `validate`, `doctor`, `template`, `hud`. |
 | Skill-only commands | `init` (interactive), `ingest` (smart), `render jaso/resume`, `query`. Typed in plain shell, the CLI prints a redirect (exit 3) and points at Claude Code. |
 | OSS infrastructure | `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1), `.github/ISSUE_TEMPLATE/{bug_report, feature_request, korean_reviewer_onboarding, config}.yml`. |
@@ -44,21 +44,21 @@ learning curve.* Distribution is the Claude Code plugin marketplace
 .github/
 ├── ISSUE_TEMPLATE/                 ← bug, feature, Korean reviewer, config
 └── workflows/ci.yml                ← lint, test, language policy, leakage scan
-plugins/selfgraph/                  ← the plugin itself
+plugins/lockedin/                  ← the plugin itself
 ├── .claude-plugin/plugin.json
-├── commands/setup.md               ← /selfgraph:setup wizard
+├── commands/setup.md               ← /lockedin:setup wizard
 ├── scripts/
 │   ├── hud.py                      ← standalone HUD (no Python pkg required)
 │   └── vendor/force-graph.min.js   ← vendored viz library
 └── skills/
-    ├── selfgraph/                  ← main skill (SKILL/AGENTS/TOOLS.md)
+    ├── lockedin/                  ← main skill (SKILL/AGENTS/TOOLS.md)
     │   └── templates/career/questions.yaml
-    ├── selfgraph-render-jaso/      ← Korean cover letter (Korean OK in skill files)
+    ├── lockedin-render-jaso/      ← Korean cover letter (Korean OK in skill files)
     │   └── RUBRIC + prompts + banned_phrases + reviewers + research-notes
-    └── selfgraph-render-resume-en/ ← English resume (us-tech-senior, mid, pm-product)
+    └── lockedin-render-resume-en/ ← English resume (us-tech-senior, mid, pm-product)
         └── RUBRIC + prompts + banned_phrases + research-notes
 
-selfgraph/                          ← Python package (optional CLI accelerator)
+lockedin/                          ← Python package (optional CLI accelerator)
 ├── cli.py · config.py · __main__.py · __init__.py
 ├── ontology/{__init__,schema}.py   ← 15 entity types, 15 edge predicates, v0.2
 ├── storage/{notes,graph}.py        ← markdown read/write, graph derivation
@@ -75,7 +75,7 @@ tests/                              ← pytest suite + fixtures
 ├── test_smoke · test_storage_roundtrip · test_commands · test_hud · test_init_template_ingest
 └── fixtures/jaso/{pass,fail}/      ← 5 pass + 5 fail synthetic golden fixtures (research-based)
 
-examples/sample-vault.yaml          ← fixture seed for `selfgraph init --fixture`
+examples/sample-vault.yaml          ← fixture seed for `lockedin init --fixture`
 README.md · README.ko.md · CHANGELOG.md · CONTRIBUTING.md · CODE_OF_CONDUCT.md · LICENSE
 ```
 
@@ -87,22 +87,22 @@ README.md · README.ko.md · CHANGELOG.md · CONTRIBUTING.md · CODE_OF_CONDUCT.
   placeholder names like `SOME_COMPANY` or `GLOBAL_TECH`). Never use
   real persons, real companies, or quotes from real published 자소서.
 - **The markdown is the contract.** If
-  `selfgraph/ontology/schema.py` changes, also update
+  `lockedin/ontology/schema.py` changes, also update
   `docs/ontology-spec.md`, `docs/ontology-mapping.md`, and the
   renderer skills' SKILL.md.
 - **stdlib-first Python.** `pyproject.toml` has `dependencies = []`.
   PDF (`pypdf`) and DOCX (`python-docx`) are optional extras.
 - **English skills, polyglot output.** All files inside
-  `plugins/selfgraph/skills/` are English with one exception. The
-  `selfgraph-render-jaso/` directory is exempt from the
+  `plugins/lockedin/skills/` are English with one exception. The
+  `lockedin-render-jaso/` directory is exempt from the
   language-policy lint because its domain is Korean output. Korean
   inline examples elsewhere belong inside fenced
   `<!-- ko-example -->...<!-- /ko-example -->` blocks.
-- **Subscription, not API keys.** selfgraph reasoning runs through
+- **Subscription, not API keys.** lockedin reasoning runs through
   Claude Code skills on the user's existing subscription. The Python
-  CLI never calls the Anthropic API directly. `selfgraph doctor`
+  CLI never calls the Anthropic API directly. `lockedin doctor`
   detects API key configuration and warns unless the user opts in via
-  `SELFGRAPH_ALLOW_API_KEY=1`.
+  `LOCKEDIN_ALLOW_API_KEY=1`.
 - **Two-turn writer/reviewer for renderers.** Writer turn drafts.
   Reviewer turn re-loads `RUBRIC.md` fresh and emits a JSON score.
   Same-context self-evaluation inflates scores by about one point.
@@ -115,19 +115,19 @@ README.md · README.ko.md · CHANGELOG.md · CONTRIBUTING.md · CODE_OF_CONDUCT.
 
 ## What to NEVER do
 
-- **Never refactor `plugins/selfgraph/skills/selfgraph-render-jaso/`
+- **Never refactor `plugins/lockedin/skills/lockedin-render-jaso/`
   to remove Korean.** It is the one English-policy exempt skill. Its
   domain is Korean output.
-- **Never write to `~/.selfgraph/`** from tests or scripts unless
-  pointed at by `SELFGRAPH_VAULT` to a temp dir. The user's real
+- **Never write to `~/Documents/LockedIn/`** from tests or scripts unless
+  pointed at by `LOCKEDIN_VAULT` to a temp dir. The user's real
   vault is theirs.
 - **Never auto-modify `~/.claude/settings.json`** outside the
-  documented `selfgraph install --setup-hud` and `--remove-hud` flow.
+  documented `lockedin install --setup-hud` and `--remove-hud` flow.
   Setup is opt-in via the wizard. Silent statusLine writes break
   trust.
 - **Never crash the HUD.** The statusLine command runs every few
   hundred ms. On any unexpected error the HUD must fall back to the
-  bare label `selfgraph` and exit 0.
+  bare label `lockedin` and exit 0.
 - **Never copy real published 자소서 or resume text into fixtures.**
   Reading them as research input is fine, the same activity as a user
   reading them to form a strategy. Copying verbatim into
@@ -136,10 +136,10 @@ README.md · README.ko.md · CHANGELOG.md · CONTRIBUTING.md · CODE_OF_CONDUCT.
 
 ## Subscription path enforcement
 
-`selfgraph doctor` is the canonical diagnostic. It reports:
+`lockedin doctor` is the canonical diagnostic. It reports:
 
-- skill installation state at `~/.claude/skills/selfgraph/SKILL.md`
-- whether `ANTHROPIC_API_KEY` is set, or `SELFGRAPH_ALLOW_API_KEY=1`
+- skill installation state at `~/.claude/skills/lockedin/SKILL.md`
+- whether `ANTHROPIC_API_KEY` is set, or `LOCKEDIN_ALLOW_API_KEY=1`
   opt-in is in effect
 - vault path and Python version
 
@@ -152,23 +152,23 @@ See `CHANGELOG.md` "Future work" for the canonical list. Highlights:
 
 - Q&A interview buildout (highest leverage)
 - Quick-start path (PDF-first onboarding, demo vault loading)
-- Automatic SELFGRAPH_REPORT.md, provenance tags, evidence_recall
+- Automatic LOCKEDIN_REPORT.md, provenance tags, evidence_recall
   instrumentation
 - Named human reviewer engagement for both render skills
-- `selfgraph migrate` command
+- `lockedin migrate` command
 - v1.2 orchestration and v1.3 graph curator
 
 ## Verification quick reference
 
 ```bash
-python3 -m selfgraph --version                      # version banner
-python3 -c "from selfgraph.ontology import ENTITY_TYPES, EDGE_PREDICATES; print(len(ENTITY_TYPES), len(EDGE_PREDICATES))"   # 15 15
+python3 -m lockedin --version                      # version banner
+python3 -c "from lockedin.ontology import ENTITY_TYPES, EDGE_PREDICATES; print(len(ENTITY_TYPES), len(EDGE_PREDICATES))"   # 15 15
 python3 -m pytest -q                                # 52+ expected
-python3 -m selfgraph doctor                         # subscription/skill check
-SELFGRAPH_VAULT=/tmp/sg python3 -m selfgraph init --fixture examples/sample-vault.yaml
-SELFGRAPH_VAULT=/tmp/sg python3 -m selfgraph validate
-SELFGRAPH_VAULT=/tmp/sg python3 -m selfgraph render graph
-SELFGRAPH_VAULT=/tmp/sg python3 -m selfgraph hud
+python3 -m lockedin doctor                         # subscription/skill check
+LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin init --fixture examples/sample-vault.yaml
+LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin validate
+LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin render graph
+LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin hud
 ```
 
 `tests/fixtures/sample-vault.yaml` and `examples/sample-vault.yaml`
@@ -193,6 +193,6 @@ If you are a Claude session opened with no prior context:
 7. Before any significant change, run `pytest -q` to confirm the
    baseline is green.
 8. If a change touches the ontology, update all four of:
-   `selfgraph/ontology/schema.py`, `docs/ontology-spec.md`,
+   `lockedin/ontology/schema.py`, `docs/ontology-spec.md`,
    `docs/ontology-mapping.md`, and the renderer skills' SKILL.md
    that reference field shapes.

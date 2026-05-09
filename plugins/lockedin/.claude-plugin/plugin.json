@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin.json",
+  "name": "lockedin",
+  "description": "Personal experience knowledge graph for Claude Code. Build the graph by talking; render resumes, cover letters, and an interactive graph viz from the same vault.",
+  "version": "1.0.0",
+  "author": {
+    "name": "daypunk",
+    "email": "daehee216@naver.com"
+  },
+  "homepage": "https://github.com/daypunk/lockedin",
+  "license": "MIT",
+  "keywords": ["lockedin", "knowledge-graph", "career", "resume", "cover-letter", "ontology"]
+}

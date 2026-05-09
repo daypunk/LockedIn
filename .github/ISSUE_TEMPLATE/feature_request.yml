@@ -6,7 +6,7 @@ body:
   - type: markdown
     attributes:
       value: |
-        selfgraph is intentionally narrow — authoring quality matters
+        lockedin is intentionally narrow — authoring quality matters
         more than feature breadth. Please describe the underlying
         problem before proposing the solution.
 
@@ -14,7 +14,7 @@ body:
     id: problem
     attributes:
       label: Problem
-      description: What is the user trying to do that selfgraph cannot do today?
+      description: What is the user trying to do that lockedin cannot do today?
       placeholder: "When I render a resume, I want to target a specific job description."
     validations:
       required: true
@@ -53,7 +53,7 @@ body:
     attributes:
       label: Alignment
       options:
-        - label: This works inside the documented vault contract (no auto-modify of `~/.claude/settings.json` or write outside `~/.selfgraph/`).
+        - label: This works inside the documented vault contract (no auto-modify of `~/.claude/settings.json` or write outside `~/Documents/LockedIn/`).
           required: true
-        - label: This does not require an Anthropic API key (selfgraph is subscription-only via Claude Code).
+        - label: This does not require an Anthropic API key (lockedin is subscription-only via Claude Code).
           required: true

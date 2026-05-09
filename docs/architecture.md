@@ -1,10 +1,10 @@
-# selfgraph architecture
+# lockedin architecture
 
 > Authoritative reference for how the pieces fit together.
 
 ## Execution model: skill-driven, CLI-assisted
 
-selfgraph is a Claude Code skill, not a standalone agent. Reasoning runs
+lockedin is a Claude Code skill, not a standalone agent. Reasoning runs
 inside the host AI assistant on the user's existing subscription. The
 Python CLI is a deterministic helper, not a parallel runtime.
 
@@ -12,30 +12,30 @@ Python CLI is a deterministic helper, not a parallel runtime.
 ┌──────────────────────────────────────────────────────────────────────┐
 │  Host: Claude Code session (user's subscription)                     │
 │                                                                      │
-│   ┌─ User says "/selfgraph render jaso ..." or natural language      │
+│   ┌─ User says "/lockedin render jaso ..." or natural language      │
 │   │                                                                  │
 │   ▼                                                                  │
-│   Skill activates (selfgraph/skill/SKILL.md)                         │
+│   Skill activates (lockedin/skill/SKILL.md)                         │
 │     ├─ Interviewer: ask the user one question at a time              │
 │     ├─ Ingester: classify diff, resolve ambiguities by asking        │
 │     ├─ Renderer: writer turn → reviewer turn (RUBRIC.md re-loaded)   │
 │     └─ GraphCurator: surface dangling references in batches          │
 │                                                                      │
 │   When deterministic work is needed, the skill issues a Bash call:   │
-│      python3 ~/.claude/skills/selfgraph/helpers/render_graph.py ...  │
-│      selfgraph validate                                              │
-│      selfgraph render graph                                          │
-│      selfgraph install --check                                       │
+│      python3 ~/.claude/skills/lockedin/helpers/render_graph.py ...  │
+│      lockedin validate                                              │
+│      lockedin render graph                                          │
+│      lockedin install --check                                       │
 │                                                                      │
 └──────────────────────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────────────────┐
 │  Pure CLI utilities (no LLM, run anywhere)                           │
 │                                                                      │
-│   selfgraph render graph                # graph.html from graph.json │
-│   selfgraph init --non-interactive --fixture FILE                    │
-│   selfgraph ingest <path> --dry-run     # diff preview, no merge     │
-│   selfgraph validate / doctor / install / template add/remove        │
+│   lockedin render graph                # graph.html from graph.json │
+│   lockedin init --non-interactive --fixture FILE                    │
+│   lockedin ingest <path> --dry-run     # diff preview, no merge     │
+│   lockedin validate / doctor / install / template add/remove        │
 │                                                                      │
 │   Skill-required commands typed here print a redirect (exit 3).      │
 └──────────────────────────────────────────────────────────────────────┘
@@ -53,11 +53,11 @@ we don't try to render visuals inside it.
 
 ## Two install paths, one source of truth
 
-selfgraph ships as a single repo with **two install paths**:
+lockedin ships as a single repo with **two install paths**:
 
 ```
                  ┌─────────────────────────────────────────────┐
-                 │  ~/.claude/skills/selfgraph/  (skill files) │
+                 │  ~/.claude/skills/lockedin/  (skill files) │
                  │   ├ SKILL.md / AGENTS.md / TOOLS.md         │
                  │   ├ render-jaso/ / render-resume-en/ / ...  │
                  │   └ helpers/  ← single-file Python helpers  │
@@ -68,8 +68,8 @@ selfgraph ships as a single repo with **two install paths**:
                                        │
    ┌────────────────────────────┐      │      ┌────────────────────────────┐
    │ Skill-only path            │      │      │ CLI accelerator path       │
-   │ git clone <repo> →         │──────┘      │ uv tool install selfgraph  │
-   │   ~/.claude/skills/...     │             │ selfgraph install          │
+   │ git clone <repo> →         │──────┘      │ uv tool install lockedin  │
+   │   ~/.claude/skills/...     │             │ lockedin install          │
    │ python3 only, system       │             │   --auto-register          │
    │ helpers via `python3 -c`   │             │ Adds: PDF ingest,          │
    └────────────────────────────┘             │       multi-template,      │
@@ -83,13 +83,13 @@ notes round-trip, graph derivation). CI enforces this via the parity test.
 ## The vault is the contract
 
 ```
-~/.selfgraph/                       ← user-owned, Obsidian-compatible
+~/Documents/LockedIn/                       ← user-owned, Obsidian-compatible
 ├── career/                         ← default template (vault folder)
 │   ├── person/<slug>.md            ← entity notes, frontmatter has type+links
 │   ├── company/<slug>.md
 │   ├── role/<slug>.md
 │   └── ...
-├── meeting/                        ← optional template (selfgraph template add meeting)
+├── meeting/                        ← optional template (lockedin template add meeting)
 │   └── ...
 └── outputs/                        ← rendered artifacts
     ├── graph.json
@@ -100,8 +100,8 @@ notes round-trip, graph derivation). CI enforces this via the parity test.
 
 Every entity is one markdown file. Every edge is one entry in a note's
 `links:` frontmatter. `graph.json` is derived; the markdown is the source
-of truth. `selfgraph validate` walks the vault and reports any frontmatter
-that does not conform to `selfgraph/ontology/schema.py`.
+of truth. `lockedin validate` walks the vault and reports any frontmatter
+that does not conform to `lockedin/ontology/schema.py`.
 
 ## Renderer two-turn pattern
 
@@ -120,11 +120,11 @@ writer-reviewer fusion that inflates self-scores by ~1 point.
 
 ## Subscription path
 
-`selfgraph` is not an Anthropic API client. The Python CLI never calls
+`lockedin` is not an Anthropic API client. The Python CLI never calls
 `anthropic.Client`. Reasoning steps run as Claude Code skill calls; the
-user pays for them via their existing subscription. `selfgraph doctor`
+user pays for them via their existing subscription. `lockedin doctor`
 detects API key configuration and exits non-zero unless the user opts in
-via `SELFGRAPH_ALLOW_API_KEY=1`.
+via `LOCKEDIN_ALLOW_API_KEY=1`.
 
 ## Roadmap shape
 

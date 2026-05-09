@@ -6,9 +6,9 @@ from pathlib import Path
 
 import pytest
 
-from selfgraph.ontology import Entity
-from selfgraph.storage.graph import derive_graph_json, write_graph_json
-from selfgraph.storage.notes import read_entity, vault_path_for, write_entity
+from lockedin.ontology import Entity
+from lockedin.storage.graph import derive_graph_json, write_graph_json
+from lockedin.storage.notes import read_entity, vault_path_for, write_entity
 
 
 def _sample_person() -> Entity:

@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from selfgraph.commands.doctor import run_doctor
-from selfgraph.commands.install import (
+from lockedin.commands.doctor import run_doctor
+from lockedin.commands.install import (
     install_auto_register,
     install_check,
     install_remove_hud,
@@ -13,10 +13,10 @@ from selfgraph.commands.install import (
     install_uninstall,
     install_upgrade,
 )
-from selfgraph.commands.render_graph import run_render_graph
-from selfgraph.commands.validate import validate
-from selfgraph.ontology import Entity
-from selfgraph.storage.notes import write_entity
+from lockedin.commands.render_graph import run_render_graph
+from lockedin.commands.validate import validate
+from lockedin.ontology import Entity
+from lockedin.storage.notes import write_entity
 
 
 def test_install_check_missing(tmp_path: Path, capsys) -> None:
@@ -30,27 +30,27 @@ def test_install_check_missing(tmp_path: Path, capsys) -> None:
 def test_install_register_then_check_then_uninstall(tmp_path: Path) -> None:
     target = tmp_path / "skills"
     assert install_auto_register(str(target)) == 0
-    # Main skill directory now lives at <target>/selfgraph/
-    assert (target / "selfgraph" / "SKILL.md").exists()
-    assert (target / "selfgraph" / ".selfgraph-manifest.json").exists()
+    # Main skill directory now lives at <target>/lockedin/
+    assert (target / "lockedin" / "SKILL.md").exists()
+    assert (target / "lockedin" / ".lockedin-manifest.json").exists()
     # Sub-skills install as their own top-level directories
-    assert (target / "selfgraph-render-jaso" / "SKILL.md").exists()
+    assert (target / "lockedin-render-jaso" / "SKILL.md").exists()
     assert install_check(str(target)) == 0
     # second register without --force refuses
     assert install_auto_register(str(target)) == 1
     # but with --force overwrites
     assert install_auto_register(str(target), force=True) == 0
     assert install_uninstall(str(target)) == 0
-    # all selfgraph* skill subdirs gone
-    assert not (target / "selfgraph").exists()
-    assert not (target / "selfgraph-render-jaso").exists()
+    # all lockedin* skill subdirs gone
+    assert not (target / "lockedin").exists()
+    assert not (target / "lockedin-render-jaso").exists()
 
 
 def test_install_upgrade_refuses_when_user_modified(tmp_path: Path) -> None:
     target = tmp_path / "skills"
     install_auto_register(str(target))
     # User edits the main skill file
-    skill_md = target / "selfgraph" / "SKILL.md"
+    skill_md = target / "lockedin" / "SKILL.md"
     skill_md.write_text(skill_md.read_text() + "\n# user edit\n", encoding="utf-8")
     rc = install_upgrade(str(target))
     assert rc == 1
@@ -63,17 +63,17 @@ def test_doctor_runs(monkeypatch, tmp_path: Path, capsys) -> None:
     # Steer skill check at a known empty path so it reports missing
     monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(tmp_path / "claude"))
     monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
-    monkeypatch.delenv("SELFGRAPH_ALLOW_API_KEY", raising=False)
+    monkeypatch.delenv("LOCKEDIN_ALLOW_API_KEY", raising=False)
     rc = run_doctor()
     out = capsys.readouterr().out
-    assert "selfgraph" in out
+    assert "lockedin" in out
     assert rc == 1  # skill not installed at the steered location
 
 
 def test_doctor_warns_on_api_key_without_optin(monkeypatch, tmp_path: Path, capsys) -> None:
     monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(tmp_path / "claude"))
     monkeypatch.setenv("ANTHROPIC_API_KEY", "fake")
-    monkeypatch.delenv("SELFGRAPH_ALLOW_API_KEY", raising=False)
+    monkeypatch.delenv("LOCKEDIN_ALLOW_API_KEY", raising=False)
     rc = run_doctor()
     out = capsys.readouterr().out
     assert rc == 1
@@ -81,7 +81,7 @@ def test_doctor_warns_on_api_key_without_optin(monkeypatch, tmp_path: Path, caps
 
 
 def test_validate_passes_on_clean_vault(tmp_path: Path, monkeypatch, capsys) -> None:
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     person = Entity(
         type="person",
         title="Sample",
@@ -107,7 +107,7 @@ def test_validate_passes_on_clean_vault(tmp_path: Path, monkeypatch, capsys) -> 
 
 
 def test_validate_catches_missing_required_field(tmp_path: Path, monkeypatch, capsys) -> None:
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     # Person without 'name' (required)
     person = Entity(
         type="person",
@@ -124,7 +124,7 @@ def test_validate_catches_missing_required_field(tmp_path: Path, monkeypatch, ca
 
 
 def test_validate_catches_edge_domain_violation(tmp_path: Path, monkeypatch, capsys) -> None:
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     # company --works_on--> project: works_on requires source=person
     bad = Entity(
         type="company",
@@ -151,7 +151,7 @@ def test_validate_catches_edge_domain_violation(tmp_path: Path, monkeypatch, cap
 
 
 def test_validate_catches_edge_range_violation(tmp_path: Path, monkeypatch, capsys) -> None:
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     # person --works_on--> company: works_on requires target=project
     person = Entity(
         type="person",
@@ -178,7 +178,7 @@ def test_validate_catches_edge_range_violation(tmp_path: Path, monkeypatch, caps
 
 
 def test_validate_catches_dangling_reference(tmp_path: Path, monkeypatch, capsys) -> None:
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     person = Entity(
         type="person",
         title="Sample",
@@ -195,7 +195,7 @@ def test_validate_catches_dangling_reference(tmp_path: Path, monkeypatch, capsys
 
 
 def test_render_graph_emits_json_and_html(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     write_entity(
         tmp_path,
         Entity(
@@ -224,7 +224,7 @@ def test_render_graph_emits_json_and_html(tmp_path: Path, monkeypatch) -> None:
 
 
 def test_render_graph_html_handles_empty_vault_gracefully(tmp_path: Path, monkeypatch) -> None:
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     rc = run_render_graph(None)
     assert rc == 0
     html = (tmp_path / "outputs" / "graph.html").read_text(encoding="utf-8")
@@ -235,7 +235,7 @@ def test_render_graph_html_handles_empty_vault_gracefully(tmp_path: Path, monkey
 
 
 def test_render_graph_fails_when_vault_missing(tmp_path: Path, monkeypatch, capsys) -> None:
-    monkeypatch.setenv("SELFGRAPH_VAULT", str(tmp_path / "no-such"))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path / "no-such"))
     rc = run_render_graph(None)
     assert rc == 1
     assert "does not exist" in capsys.readouterr().out
@@ -261,16 +261,16 @@ def test_setup_hud_wires_statusline_when_absent(tmp_path: Path, monkeypatch, cap
     assert rc == 0
 
     # Script installed at stable path
-    assert (claude_dir / "selfgraph" / "hud.py").exists()
+    assert (claude_dir / "lockedin" / "hud.py").exists()
     # settings.json populated
     settings = _read_settings(claude_dir)
     sl = settings.get("statusLine")
     assert isinstance(sl, dict)
     assert sl.get("type") == "command"
     assert "hud.py" in sl.get("command", "")
-    assert "selfgraph" in sl.get("command", "")
+    assert "lockedin" in sl.get("command", "")
     # User-friendly output
-    assert "selfgraph HUD wired" in capsys.readouterr().out
+    assert "lockedin HUD wired" in capsys.readouterr().out
 
 
 def test_setup_hud_backs_up_existing_statusline(tmp_path: Path, monkeypatch) -> None:
@@ -288,14 +288,14 @@ def test_setup_hud_backs_up_existing_statusline(tmp_path: Path, monkeypatch) -> 
     rc = install_setup_hud()
     assert rc == 0
 
-    backup = claude_dir / "selfgraph" / ".previous-statusline.json"
+    backup = claude_dir / "lockedin" / ".previous-statusline.json"
     assert backup.exists()
     import json
     restored = json.loads(backup.read_text(encoding="utf-8"))
     assert restored == pre["statusLine"]
 
     settings = _read_settings(claude_dir)
-    assert "selfgraph" in settings["statusLine"]["command"]
+    assert "lockedin" in settings["statusLine"]["command"]
 
 
 def test_remove_hud_restores_previous_statusline(tmp_path: Path, monkeypatch) -> None:
@@ -303,19 +303,19 @@ def test_remove_hud_restores_previous_statusline(tmp_path: Path, monkeypatch) ->
     claude_dir.mkdir()
     monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(claude_dir))
 
-    # First, set up an existing statusLine + wire selfgraph (which backs it up)
+    # First, set up an existing statusLine + wire lockedin (which backs it up)
     (claude_dir / "settings.json").write_text(
         '{\n  "statusLine": {"type": "command", "command": "echo previous"}\n}\n',
         encoding="utf-8",
     )
     install_setup_hud()
-    assert "selfgraph" in _read_settings(claude_dir)["statusLine"]["command"]
+    assert "lockedin" in _read_settings(claude_dir)["statusLine"]["command"]
 
     # Now remove — backup should be restored
     rc = install_remove_hud()
     assert rc == 0
     assert _read_settings(claude_dir)["statusLine"]["command"] == "echo previous"
-    assert not (claude_dir / "selfgraph" / "hud.py").exists()
+    assert not (claude_dir / "lockedin" / "hud.py").exists()
 
 
 def test_setup_hud_idempotent(tmp_path: Path, monkeypatch) -> None:
@@ -341,6 +341,6 @@ def test_remove_hud_when_not_ours(tmp_path: Path, monkeypatch, capsys) -> None:
     rc = install_remove_hud()
     assert rc == 0
     out = capsys.readouterr().out
-    assert "not selfgraph" in out
+    assert "not lockedin" in out
     # statusLine left intact
     assert _read_settings(claude_dir)["statusLine"]["command"] == "node /not-ours.mjs"

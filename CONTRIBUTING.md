@@ -1,6 +1,6 @@
-# Contributing to selfgraph
+# Contributing to lockedin
 
-Thanks for considering a contribution. selfgraph is a Claude Code
+Thanks for considering a contribution. lockedin is a Claude Code
 plugin that organizes personal experience into a typed markdown vault
 and renders artifacts (resume, cover letter, portfolio, graph viz)
 from the same source. The project is small and intentionally so —
@@ -29,7 +29,7 @@ If you are new to the codebase, read these in order:
 | Bug fixes with a regression test | New entity types in the ontology | New renderer skills before the existing ones are calibrated |
 | Korean 자소서 reviewer engagement | New persona for `render-resume-en` | API-key-based execution paths (we are subscription-only) |
 | Documentation improvements | A new ingest source (e.g., another file format) | Telemetry / phone-home features |
-| Skill prompt refinements (with rubric scores before/after) | Translation of skills into other languages | Anything that writes outside `~/.selfgraph/` and the documented CLI flow |
+| Skill prompt refinements (with rubric scores before/after) | Translation of skills into other languages | Anything that writes outside `~/Documents/LockedIn/` and the documented CLI flow |
 | Golden fixtures (with the rules below) | New CLI subcommands | Auto-modification of `~/.claude/settings.json` outside the wizard |
 
 ## Development setup
@@ -39,13 +39,13 @@ plain `pip`, and a working Claude Code installation if you want to
 exercise the skill paths.
 
 ```bash
-git clone https://github.com/daypunk/selfgraph.git
-cd selfgraph
+git clone https://github.com/daypunk/lockedin.git
+cd lockedin
 uv venv
 source .venv/bin/activate  # or .venv\Scripts\activate on Windows
 uv pip install -e ".[dev,pdf,docx]"
 pytest -q                  # baseline must be green before you start
-python3 -m selfgraph doctor # checks runtime / skill / API-key state
+python3 -m lockedin doctor # checks runtime / skill / API-key state
 ```
 
 `pyproject.toml` keeps runtime dependencies empty (`dependencies = []`).
@@ -57,16 +57,16 @@ not introduce new runtime dependencies without an issue discussion.
 ```bash
 pytest -q                                                       # full suite
 pytest tests/test_validate.py -q                                # one file
-SELFGRAPH_VAULT=/tmp/sg python3 -m selfgraph init --fixture examples/sample-vault.yaml
-SELFGRAPH_VAULT=/tmp/sg python3 -m selfgraph validate
-SELFGRAPH_VAULT=/tmp/sg python3 -m selfgraph render graph
+LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin init --fixture examples/sample-vault.yaml
+LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin validate
+LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin render graph
 ```
 
 CI gates:
 
-- **lint**: `ruff check selfgraph tests`.
+- **lint**: `ruff check lockedin tests`.
 - **language policy**: skill meta files must be English except the
-  `selfgraph-render-jaso/` directory (its domain is Korean output).
+  `lockedin-render-jaso/` directory (its domain is Korean output).
   CJK outside fenced `<!-- ko-example -->...<!-- /ko-example -->`
   blocks fails the lint. Multilingual switcher links
   (`[한국어](README.ko.md)` etc.) are allowed.
@@ -122,12 +122,12 @@ have hired in 2+ Korean industries (IT 대기업 / 외국계 / 금융 / 제조
 Engagement is approximately 2–3 hours, asynchronous, attribution as
 you prefer.
 
-See [`plugins/selfgraph/skills/selfgraph-render-jaso/reviewers.md`](./plugins/selfgraph/skills/selfgraph-render-jaso/reviewers.md)
+See [`plugins/lockedin/skills/lockedin-render-jaso/reviewers.md`](./plugins/lockedin/skills/lockedin-render-jaso/reviewers.md)
 for the engagement format.
 
 ## Adding or refining a renderer skill
 
-Skills live in `plugins/selfgraph/skills/<skill-name>/`. Each skill
+Skills live in `plugins/lockedin/skills/<skill-name>/`. Each skill
 needs:
 
 - `SKILL.md` — frontmatter description triggers natural-language
@@ -149,8 +149,8 @@ narrow for v1.
 
 ## Language policy
 
-All files inside `plugins/selfgraph/skills/` are English **except**
-the `selfgraph-render-jaso/` directory, which is exempt because its
+All files inside `plugins/lockedin/skills/` are English **except**
+the `lockedin-render-jaso/` directory, which is exempt because its
 domain is Korean output. Korean inline examples elsewhere belong in
 fenced `<!-- ko-example -->...<!-- /ko-example -->` blocks. The CI
 language-policy lint enforces this.
@@ -187,7 +187,7 @@ incidents privately to the maintainer at
 
 ## Asking for help
 
-Open a [Discussion](https://github.com/daypunk/selfgraph/discussions)
-for questions and ideas. Open an [Issue](https://github.com/daypunk/selfgraph/issues/new/choose)
+Open a [Discussion](https://github.com/daypunk/lockedin/discussions)
+for questions and ideas. Open an [Issue](https://github.com/daypunk/lockedin/issues/new/choose)
 for bugs and concrete proposals. The maintainer reads everything but
 may take a few days to respond.

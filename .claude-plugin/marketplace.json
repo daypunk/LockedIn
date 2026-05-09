@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
-  "name": "selfgraph",
+  "name": "lockedin",
   "owner": {
     "name": "daypunk",
     "email": "daehee216@naver.com"
@@ -8,14 +8,14 @@
   "description": "Personal experience knowledge graph for Claude Code.",
   "plugins": [
     {
-      "name": "selfgraph",
-      "source": "./plugins/selfgraph",
+      "name": "lockedin",
+      "source": "./plugins/lockedin",
       "description": "Build and grow a personal markdown ontology, then render resumes, cover letters, and an interactive graph viz from the same vault.",
       "category": "productivity",
       "tags": ["knowledge-graph", "ontology", "career", "resume", "cover-letter", "obsidian", "korean"],
       "license": "MIT",
-      "homepage": "https://github.com/daypunk/selfgraph",
-      "repository": "https://github.com/daypunk/selfgraph"
+      "homepage": "https://github.com/daypunk/lockedin",
+      "repository": "https://github.com/daypunk/lockedin"
     }
   ]
 }

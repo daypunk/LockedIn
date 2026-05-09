@@ -1,7 +1,7 @@
-# Ontology mapping — selfgraph ↔ professional schemas
+# Ontology mapping — lockedin ↔ professional schemas
 
-Cross-walk between selfgraph's ontology (v0.2 target) and three external
-references. Use this when (a) extending selfgraph's schema, (b) building
+Cross-walk between lockedin's ontology (v0.2 target) and three external
+references. Use this when (a) extending lockedin's schema, (b) building
 import/export adapters, or (c) deciding whether to add a new entity type
 versus extending an existing one.
 
@@ -16,7 +16,7 @@ References:
 
 ## Entity types
 
-| selfgraph type | JSON Resume | Schema.org | FOAF | Notes |
+| lockedin type | JSON Resume | Schema.org | FOAF | Notes |
 | --- | --- | --- | --- | --- |
 | `person` | `basics` | `Person` | `foaf:Person` | The user themselves; also any other person referenced |
 | `company` | `work[].name` | `Organization` | `foaf:Organization` | Employer / school / client |
@@ -44,7 +44,7 @@ Total v0.2 entity count: **15** (was 11). 4 added (certificate / publication / v
 
 ## Edge predicates
 
-| selfgraph predicate | FOAF / Schema.org alignment | Domain → Range | Temporal? |
+| lockedin predicate | FOAF / Schema.org alignment | Domain → Range | Temporal? |
 | --- | --- | --- | --- |
 | `works_on` | `foaf:currentProject` | person → project | yes |
 | `held_role_at` | `schema:hasOccupation` | person → company | yes |
@@ -66,9 +66,9 @@ Total v0.2 edge count: **15** (was 12). 3 added.
 
 ## Field-level coverage examples
 
-JSON Resume `work` entry → selfgraph `role` entity:
+JSON Resume `work` entry → lockedin `role` entity:
 
-| JSON Resume field | selfgraph field | Type |
+| JSON Resume field | lockedin field | Type |
 | --- | --- | --- |
 | `name` (company name) | (relation: `held_role_at` → company entity) | edge |
 | `position` | `title` | string, required |
@@ -78,9 +78,9 @@ JSON Resume `work` entry → selfgraph `role` entity:
 | `highlights[]` | `highlights` | list[string] |
 | `url` | `fields.url` | url |
 
-Schema.org `Person` → selfgraph `person`:
+Schema.org `Person` → lockedin `person`:
 
-| Schema.org property | selfgraph field |
+| Schema.org property | lockedin field |
 | --- | --- |
 | `name` | `name` (required) |
 | `email` | `email` (FieldSpec type=email) |
@@ -134,8 +134,8 @@ once v0.2 lands.
 ## Schema versioning
 
 v0.2 introduces `schema_version: 2` at the vault root
-(`<vault>/.selfgraph/version.json`). v0.1 vaults (no version file or
-`schema_version: 1`) auto-migrate on first `selfgraph validate`:
+(`<vault>/.lockedin/version.json`). v0.1 vaults (no version file or
+`schema_version: 1`) auto-migrate on first `lockedin validate`:
 
 - Promote `fields: dict[str, Any]` to typed fields where the keys map
   cleanly.

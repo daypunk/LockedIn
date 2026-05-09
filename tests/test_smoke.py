@@ -8,13 +8,13 @@ from __future__ import annotations
 
 
 def test_package_imports() -> None:
-    import selfgraph
+    import lockedin
 
-    assert selfgraph.__version__
+    assert lockedin.__version__
 
 
 def test_ontology_constants_loaded() -> None:
-    from selfgraph.ontology import EDGE_PREDICATES, ENTITY_TYPES
+    from lockedin.ontology import EDGE_PREDICATES, ENTITY_TYPES
 
     assert "person" in ENTITY_TYPES
     assert "project" in ENTITY_TYPES
@@ -26,7 +26,7 @@ def test_ontology_constants_loaded() -> None:
 def test_ontology_entity_validates_type() -> None:
     import pytest
 
-    from selfgraph.ontology import Entity
+    from lockedin.ontology import Entity
 
     Entity(type="person", title="Test", slug="test")  # ok
 
@@ -37,7 +37,7 @@ def test_ontology_entity_validates_type() -> None:
 def test_ontology_edge_validates_predicate() -> None:
     import pytest
 
-    from selfgraph.ontology import Edge
+    from lockedin.ontology import Edge
 
     Edge(subject="a", predicate="works_on", object="b")  # ok
 
@@ -46,7 +46,7 @@ def test_ontology_edge_validates_predicate() -> None:
 
 
 def test_cli_help_runs_with_no_args() -> None:
-    from selfgraph.cli import main
+    from lockedin.cli import main
 
     rc = main([])
     assert rc == 0
@@ -55,7 +55,7 @@ def test_cli_help_runs_with_no_args() -> None:
 def test_cli_version_exits_zero() -> None:
     import pytest
 
-    from selfgraph.cli import main
+    from lockedin.cli import main
 
     with pytest.raises(SystemExit) as exc_info:
         main(["--version"])
@@ -63,7 +63,7 @@ def test_cli_version_exits_zero() -> None:
 
 
 def test_cli_skill_only_command_redirects() -> None:
-    from selfgraph.cli import SKILL_REDIRECT_EXIT, main
+    from lockedin.cli import SKILL_REDIRECT_EXIT, main
 
     rc = main(["render", "jaso", "--company", "X"])
     assert rc == SKILL_REDIRECT_EXIT

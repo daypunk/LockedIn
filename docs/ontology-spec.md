@@ -1,11 +1,11 @@
-# selfgraph ontology specification (v0.2)
+# lockedin ontology specification (v0.2)
 
-> The contract `selfgraph validate` checks. If a note's frontmatter
+> The contract `lockedin validate` checks. If a note's frontmatter
 > doesn't conform, validate exits non-zero.
 
 For the cross-walk to JSON Resume / Schema.org / FOAF, see
 `docs/ontology-mapping.md`. For per-entity field contracts and edge
-domain/range, the source of truth is `selfgraph/ontology/schema.py`.
+domain/range, the source of truth is `lockedin/ontology/schema.py`.
 
 ## File layout
 
@@ -15,7 +15,7 @@ Every entity is one markdown file at:
 <vault>/<domain>/<type>/<slug>.md
 ```
 
-`<vault>` defaults to `~/.selfgraph/`. `<domain>` matches the ontology
+`<vault>` defaults to `~/Documents/LockedIn/`. `<domain>` matches the ontology
 template (`career`, `meeting`, `project`, `learning`, …). `<slug>` is a
 URL-safe lowercase identifier derived from the note's `title:` field.
 
@@ -23,7 +23,7 @@ URL-safe lowercase identifier derived from the note's `title:` field.
 
 ```yaml
 ---
-type: <one of selfgraph.ontology.schema.ENTITY_TYPES>
+type: <one of lockedin.ontology.schema.ENTITY_TYPES>
 title: <human-readable title>
 slug: <url-safe identifier>
 created: <ISO-8601 datetime>
@@ -31,7 +31,7 @@ updated: <ISO-8601 datetime>
 fields:
   <type-specific fields, see ENTITY_SCHEMAS>
 links:
-  - predicate: <one of selfgraph.ontology.schema.EDGE_PREDICATES>
+  - predicate: <one of lockedin.ontology.schema.EDGE_PREDICATES>
     object: <slug of another note>
     weight: <optional float, default 1.0>
 ---
@@ -95,7 +95,7 @@ by `storage.notes.write_entity` MUST produce a byte-identical file.
 Both the Python CLI and the skill-only helper must satisfy this; CI's
 parity test diffs the two implementations against shared fixtures.
 
-## Validation rules (full set in `selfgraph validate` impl)
+## Validation rules (full set in `lockedin validate` impl)
 
 1. `type` must be in `ENTITY_TYPES`.
 2. `slug` must be unique across the vault.
@@ -113,13 +113,13 @@ parity test diffs the two implementations against shared fixtures.
 ## Schema versioning
 
 This is **schema_version 2**. v0.1 vaults (no version file or
-`schema_version: 1`) are still readable, but `selfgraph validate` will
+`schema_version: 1`) are still readable, but `lockedin validate` will
 report any v0.2 contract violations (typically: missing required
-fields). Run the migration step (planned for a future `selfgraph
+fields). Run the migration step (planned for a future `lockedin
 migrate` command) to bring older vaults forward, or hand-edit the
 flagged notes.
 
-The vault root marker is `<vault>/.selfgraph/version.json`:
+The vault root marker is `<vault>/.lockedin/version.json`:
 
 ```json
 { "schema_version": 2 }

@@ -1,8 +1,8 @@
-# Example fixture for: selfgraph init --non-interactive --fixture <this-file>
+# Example fixture for: lockedin init --non-interactive --fixture <this-file>
 #
 # Deterministic seed — no LLM. Each entity becomes one markdown note in
 # the vault. Fields conform to the v0.2 schema in
-# selfgraph/ontology/schema.py (per-type required/optional contracts).
+# lockedin/ontology/schema.py (per-type required/optional contracts).
 #
 # Schema reference: docs/ontology-spec.md and docs/ontology-mapping.md.
 
