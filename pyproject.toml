@@ -9,7 +9,7 @@ description = "Your experience as a knowledge graph. Claude Code-native."
 readme = "README.md"
 requires-python = ">=3.10"
 license = { text = "MIT" }
-authors = [{ name = "daypunk", email = "daehee216@naver.com" }]
+authors = [{ name = "daypunk", email = "business@daypunk.com" }]
 keywords = ["claude-code", "knowledge-graph", "ontology", "personal-knowledge-management", "career", "resume"]
 classifiers = [
     "Environment :: Console",

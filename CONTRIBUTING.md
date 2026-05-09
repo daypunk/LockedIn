@@ -183,7 +183,7 @@ This project adheres to the
 [Contributor Covenant](https://www.contributor-covenant.org/version/2/1/code_of_conduct/)
 v2.1. By participating, you agree to uphold its terms. Report
 incidents privately to the maintainer at
-[daehee216@naver.com](mailto:daehee216@naver.com).
+[business@daypunk.com](mailto:business@daypunk.com).
 
 ## Asking for help
 

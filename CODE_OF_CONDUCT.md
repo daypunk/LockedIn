@@ -14,7 +14,7 @@ engaging with maintainers — you agree to abide by its terms.
 If you experience or witness behavior that violates the Covenant,
 please contact the maintainer privately:
 
-- **Email**: [daehee216@naver.com](mailto:daehee216@naver.com)
+- **Email**: [business@daypunk.com](mailto:business@daypunk.com)
 
 Reports are handled confidentially. The maintainer will acknowledge
 within a reasonable time and follow the Covenant's enforcement
