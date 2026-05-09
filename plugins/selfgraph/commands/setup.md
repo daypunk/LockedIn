@@ -90,9 +90,33 @@ Then summarize what was configured:
 - Interview language: en | ko
 - Vault path: `<path>`
 
-Close with a concrete next step: *"Try saying 'log today's meeting' or
-'absorb a resume.pdf' to start. Re-run `/selfgraph:setup` any time to
-change settings."*
+Close with a concrete next step that points the user toward the
+fastest first artifact. The recommended default is the PDF-first
+path because it produces a useful artifact in under two minutes
+without requiring the interview engine.
+
+> *"To get started fast, drop a resume PDF or DOCX into chat and say*
+> *'absorb my resume'. selfgraph will parse it and propose entities to*
+> *add to your vault. If you would rather see how the tool works on*
+> *sample data first, say 'load demo'. Re-run `/selfgraph:setup` any*
+> *time to change settings."*
+
+### Demo vault loading (opt-in only)
+
+If the user explicitly asks for "load demo" or "sample data" or
+"preview" after setup, run the deterministic seed:
+
+```
+selfgraph init --fixture examples/sample-vault.yaml --vault $VAULT
+```
+
+Demo vault loading is opt-in by design. A 12-entity demo vault is
+sparse enough that renderers may produce uneven output (low
+evidence_recall, generic phrasing); a user who sees that output as
+their first selfgraph experience can mis-learn the tool's quality.
+PDF-first onboarding leaves the user's vault in a state where the
+first render reflects real personal evidence rather than fixture
+data.
 
 ## Reversibility
 

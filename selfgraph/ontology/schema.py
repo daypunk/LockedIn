@@ -77,9 +77,13 @@ class EntitySpec:
 ENTITY_SCHEMAS: dict[str, EntitySpec] = {
     "person": EntitySpec(
         type="person",
-        description="An individual — typically the user, but can reference others.",
+        description="An individual. Typically the user, but can reference others.",
         fields={
             "name": FieldSpec("string", "Full name", required=True),
+            "aliases": FieldSpec(
+                "list[string]",
+                "Alternative names this person is known by (e.g., Jim, 제인). Used by free-form ingest matching.",
+            ),
             "current_role": FieldSpec("string", "One-sentence role summary"),
             "email": FieldSpec("email", "Contact email"),
             "based_in": FieldSpec("string", "City or region"),
@@ -92,6 +96,10 @@ ENTITY_SCHEMAS: dict[str, EntitySpec] = {
         description="An employer, school, client, or other organization.",
         fields={
             "name": FieldSpec("string", "Company name", required=True),
+            "aliases": FieldSpec(
+                "list[string]",
+                "Alternative names this organization is known by (acronyms, romanizations, brand variations).",
+            ),
             "industry": FieldSpec("string", "Industry tag"),
             "employees": FieldSpec("int", "Approximate headcount"),
             "url": FieldSpec("url", "Website"),
@@ -402,8 +410,43 @@ EDGE_PREDICATES: tuple[str, ...] = tuple(EDGE_SCHEMAS.keys())
 # Schema versioning
 # ---------------------------------------------------------------------------
 
-SCHEMA_VERSION = 2
-"""Bumped on breaking changes. Surfaced via ``selfgraph validate``."""
+SCHEMA_VERSION = 3
+"""Bumped on breaking changes. Surfaced via ``selfgraph validate``.
+
+v3 (2026-05): added per-entity ``provenance`` system field across all
+entity types. Added ``aliases: list[string]`` to ``person`` and
+``company`` entities to support free-form ingest matching.
+"""
+
+
+# ---------------------------------------------------------------------------
+# Provenance system field
+# ---------------------------------------------------------------------------
+# Every entity record carries a ``provenance`` field that traces where the
+# record came from. Renderers surface this in their reviewer JSON so the
+# user can audit the origin of each cited fact.
+
+PROVENANCE_VALUES: tuple[str, ...] = (
+    "interview",
+    "pdf_ingest",
+    "docx_ingest",
+    "user_edit",
+    "inferred",
+)
+
+_PROVENANCE_FIELD = FieldSpec(
+    type="string",
+    description=(
+        "Source of this entity record. "
+        f"Allowed values: {', '.join(PROVENANCE_VALUES)}."
+    ),
+    required=False,
+)
+
+# Inject ``provenance`` into every entity type. This keeps the field schema
+# DRY while still being visible to ``selfgraph validate``.
+for _spec in ENTITY_SCHEMAS.values():
+    _spec.fields.setdefault("provenance", _PROVENANCE_FIELD)
 
 
 # ---------------------------------------------------------------------------

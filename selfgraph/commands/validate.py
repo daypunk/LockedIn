@@ -21,6 +21,7 @@ from selfgraph.config import resolve_vault
 from selfgraph.ontology import (
     EDGE_SCHEMAS,
     ENTITY_SCHEMAS,
+    PROVENANCE_VALUES,
     Entity,
     FieldSpec,
 )
@@ -92,6 +93,13 @@ def _check_entity_fields(path: Path, entity: Entity, errors: list[str]) -> None:
             err = _check_field_value(fields[name], fspec)
             if err:
                 errors.append(f"{path}: field {name!r} ({fspec.type}): {err}")
+                continue
+            # Enum-style check for the provenance system field.
+            if name == "provenance" and fields[name] not in PROVENANCE_VALUES:
+                errors.append(
+                    f"{path}: provenance value {fields[name]!r} not in "
+                    f"{list(PROVENANCE_VALUES)}"
+                )
 
 
 def _check_edges(

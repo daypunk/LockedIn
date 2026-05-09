@@ -119,6 +119,25 @@ def _build_parser() -> argparse.ArgumentParser:
     p_validate = sub.add_parser("validate", help="(CLI) check vault against schema")
     p_validate.add_argument("--vault")
 
+    p_migrate = sub.add_parser(
+        "migrate",
+        help="(CLI) upgrade vault frontmatter to the latest schema version",
+    )
+    p_migrate.add_argument("--vault")
+    p_migrate.add_argument("--dry-run", action="store_true",
+                           help="report what would change without writing")
+
+    p_experience = sub.add_parser(
+        "experience",
+        help="(CLI) synthesize a denormalized experience view for a person",
+    )
+    p_experience.add_argument("slug", help="person slug to view")
+    p_experience.add_argument(
+        "--time-range",
+        help="filter by date overlap, format YYYY-MM/YYYY-MM",
+    )
+    p_experience.add_argument("--vault")
+
     p_hud = sub.add_parser(
         "hud",
         help="(CLI) emit a one-line statusLine snippet for Claude Code",
@@ -181,6 +200,14 @@ def main(argv: list[str] | None = None) -> int:
     if args.cmd == "validate":
         from selfgraph.commands.validate import validate
         return validate(args.vault)
+
+    if args.cmd == "migrate":
+        from selfgraph.commands.migrate import migrate
+        return migrate(args.vault, dry_run=args.dry_run)
+
+    if args.cmd == "experience":
+        from selfgraph.commands.experience import experience
+        return experience(args.slug, time_range=args.time_range, vault_arg=args.vault)
 
     if args.cmd == "install":
         from selfgraph.commands.install import (

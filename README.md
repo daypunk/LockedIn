@@ -14,7 +14,7 @@ Inside Claude Code, run three commands.
 /selfgraph:setup
 ```
 
-The third command runs a one-time wizard. It wires the heads-up display, picks your default interview language, and chooses where your vault lives.
+The third command runs a one-time wizard. It wires the heads-up display, picks your default interview language, and chooses where to save your experience.
 
 ## How you use it
 
@@ -24,13 +24,13 @@ When you want to capture experience:
 
 - "start organizing my experience"
 - "log today's meeting with the design team"
-- "absorb this resume.pdf"
-- "add what I learned this week from the LLM agents paper"
+- "absorb my resume.pdf"
+- "add what I learned this week from a paper"
 
 When you want to produce something from what is already captured:
 
-- "make me a resume targeted at us-tech-senior"
-- "write me a Korean cover letter for company X, question 1"
+- "make me an English resume"
+- "I'm applying to company X for role Y, write the answer to question Z"
 - "summarize last quarter's decisions"
 - "show me my graph"
 
@@ -38,13 +38,13 @@ selfgraph asks one question at a time when it needs more from you, and it stops 
 
 ## Why it exists
 
-Most career tools regenerate every artifact from scratch. The artifact is the point, the source is forgotten. selfgraph treats the source as the point. Your structured experience lives at `~/.selfgraph/` as plain markdown that you own. Resumes, cover letters, and graph visualizations are queries against that memory, not the memory itself.
+Most career tools regenerate every artifact from scratch. The artifact is the point, the source evaporates. selfgraph treats the source as the point. Your structured experience accumulates at `~/.selfgraph/` as plain markdown files that you own and can carry to other tools. Resumes, cover letters, and meeting notes are artifacts of that memory, not the memory itself.
 
 ## How it works
 
-The vault is plain markdown with frontmatter. Every entity becomes one file. There are fifteen entity types covering people, companies, roles, projects, achievements, skills, education, certificates, publications, volunteer work, languages, documents, meetings, decisions, and topics. Relationships between entities are stored as links inside frontmatter, and the schema enforces which type can connect to which.
+Your experiences are stored as plain markdown files with frontmatter. Every entity becomes one file. There are fifteen entity types covering people, companies, roles, projects, achievements, skills, education, certificates, publications, volunteer work, languages, documents, meetings, decisions, and topics. Relationships between entities are stored as links inside frontmatter, and the schema enforces which type can connect to which.
 
-When you ask for a render, selfgraph queries the vault, drafts the output in one Claude turn, and then reviews the draft against a calibrated rubric in a separate Claude turn. The two-turn split is intentional. Self evaluation in the same context inflates scores by about one point.
+When you ask for a render, selfgraph queries the vault, drafts the output in one Claude turn, and then reviews the draft against a calibrated rubric in a separate Claude turn. The split prevents self-evaluation bias. When the same Claude call both writes and scores, it tends to be lenient with itself by about one point. The reviewer turn runs separately and reloads the rubric from scratch, which removes the inflation.
 
 selfgraph runs on your existing Claude Code subscription. It does not require an Anthropic API key, and it does not phone home.
 
@@ -54,7 +54,7 @@ selfgraph runs on your existing Claude Code subscription. It does not require an
 |---|---|
 | `selfgraph` | Main skill. Routes natural language requests, runs the Q&A interview that seeds your vault, coordinates ingest and render flows. |
 | `selfgraph-render-jaso` | Korean cover letter renderer with a five-dimension rubric (<!-- ko-example -->두괄식, 구조화, 구체성, 표현, 적합성<!-- /ko-example -->). Cross-source confirmed banned phrase list. Two-turn writer and reviewer with a hard guard for fresh rubric loading. |
-| `selfgraph-render-resume-en` | English resume renderer. Five dimensions: metric density, action verb quality, structural adherence, banned phrase cleanliness, persona fit. Three personas: us-tech-senior, us-tech-mid, pm-product. |
+| `selfgraph-render-resume-en` | English resume renderer. Five dimensions: metric density, action verb quality, structural adherence, banned phrase cleanliness, persona fit. Built-in personas are us-tech-senior, us-tech-mid, and pm-product, and targeting other roles also works. The five dimensions apply regardless of target. The persona fit dimension is calibrated against the built-in three, so scores may be conservative for outside-set roles. |
 
 ## Documentation
 
