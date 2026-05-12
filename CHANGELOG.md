@@ -1,5 +1,41 @@
 # Changelog
 
+## [1.2.0] — 2026-05-12
+
+### Added
+
+- `lockedin-audit` skill: drive-by (no vault) and post-ingest 3-mode scorer (`score` / `refine` / `refine-score`). Router-only `RUBRIC.md` that reuses `render-resume-en` and `render-jaso` rubrics; no dimension duplication.
+- `audit` CLI subcommand (`/lockedin audit <path>`) and `interview` alias for `init`.
+- Real document ingest: PDF (`pypdf`), DOCX (`python-docx`), markdown, and plain text now expose `extract_text()` and regex-based `parse()` returning grounding dicts (dates, urls, emails, candidate orgs). Previously `NotImplementedError` stubs.
+- Interview resumability: state persistence at `<vault>/.lockedin/interview-state.json`, atomic write, pause/skip/resume keywords, progress banner `[Section M/N · Q N/N]`, `sections=[…]` filter, `fresh=True` restart.
+- Interview question bank expanded from 6 to 49 questions across 9 sections (identity, companies and roles, projects, education, certificates, publications, volunteer experience, languages, decisions and learning).
+- Korean cover letter and English resume calibration parity: `banned_phrases.json` schema v2 (object array with category/severity/sources), 3 pass + 3 fail fixtures per skill, `test_jaso_calibration.py` and `test_resume_en_calibration.py`.
+- AI-native cross-source calibration shipped for `lockedin-render-interview` (7 sources, 25 banned phrases) and `lockedin-render-ideas` (7 sources, 27 banned phrases) with 3 pass + 3 fail fixtures each.
+- `lockedin doctor` now reports: audit skill installation, `pypdf` / `python-docx` / `PyYAML` availability, interview-state progress summary.
+- New `README.ja.md` (Japanese); language switcher across all four READMEs links every locale.
+- CI lint additions: `tests/test_research_allowlist.py` (citation host enforcement), `tests/test_readme_promises.py` (README ↔ code drift guard).
+
+### Changed
+
+- Ingest layer refactor: per-format modules at `lockedin/ingest/{pdf,docx,markdown,text}.py` now own `extract_text` and `parse`; `lockedin/commands/ingest_dry.py` slimmed to a thin orchestrator. Shared regex helpers extracted into `_parse_helpers.py` and `_section_heuristics.py`.
+- Main skill `SKILL.md`: `audit` flagged as the lowest-friction first try (Step 0 in Core flow); activation triggers include audit-related natural language.
+- `/lockedin:setup` wizard final guidance restructured to a 3-path menu (audit → absorb → demo).
+- Render CLI choices expanded from `{jaso, resume}` to `{jaso, resume, interview, ideas}` to match shipped skills.
+- AI-native posture made explicit in `CLAUDE.md`: rubric calibration goes through cross-source AI research, not human reviewer engagements.
+- Interview completes with a next-steps footer and an explicit `EXPERIENCE.md` refresh.
+- Test count: 73 → 231.
+
+### Removed
+
+- `.github/ISSUE_TEMPLATE/korean_reviewer_onboarding.yml` (AI-native posture).
+
+### Fixed
+
+- `lockedin/ontology/schema.py` module docstring corrected from "v0.2" to "v3" (matches `SCHEMA_VERSION = 3`).
+- `docs/ontology-spec.md` and `docs/ontology-mapping.md`: version labels synced to v3; `aliases` (person/company) and `provenance` system field documented.
+- `docs/architecture.md`: install paths updated from the legacy `uv tool install` flow to the current plugin marketplace + optional Python CLI accelerator.
+- `tests/research-allowlist.txt`: added `linkareer.com` (was only `linkareer.co.kr`); both are the same service.
+
 ## [1.1.0] — 2026-05-09
 
 ### Breaking

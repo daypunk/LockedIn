@@ -1,10 +1,10 @@
 """lockedin ingest <path> --dry-run — parse documents and report.
 
 Pure-CLI utility. Walks the given path, picks readers for each supported
-extension (`.md`, `.txt`, `.pdf`, `.docx`), and prints a summary report.
-**No vault writes**, no LLM calls, no ambiguity resolution. The smart
-ingest path that resolves ambiguities and merges into the ontology lives
-in the skill (host AI asks the user).
+extension (`.md`, `.markdown`, `.txt`, `.pdf`, `.docx`), and prints a
+summary report. **No vault writes**, no LLM calls, no ambiguity resolution.
+The smart ingest path that resolves ambiguities and merges into the ontology
+lives in the skill (host AI asks the user).
 """
 
 from __future__ import annotations
@@ -12,44 +12,17 @@ from __future__ import annotations
 from collections.abc import Callable
 from pathlib import Path
 
-
-def _read_text_file(path: Path) -> str | None:
-    try:
-        return path.read_text(encoding="utf-8", errors="replace")
-    except OSError:
-        return None
-
-
-def _read_pdf(path: Path) -> str | None:
-    try:
-        from pypdf import PdfReader  # type: ignore[import-not-found]
-    except ImportError:
-        return None
-    try:
-        reader = PdfReader(str(path))
-        return "\n".join((page.extract_text() or "") for page in reader.pages)
-    except Exception:  # pragma: no cover  # noqa: BLE001
-        return None
-
-
-def _read_docx(path: Path) -> str | None:
-    try:
-        import docx  # type: ignore[import-not-found]  # python-docx
-    except ImportError:
-        return None
-    try:
-        document = docx.Document(str(path))
-        return "\n".join(p.text for p in document.paragraphs)
-    except Exception:  # pragma: no cover  # noqa: BLE001
-        return None
-
+from lockedin.ingest import docx as _docx_mod
+from lockedin.ingest import markdown as _md_mod
+from lockedin.ingest import pdf as _pdf_mod
+from lockedin.ingest import text as _text_mod
 
 READERS: dict[str, Callable[[Path], str | None]] = {
-    ".md": _read_text_file,
-    ".markdown": _read_text_file,
-    ".txt": _read_text_file,
-    ".pdf": _read_pdf,
-    ".docx": _read_docx,
+    ".md": _md_mod.extract_text,
+    ".markdown": _md_mod.extract_text,
+    ".txt": _text_mod.extract_text,
+    ".pdf": _pdf_mod.extract_text,
+    ".docx": _docx_mod.extract_text,
 }
 
 

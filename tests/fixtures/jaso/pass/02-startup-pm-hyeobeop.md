@@ -1,11 +1,16 @@
 ---
+fixture_kind: pass
+target_question: 갈등극복
 expected_dimensions:
   두괄식: 5
   구조화: 5
   구체성: 5
   표현: 5
   적합성: 5
+expected_score: 4.8
 expected_revisions_required: false
+banned_phrases_hit: []
+dimensions_failed: []
 prompt: 협업 과정에서 갈등이 발생한 경험과 해결 방법을 서술해주세요
 company: SCALEUP_FINTECH (composite Series B startup)
 industry: 스타트업

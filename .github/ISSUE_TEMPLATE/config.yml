@@ -3,6 +3,3 @@ contact_links:
   - name: Discussions
     url: https://github.com/daypunk/lockedin/discussions
     about: For questions, ideas, and general conversation.
-  - name: Korean reviewer onboarding
-    url: https://github.com/daypunk/lockedin/issues/new?template=korean_reviewer_onboarding.yml
-    about: Have read or written 자소서? We'd love your help calibrating render-jaso.

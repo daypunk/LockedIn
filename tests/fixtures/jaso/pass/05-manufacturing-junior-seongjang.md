@@ -1,11 +1,16 @@
 ---
+fixture_kind: pass
+target_question: 성장과정
 expected_dimensions:
   두괄식: 5
   구조화: 5
   구체성: 5
   표현: 5
   적합성: 4
+expected_score: 4.8
 expected_revisions_required: false
+banned_phrases_hit: []
+dimensions_failed: []
 prompt: 본인의 성장과정에서 가장 큰 영향을 준 경험을 서술해주세요
 company: KOREA_HEAVY (composite manufacturing group)
 industry: 제조

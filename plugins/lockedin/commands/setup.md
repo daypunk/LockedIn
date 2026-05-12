@@ -80,7 +80,7 @@ Merge into `lockedin/config.json`:
 ```json
 {
   "setup_completed": "<ISO-8601 timestamp>",
-  "setup_version": "1.1.0"
+  "setup_version": "1.2.0"
 }
 ```
 
@@ -90,16 +90,24 @@ Then summarize what was configured:
 - Interview language: en | ko
 - Vault path: `<path>`
 
-Close with a concrete next step that points the user toward the
-fastest first artifact. The recommended default is the PDF-first
-path because it produces a useful artifact in under two minutes
-without requiring the interview engine.
+Close with a concrete next step. Three paths, ordered from lowest
+friction to highest commitment — recommend the first.
 
-> *"To get started fast, drop a resume PDF or DOCX into chat and say*
-> *'absorb my resume'. lockedin will parse it and propose entities to*
-> *add to your vault. If you would rather see how the tool works on*
-> *sample data first, say 'load demo'. Re-run `/lockedin:setup` any*
-> *time to change settings."*
+> *"Three ways to start, fastest first:*
+>
+> *1. **Just audit a resume** (zero commitment). Drop any resume PDF or*
+>    *DOCX in chat and say 'audit my resume'. Returns a 5-dimension*
+>    *calibrated score in about 30 seconds. No vault, no merge.*
+>
+> *2. **Absorb a resume into the vault.** Drop the same file and say*
+>    *'absorb my resume'. lockedin will parse it and propose entities*
+>    *to add. After the merge you can refine, score, or render.*
+>
+> *3. **Sample-data preview.** Say 'load demo' if you'd rather see the*
+>    *renderers running on fixture data first, before committing your*
+>    *own experience.*
+>
+> *Re-run `/lockedin:setup` any time to change settings."*
 
 ### Demo vault loading (opt-in only)
 

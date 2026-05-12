@@ -6,6 +6,7 @@ from pathlib import Path
 
 import pytest
 
+from lockedin.cli import main as cli_main
 from lockedin.commands.ingest_dry import ingest_dry_run
 from lockedin.commands.init import init_from_fixture
 from lockedin.commands.template import template
@@ -46,6 +47,20 @@ def test_init_from_fixture_writes_entities(tmp_path: Path, monkeypatch, capsys) 
     assert person.fields["current_role"] == "PM"
     assert person.links[0]["object"] == "project-a"
     assert (tmp_path / "experience" / "project" / "project-a.md").exists()
+
+
+def test_interview_alias_dispatches_to_init(tmp_path: Path, monkeypatch, capsys) -> None:
+    """The `interview` alias should route through the same dispatch as `init`."""
+    pytest.importorskip("yaml")
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
+    fixture = tmp_path / "seed.yaml"
+    fixture.write_text(SAMPLE_FIXTURE, encoding="utf-8")
+
+    rc = cli_main(["interview", "--fixture", str(fixture)])
+    assert rc == 0
+    out = capsys.readouterr().out
+    assert "wrote 2 entities" in out
+    assert (tmp_path / "experience" / "person" / "sample-user.md").exists()
 
 
 def test_init_from_fixture_missing_file(tmp_path: Path, capsys) -> None:

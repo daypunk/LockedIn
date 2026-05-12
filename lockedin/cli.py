@@ -9,7 +9,8 @@ Two execution surfaces, deliberately separated:
 
 * **Claude Code skill commands** (need an LLM in the loop, run inside
   Claude Code on the user's existing subscription): interactive `init`,
-  smart `ingest`, `render jaso/resume`, `query`.
+  smart `ingest`, `render jaso/resume/interview/ideas`, `audit`,
+  `query`.
 
 When a skill-only subcommand is invoked from a plain terminal, the CLI
 prints a short pointer explaining how to invoke it inside Claude Code,
@@ -36,7 +37,10 @@ Open Claude Code in this directory and run:
 Or use natural language. Examples:
     "내 경력 정리해줘"          → /lockedin init
     "이 PDF 흡수해줘"           → /lockedin ingest <path>
+    "이 이력서 점검해줘"        → /lockedin audit <path>
     "자소서 1번 문항 써줘"      → /lockedin render jaso
+    "면접 답변 써줘"            → /lockedin render interview
+    "다음 프로젝트 아이디어"    → /lockedin render ideas
 
 Pure-CLI alternatives that work outside Claude Code (no LLM):
     lockedin init --non-interactive --fixture seed.yaml  # deterministic seed
@@ -69,7 +73,8 @@ def _build_parser() -> argparse.ArgumentParser:
     # ── skill-driven (with deterministic-flag escape hatches) ───────────────
     p_init = sub.add_parser(
         "init",
-        help="Q&A interview to seed the ontology (skill). With --non-interactive --fixture: deterministic CLI seed.",
+        aliases=["interview"],
+        help="Q&A interview to seed the ontology (skill). With --non-interactive --fixture: deterministic CLI seed. Alias: `interview`.",
     )
     p_init.add_argument("--lang", choices=["en", "ko"], default="en")
     p_init.add_argument("--non-interactive", action="store_true")
@@ -86,13 +91,32 @@ def _build_parser() -> argparse.ArgumentParser:
 
     p_render = sub.add_parser(
         "render",
-        help="render an artifact. jaso/resume: skill.",
+        help="render an artifact (skill): jaso, resume, interview, ideas.",
     )
-    p_render.add_argument("kind", choices=["jaso", "resume"])
+    p_render.add_argument(
+        "kind", choices=["jaso", "resume", "interview", "ideas"]
+    )
     p_render.add_argument("--target", help="renderer profile (e.g. us-tech-senior)")
-    p_render.add_argument("--company", help="company name (jaso only)")
-    p_render.add_argument("--question", help="question id or text (jaso only)")
+    p_render.add_argument("--company", help="company name (jaso/interview)")
+    p_render.add_argument("--question", help="question id or text (jaso/interview)")
     p_render.add_argument("--self-evaluate", action="store_true")
+
+    p_audit = sub.add_parser(
+        "audit",
+        help=(
+            "score a resume document against the calibrated rubric (skill). "
+            "Drive-by mode requires no vault."
+        ),
+    )
+    p_audit.add_argument(
+        "path", help="path to the resume document (.pdf / .docx / .md / .txt)"
+    )
+    p_audit.add_argument(
+        "--mode",
+        choices=["score", "refine", "refine-score"],
+        default="score",
+        help="score (default), refine, or refine then score",
+    )
 
     p_query = sub.add_parser("query", help="natural-language vault query (skill).")
     p_query.add_argument("text")
@@ -164,8 +188,8 @@ def main(argv: list[str] | None = None) -> int:
         parser.print_help()
         return 0
 
-    # init: deterministic when --fixture is given (non-interactive implied)
-    if args.cmd == "init":
+    # init / interview alias: deterministic when --fixture is given (non-interactive implied)
+    if args.cmd in ("init", "interview"):
         if args.fixture:
             from lockedin.commands.init import init_from_fixture
             return init_from_fixture(args.fixture, args.vault, lang=args.lang)
@@ -181,7 +205,7 @@ def main(argv: list[str] | None = None) -> int:
             return ingest_dry_run(args.path, domain=args.domain)
         return _redirect("ingest", f"ingest {args.path}")
 
-    # render: jaso/resume need the skill
+    # render: all kinds need the skill
     if args.cmd == "render":
         invocation_parts = ["render", args.kind]
         if args.target:
@@ -191,6 +215,18 @@ def main(argv: list[str] | None = None) -> int:
         if args.question:
             invocation_parts += ["--question", str(args.question)]
         return _redirect("render", " ".join(invocation_parts))
+
+    # audit: drive-by scorer, runs through the skill
+    if args.cmd == "audit":
+        invocation_parts = ["audit", args.path]
+        if args.mode and args.mode != "score":
+            invocation_parts += ["--mode", args.mode]
+        rc = _redirect("audit", " ".join(invocation_parts))
+        print("Audit modes:")
+        print("  --mode score          # (default) rubric pass on source. No vault changes.")
+        print("  --mode refine         # diff-based refinement of merged entities.")
+        print("  --mode refine-score   # refine, then score the refined output. Shows the delta.")
+        return rc
 
     # query: skill only
     if args.cmd == "query":

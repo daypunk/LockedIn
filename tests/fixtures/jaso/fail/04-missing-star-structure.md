@@ -1,4 +1,6 @@
 ---
+fixture_kind: fail
+target_question: 직무경험
 expected_dimensions:
   두괄식: 3
   구조화: 1
@@ -6,6 +8,8 @@ expected_dimensions:
   표현: 4
   적합성: 4
 expected_revisions_required: true
+banned_phrases_hit: []
+dimensions_failed: ["구조화"]
 prompt: 가장 도전적이었던 경험을 서술해주세요
 company: SOME_COMPANY
 industry: IT 대기업

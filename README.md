@@ -4,9 +4,9 @@
 
 # LockedIn
 
-**English** | [한국어](README.ko.md) | [简体中文](README.zh.md)
+**English** | [한국어](README.ko.md) | [日本語](README.ja.md) | [简体中文](README.zh.md)
 
-[![version](https://img.shields.io/badge/version-1.1.0-orange.svg)](https://github.com/daypunk/LockedIn/releases)
+[![version](https://img.shields.io/badge/version-1.2.0-orange.svg)](https://github.com/daypunk/LockedIn/releases)
 [![license](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
 [![stars](https://img.shields.io/github/stars/daypunk/LockedIn?color=orange&style=flat)](https://github.com/daypunk/LockedIn/stargazers)
 
@@ -58,6 +58,7 @@ Most career tools regenerate every artifact from scratch. The artifact is the po
 - **Natural-language activation.** Talk to Claude Code the way you already do.
 - **One vault, four artifacts.** Resumes, cover letters, interview answers, and project ideas all come from the same source.
 - **Quality guard built in.** Drafting and scoring run as two separate Claude turns and every artifact ships with a JSON rubric score.
+- **Pre-flight audit.** Drop any resume and get the same calibrated score before you commit to a vault — no install, no signup.
 - **Subscription, not API keys.** Everything runs on your existing Claude Code subscription.
 
 ## How it works
@@ -79,6 +80,7 @@ LockedIn runs on your existing Claude Code subscription. It does not require an 
 | `lockedin-render-resume-en` | English resume renderer. Five dimensions: metric density, action verb quality, structural adherence, banned phrase cleanliness, persona fit. Built-in personas are us-tech-senior, us-tech-mid, and pm-product, and targeting other roles also works. The five dimensions apply regardless of target. The persona fit dimension is calibrated against the built-in three, so scores may be conservative for outside-set roles. |
 | `lockedin-render-interview` | Interview answer renderer. STAR or PAR shape with one experience per paragraph and explicit transitions between paragraphs. Five dimensions: clarity, evidence density, persona fit, conciseness, tone. |
 | `lockedin-render-ideas` | Surfaces 3 to 5 next-project or career-move ideas grounded in your vault. Each idea is one paragraph: pitch sentence plus rationale that cites real entities. Five dimensions: feasibility, novelty, evidence ground, scope match, motivation alignment. |
+| `lockedin-audit` | Calibrated pre-flight scorer. Takes any resume document, returns a 5-dimension rubric score plus banned-phrase and weak-verb hits. Optional refinement pass quantifies the score lift. Reuses `render-resume-en` and `render-jaso` rubrics — same calibration, no duplication. |
 
 ## Documentation
 

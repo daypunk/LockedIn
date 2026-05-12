@@ -1,36 +1,260 @@
 {
-  "schema_version": 1,
-  "status": "v1.0 — research-based; cross-source confirmed",
-  "rationale": "Each entry was flagged by 3+ independent Korean 자소서 guides as 진부 / 추상적 / 클리셰. Cross-source HR survey statistics: 성실한 (49.2%), 노력하는 (36.3%), 책임감 있는 (28.5%), 솔선수범하는 (21.8%), 창의적인 (21.8%), 도전적인 (13.4%) per published 인사담당자 surveys. Sources: 워크넷, 잡코리아, 사람인, 링커리어, 캐치, 하이잡, brunch career writers, plus the khan.co.kr / hankookilbo HR-survey citations. See research-notes.md.",
+  "schema_version": 2,
+  "status": "v2.0 — research-based; cross-source confirmed; upgraded to object format",
+  "rationale": "Each entry was flagged by 3+ independent Korean 자소서 guides as 진부 / 추상적 / 클리셰. Cross-source HR survey statistics: 성실한 (49.2%), 노력하는 (36.3%), 책임감 있는 (28.5%), 솔선수범하는 (21.8%), 창의적인 (21.8%), 도전적인 (13.4%) per published 인사담당자 surveys. Sources: 워크넷, 잡코리아, 사람인, 링커리어, 캐치, 하이잡, brunch career writers, plus khan.co.kr / hankookilbo HR-survey citations. See research-notes.md.",
   "phrases": [
-    "성실한",
-    "성실하게",
-    "성실히",
-    "노력하는",
-    "노력하겠습니다",
-    "노력하여",
-    "꾸준히 노력",
-    "책임감 있는",
-    "책임감 있게",
-    "솔선수범",
-    "솔선수범하는",
-    "창의적인",
-    "창의적으로",
-    "도전적인",
-    "도전하는 자세",
-    "열정적으로",
-    "열정적인",
-    "최선을 다하여",
-    "최선을 다하겠습니다",
-    "최선을 다해",
-    "발전시키겠습니다",
-    "기여하고 싶습니다",
-    "기여하겠습니다",
-    "배우는 자세",
-    "배우겠습니다",
-    "성장하겠습니다",
-    "보탬이 되",
-    "임하겠습니다"
+    {
+      "phrase": "성실한",
+      "category": "trait_cliche",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20483"
+      ]
+    },
+    {
+      "phrase": "성실하게",
+      "category": "trait_cliche",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20483"
+      ]
+    },
+    {
+      "phrase": "성실히",
+      "category": "trait_cliche",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://linkareer.com/activity/143027"
+      ]
+    },
+    {
+      "phrase": "노력하는",
+      "category": "trait_cliche",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20483"
+      ]
+    },
+    {
+      "phrase": "노력하겠습니다",
+      "category": "vague_commitment",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://linkareer.com/activity/143027"
+      ]
+    },
+    {
+      "phrase": "노력하여",
+      "category": "vague_commitment",
+      "severity": "medium",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20483"
+      ]
+    },
+    {
+      "phrase": "꾸준히 노력",
+      "category": "vague_commitment",
+      "severity": "high",
+      "sources": [
+        "https://linkareer.com/activity/143027",
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122"
+      ]
+    },
+    {
+      "phrase": "책임감 있는",
+      "category": "trait_cliche",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20483"
+      ]
+    },
+    {
+      "phrase": "책임감 있게",
+      "category": "trait_cliche",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://linkareer.com/activity/143027"
+      ]
+    },
+    {
+      "phrase": "솔선수범",
+      "category": "trait_cliche",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20483"
+      ]
+    },
+    {
+      "phrase": "솔선수범하는",
+      "category": "trait_cliche",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://linkareer.com/activity/143027"
+      ]
+    },
+    {
+      "phrase": "창의적인",
+      "category": "trait_cliche",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20483"
+      ]
+    },
+    {
+      "phrase": "창의적으로",
+      "category": "trait_cliche",
+      "severity": "medium",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://linkareer.com/activity/143027"
+      ]
+    },
+    {
+      "phrase": "도전적인",
+      "category": "trait_cliche",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20483"
+      ]
+    },
+    {
+      "phrase": "도전하는 자세",
+      "category": "trait_cliche",
+      "severity": "high",
+      "sources": [
+        "https://linkareer.com/activity/143027",
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122"
+      ]
+    },
+    {
+      "phrase": "열정적으로",
+      "category": "trait_cliche",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20483"
+      ]
+    },
+    {
+      "phrase": "열정적인",
+      "category": "trait_cliche",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://linkareer.com/activity/143027"
+      ]
+    },
+    {
+      "phrase": "최선을 다하여",
+      "category": "vague_commitment",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20483"
+      ]
+    },
+    {
+      "phrase": "최선을 다하겠습니다",
+      "category": "vague_commitment",
+      "severity": "high",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://linkareer.com/activity/143027"
+      ]
+    },
+    {
+      "phrase": "최선을 다해",
+      "category": "vague_commitment",
+      "severity": "high",
+      "sources": [
+        "https://linkareer.com/activity/143027",
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122"
+      ]
+    },
+    {
+      "phrase": "발전시키겠습니다",
+      "category": "vague_commitment",
+      "severity": "medium",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20483"
+      ]
+    },
+    {
+      "phrase": "기여하고 싶습니다",
+      "category": "vague_commitment",
+      "severity": "medium",
+      "sources": [
+        "https://linkareer.com/activity/143027",
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122"
+      ]
+    },
+    {
+      "phrase": "기여하겠습니다",
+      "category": "vague_commitment",
+      "severity": "medium",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20483"
+      ]
+    },
+    {
+      "phrase": "배우는 자세",
+      "category": "trait_cliche",
+      "severity": "medium",
+      "sources": [
+        "https://linkareer.com/activity/143027",
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122"
+      ]
+    },
+    {
+      "phrase": "배우겠습니다",
+      "category": "vague_commitment",
+      "severity": "medium",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20483"
+      ]
+    },
+    {
+      "phrase": "성장하겠습니다",
+      "category": "vague_commitment",
+      "severity": "medium",
+      "sources": [
+        "https://linkareer.com/activity/143027",
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122"
+      ]
+    },
+    {
+      "phrase": "보탬이 되",
+      "category": "vague_commitment",
+      "severity": "medium",
+      "sources": [
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122",
+        "https://www.jobkorea.co.kr/goodjob/tip/view?News_No=20483"
+      ]
+    },
+    {
+      "phrase": "임하겠습니다",
+      "category": "vague_commitment",
+      "severity": "high",
+      "sources": [
+        "https://linkareer.com/activity/143027",
+        "https://www.saramin.co.kr/zf_user/career-inside/inside-detail?careerInsideSn=122"
+      ]
+    }
   ],
   "policy": "Each occurrence reduces the 표현 dimension by 1 (floor 0). The reviewer turn surfaces the offending sentence in banned_phrase_hits using pipe-separated format: '성실한|... 성실한 자세로 임했습니다 ...'. Multiple distinct phrases compound; multiple instances of the same phrase count once."
 }

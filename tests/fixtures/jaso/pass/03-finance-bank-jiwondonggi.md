@@ -1,11 +1,16 @@
 ---
+fixture_kind: pass
+target_question: 지원동기
 expected_dimensions:
   두괄식: 5
   구조화: 4
   구체성: 5
   표현: 5
   적합성: 5
+expected_score: 4.8
 expected_revisions_required: false
+banned_phrases_hit: []
+dimensions_failed: []
 prompt: 우리 은행에 지원한 동기와 입행 후 어떤 가치를 더하고 싶은지 서술해주세요
 company: NATIONAL_BANK (composite domestic bank)
 industry: 금융

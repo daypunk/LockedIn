@@ -1,4 +1,6 @@
 ---
+fixture_kind: fail
+target_question: 지원동기
 expected_dimensions:
   두괄식: 3
   구조화: 3
@@ -6,6 +8,8 @@ expected_dimensions:
   표현: 3
   적합성: 1
 expected_revisions_required: true
+banned_phrases_hit: []
+dimensions_failed: ["적합성"]
 prompt: 우리 회사에 지원한 동기를 서술해주세요
 company: SOME_COMPANY
 industry: 일반

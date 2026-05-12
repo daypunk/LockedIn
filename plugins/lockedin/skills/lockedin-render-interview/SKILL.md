@@ -20,10 +20,11 @@ description: |
 
 # render-interview
 
-Status: **v1.1 (skeleton)**. Skill scaffold ships with prompts and a
-minimal rubric. Cross-source calibration of the rubric and a
-fixture set are v1.2 targets. The skill is functional today; quality
-will tighten with calibration.
+Status: **v1.2 (calibrated)**. Research-based calibration complete.
+RUBRIC.md ships with five cross-source-validated dimensions. A
+banned_phrases.json (25 entries, each backed by 2+ sources) and
+research-notes.md (7 cited sources) ship alongside the prompts.
+Pass/fail fixture corpus under `tests/fixtures/interview/`.
 
 ## Use this when
 
@@ -60,17 +61,21 @@ the user.
 ## Files in this directory
 
 ```
-SKILL.md
+SKILL.md             (this file)
+research-notes.md    7 cited sources, cross-source analysis summary
+banned_phrases.json  25 entries, severity-tagged, each backed by 2+ URLs
 prompt-writer.md     writer-turn instruction
-prompt-reviewer.md   reviewer-turn instruction (separate Claude turn)
-RUBRIC.md            5-dimension scoring contract (calibration v1.2)
+prompt-reviewer.md   reviewer-turn instruction (re-loads RUBRIC.md fresh)
+RUBRIC.md            5-dimension scoring contract + score bands
 ```
 
 ## Calibration status
 
-The rubric and prompts here are v1.1 foundational. Cross-source
-calibration (interview-coaching guides, hiring-manager interviews,
-behavioural interview research) is the v1.2 target. Until then the
-LLM reviewer turn is self-consistent against the rubric, but the
-rubric itself has not been validated against an external corpus the
-way the jaso and resume-en rubrics have.
+v1.2 calibrated. The rubric dimensions (clarity, evidence_density,
+persona_fit, conciseness, tone) are grounded in cross-source public
+research from MIT CAPD, The Muse, Indeed, Harvard Business Review,
+Yale OCS, The Interview Guys, and Big Interview. The banned_phrases.json
+contains 25 entries across four categories (weak_ownership, trait_claim,
+rehearsed_non_answer, vague_filler), each backed by 2+ independent
+sources. Pass and fail fixture corpus is at
+`tests/fixtures/interview/{pass,fail}/` (3 pass, 3 fail).

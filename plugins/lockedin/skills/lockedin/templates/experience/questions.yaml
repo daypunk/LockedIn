@@ -28,36 +28,60 @@
 #              before merging into vault
 #   branches:  list of { condition, next } — routes the interview to a
 #              different question id; "always" means unconditional flow
-#
-# The question bank ships with a 3-section, 6-question skeleton.
-# v1.1 target: 9 sections covering identity, companies and roles,
-# projects, education, skills, decisions, learning, certificates, and
-# publications, each with 5 or more questions plus branching and
-# follow-ups.
 
 version: 1
 template: experience
 lang_default: en
 
 sections:
+  # -----------------------------------------------------------------------
+  # 1. identity — writes to: person
+  # -----------------------------------------------------------------------
   - name: identity
     prompt: "Let's start with you."
-    prompt_ko: "당신부터 시작하겠습니다."
+    prompt_ko: "먼저 본인에 대해 알아볼까요."
     produces: [person]
     required: [name, current_role]
     questions:
       - id: q_name
-        text: "What's your name?"
-        text_ko: "이름이 어떻게 되시나요?"
+        text: "What's your full name?"
+        text_ko: "성함이 어떻게 되시나요?"
         writes: { entity: person, field: name }
         validate: non_empty
+
       - id: q_current_role
-        text: "What do you do, in one sentence?"
-        text_ko: "현재 무슨 일을 하시나요? 한 문장으로요."
+        text: "How would you describe what you do, in one sentence?"
+        text_ko: "현재 어떤 일을 하고 계신지 한 문장으로 설명해 주시겠어요?"
         writes: { entity: person, field: current_role }
         validate: non_empty
         requires: [q_name]
 
+      - id: q_email
+        text: "What's the best email address to reach you?"
+        text_ko: "연락 가능한 이메일 주소가 어떻게 되시나요?"
+        writes: { entity: person, field: email }
+        validate: email
+        requires: [q_name]
+
+      - id: q_based_in
+        text: "What city or region are you based in?"
+        text_ko: "현재 어느 도시나 지역에 거주하고 계신가요?"
+        writes: { entity: person, field: based_in }
+        requires: [q_name]
+
+      - id: q_summary
+        text: "In a few sentences, how would you describe your overall professional background and what you care about most in your work?"
+        text_ko: "본인의 전반적인 직업적 배경과 일에서 가장 중요하게 생각하는 것을 몇 문장으로 설명해 주시겠어요?"
+        writes: { entity: person, field: summary }
+        requires: [q_name, q_current_role]
+        follow_up:
+          - if: len_lt:50
+            text: "That's a great start — could you expand a bit on what drives you professionally?"
+            text_ko: "좋은 시작이에요. 직업적으로 무엇이 동기가 되는지 조금 더 말씀해 주시겠어요?"
+
+  # -----------------------------------------------------------------------
+  # 2. companies_and_roles — writes to: company, role
+  # -----------------------------------------------------------------------
   - name: companies_and_roles
     prompt: "Walk me through your work history."
     prompt_ko: "지금까지의 경력을 들려주세요."
@@ -65,18 +89,53 @@ sections:
     required: [at_least_one_role]
     questions:
       - id: q_recent_company
-        text: "Where do you work right now (or most recently)?"
-        text_ko: "지금 (또는 가장 최근에) 어디에서 일하시나요?"
+        text: "Where do you work right now, or where did you work most recently?"
+        text_ko: "현재 어디에서 일하고 계신가요, 아니면 가장 최근에 다닌 직장은 어디인가요?"
         writes: { entity: company, field: name }
+        validate: non_empty
         extract:
           - type: company
             from: answer
-      - id: q_role_title
-        text: "What's your title there?"
-        text_ko: "직책은 무엇인가요?"
-        writes: { entity: role, field: title }
+
+      - id: q_company_industry
+        text: "What industry or sector would you put that company in?"
+        text_ko: "그 회사는 어떤 산업이나 분야에 속하나요?"
+        writes: { entity: company, field: industry }
         requires: [q_recent_company]
 
+      - id: q_role_title
+        text: "What's your title there?"
+        text_ko: "그 회사에서 직책은 무엇인가요?"
+        writes: { entity: role, field: title }
+        validate: non_empty
+        requires: [q_recent_company]
+
+      - id: q_role_start_date
+        text: "When did you start that role? (e.g., 2022-03 or 2022)"
+        text_ko: "그 역할은 언제부터 시작하셨나요? (예: 2022-03 또는 2022)"
+        writes: { entity: role, field: start_date }
+        validate: date
+        requires: [q_role_title]
+
+      - id: q_role_summary
+        text: "In a sentence or two, what were your main responsibilities in that role?"
+        text_ko: "그 역할에서 주요 책임이 무엇이었는지 한두 문장으로 말씀해 주시겠어요?"
+        writes: { entity: role, field: summary }
+        requires: [q_role_title]
+        follow_up:
+          - if: len_lt:30
+            text: "Could you add a bit more detail about the scope or the team you worked with?"
+            text_ko: "업무 범위나 함께 일한 팀에 대해 조금 더 말씀해 주시겠어요?"
+
+      - id: q_role_level
+        text: "How would you describe your seniority level in that role? (e.g., junior, mid, senior, lead, principal)"
+        text_ko: "그 역할에서의 시니어리티 레벨은 어떻게 되나요? (예: 주니어, 미드, 시니어, 리드, 프린시펄)"
+        writes: { entity: role, field: level }
+        requires: [q_role_title]
+
+  # -----------------------------------------------------------------------
+  # 3. projects — writes to: project, achievement, skill
+  # -----------------------------------------------------------------------
   - name: projects
     prompt: "Tell me about the projects that mattered."
     prompt_ko: "기억에 남는 프로젝트를 알려주세요."
@@ -84,14 +143,26 @@ sections:
     required: [at_least_two_projects]
     questions:
       - id: q_proudest_project
-        text: "What's a project you're proudest of? What did it ship?"
-        text_ko: "가장 자랑스러운 프로젝트가 뭐였나요? 무엇을 만들어 냈나요?"
+        text: "What's a project you're most proud of? What did it ship or deliver?"
+        text_ko: "가장 자랑스러운 프로젝트가 무엇인가요? 어떤 결과물이나 성과를 냈나요?"
         writes: { entity: project, field: name }
+        validate: non_empty
         extract:
           - type: project
             from: answer
           - type: skill
             from: answer
+
+      - id: q_project_description
+        text: "In a few sentences, what problem was that project solving and how did you approach it?"
+        text_ko: "그 프로젝트가 해결하려 한 문제와 접근 방식을 몇 문장으로 설명해 주시겠어요?"
+        writes: { entity: project, field: description }
+        requires: [q_proudest_project]
+        follow_up:
+          - if: len_lt:40
+            text: "Could you add a bit more about the technical or organizational approach you took?"
+            text_ko: "기술적 또는 조직적 접근 방식에 대해 조금 더 말씀해 주시겠어요?"
+
       - id: q_metric
         text: "How did you measure success on that project?"
         text_ko: "그 프로젝트의 성공은 어떻게 측정했나요?"
@@ -102,7 +173,295 @@ sections:
             text: "Could you add one concrete number, like a percentage or a count?"
             text_ko: "구체적인 수치를 하나 더 추가해 주실 수 있나요? 예를 들어 비율이나 횟수처럼요."
 
-# More sections (education, skills, decisions, learning, certificates,
-# publications, volunteer) land with the v1.1 interview engine
-# implementation. The schema above is forward-compatible; new sections
-# only need to follow the same shape.
+      - id: q_achievement_headline
+        text: "What's the single most memorable result from that project — the one-liner you'd put on a resume?"
+        text_ko: "그 프로젝트에서 가장 기억에 남는 결과를 이력서에 한 줄로 쓴다면 어떻게 쓰시겠어요?"
+        writes: { entity: achievement, field: headline }
+        validate: non_empty
+        requires: [q_metric]
+
+      - id: q_project_skills
+        text: "What were the main technologies or skills you used or developed on that project? (comma-separated is fine)"
+        text_ko: "그 프로젝트에서 사용하거나 발전시킨 주요 기술이나 역량은 무엇인가요? (쉼표로 구분해도 됩니다)"
+        writes: { entity: skill, field: name }
+        requires: [q_proudest_project]
+
+      - id: q_project_year
+        text: "What year did that project start, or what year are you most associated with it? (e.g., 2023)"
+        text_ko: "그 프로젝트는 몇 년도에 시작했나요, 아니면 어느 해와 가장 연관이 깊나요? (예: 2023)"
+        writes: { entity: project, field: year }
+        validate: year
+        requires: [q_proudest_project]
+
+  # -----------------------------------------------------------------------
+  # 4. education — writes to: education
+  # -----------------------------------------------------------------------
+  - name: education
+    prompt: "Let's cover your educational background."
+    prompt_ko: "학력 사항에 대해 알아볼게요."
+    produces: [education]
+    required: [institution]
+    questions:
+      - id: q_edu_institution
+        text: "What institution did you attend for your highest completed degree or program?"
+        text_ko: "가장 높은 학위나 과정을 이수한 학교 이름이 어떻게 되나요?"
+        writes: { entity: education, field: institution }
+        validate: non_empty
+
+      - id: q_edu_study_type
+        text: "What type of credential was it? (e.g., Bachelor's, Master's, PhD, Bootcamp, Online Course)"
+        text_ko: "어떤 종류의 학위나 자격이었나요? (예: 학사, 석사, 박사, 부트캠프, 온라인 강의)"
+        writes: { entity: education, field: study_type }
+        requires: [q_edu_institution]
+
+      - id: q_edu_area
+        text: "What was your field of study or major?"
+        text_ko: "전공이나 연구 분야가 무엇이었나요?"
+        writes: { entity: education, field: area }
+        requires: [q_edu_institution]
+
+      - id: q_edu_start_date
+        text: "When did you start that program? (e.g., 2018-09 or 2018)"
+        text_ko: "그 프로그램은 언제 시작하셨나요? (예: 2018-09 또는 2018)"
+        writes: { entity: education, field: start_date }
+        validate: date
+        requires: [q_edu_institution]
+
+      - id: q_edu_end_date
+        text: "When did you finish, or are you still enrolled? (leave blank if ongoing)"
+        text_ko: "언제 졸업하셨나요, 아니면 아직 재학 중이신가요? (재학 중이라면 비워 두세요)"
+        writes: { entity: education, field: end_date }
+        requires: [q_edu_institution]
+
+      - id: q_edu_score
+        text: "Do you have a GPA or grade worth noting? (leave blank to skip)"
+        text_ko: "기재할 만한 학점이나 성적이 있으신가요? (없으면 건너뛰어도 됩니다)"
+        writes: { entity: education, field: score }
+        requires: [q_edu_institution]
+
+  # -----------------------------------------------------------------------
+  # 5. certificates — writes to: certificate
+  # -----------------------------------------------------------------------
+  - name: certificates
+    prompt: "Let's capture any professional certifications or licenses you hold."
+    prompt_ko: "보유하고 계신 전문 자격증이나 면허에 대해 알아볼게요."
+    produces: [certificate]
+    required: [name]
+    questions:
+      - id: q_cert_name
+        text: "What's the name of a certification or license you hold? (e.g., AWS Solutions Architect, PMP, CPA)"
+        text_ko: "보유하고 계신 자격증이나 면허 이름은 무엇인가요? (예: AWS Solutions Architect, PMP, 정보처리기사)"
+        writes: { entity: certificate, field: name }
+        validate: non_empty
+
+      - id: q_cert_issuer
+        text: "Who issued that certification? (e.g., Amazon Web Services, PMI)"
+        text_ko: "그 자격증은 어디에서 발급했나요? (예: Amazon Web Services, 한국산업인력공단)"
+        writes: { entity: certificate, field: issuer }
+        requires: [q_cert_name]
+
+      - id: q_cert_date
+        text: "When did you earn it? (e.g., 2023-05 or 2023)"
+        text_ko: "언제 취득하셨나요? (예: 2023-05 또는 2023)"
+        writes: { entity: certificate, field: date }
+        validate: date
+        requires: [q_cert_name]
+
+      - id: q_cert_url
+        text: "Is there a verification URL for that certificate? (leave blank to skip)"
+        text_ko: "그 자격증의 확인 URL이 있으신가요? (없으면 건너뛰어도 됩니다)"
+        writes: { entity: certificate, field: url }
+        validate: url
+        requires: [q_cert_name]
+
+      - id: q_cert_additional
+        text: "Do you have any other certifications worth capturing? If so, name the next one."
+        text_ko: "다른 자격증도 있으신가요? 있으시면 다음 자격증 이름을 말씀해 주세요."
+        writes: { entity: certificate, field: name }
+        requires: [q_cert_name]
+
+  # -----------------------------------------------------------------------
+  # 6. publications — writes to: publication
+  # -----------------------------------------------------------------------
+  - name: publications
+    prompt: "Have you published any papers, articles, talks, or other works?"
+    prompt_ko: "논문, 아티클, 발표, 혹은 다른 저작물을 발표한 적이 있으신가요?"
+    produces: [publication]
+    required: [name]
+    questions:
+      - id: q_pub_name
+        text: "What's the title of a paper, article, blog post, or talk you've given?"
+        text_ko: "발표하신 논문, 아티클, 블로그 포스트, 또는 발표의 제목이 무엇인가요?"
+        writes: { entity: publication, field: name }
+        validate: non_empty
+
+      - id: q_pub_publisher
+        text: "Where was it published or presented? (e.g., conference name, journal, blog platform)"
+        text_ko: "어디에서 게재하거나 발표하셨나요? (예: 학회명, 저널, 블로그 플랫폼)"
+        writes: { entity: publication, field: publisher }
+        requires: [q_pub_name]
+
+      - id: q_pub_release_date
+        text: "When was it published or presented? (e.g., 2024-03 or 2024)"
+        text_ko: "언제 발표되거나 게재되었나요? (예: 2024-03 또는 2024)"
+        writes: { entity: publication, field: release_date }
+        validate: date
+        requires: [q_pub_name]
+
+      - id: q_pub_url
+        text: "Is there a URL where it can be found online? (leave blank to skip)"
+        text_ko: "온라인에서 볼 수 있는 URL이 있나요? (없으면 건너뛰어도 됩니다)"
+        writes: { entity: publication, field: url }
+        validate: url
+        requires: [q_pub_name]
+
+      - id: q_pub_summary
+        text: "In one or two sentences, what was this work about and why does it matter?"
+        text_ko: "이 저작물이 어떤 내용이었는지, 그리고 왜 중요한지 한두 문장으로 설명해 주시겠어요?"
+        writes: { entity: publication, field: summary }
+        requires: [q_pub_name]
+        follow_up:
+          - if: len_lt:30
+            text: "Could you say a bit more about the key insight or contribution?"
+            text_ko: "핵심 인사이트나 기여에 대해 조금 더 말씀해 주시겠어요?"
+
+  # -----------------------------------------------------------------------
+  # 7. volunteer_experience — writes to: volunteer
+  # -----------------------------------------------------------------------
+  - name: volunteer_experience
+    prompt: "Let's talk about any volunteer or community involvement."
+    prompt_ko: "자원봉사나 커뮤니티 활동에 대해 이야기해 볼게요."
+    produces: [volunteer]
+    required: [organization]
+    questions:
+      - id: q_vol_organization
+        text: "What organization did you volunteer with or contribute to?"
+        text_ko: "어떤 단체나 조직에서 자원봉사나 기여 활동을 하셨나요?"
+        writes: { entity: volunteer, field: organization }
+        validate: non_empty
+
+      - id: q_vol_position
+        text: "What was your role or position there? (e.g., mentor, event organizer, board member)"
+        text_ko: "그곳에서 어떤 역할을 맡으셨나요? (예: 멘토, 행사 진행자, 이사)"
+        writes: { entity: volunteer, field: position }
+        requires: [q_vol_organization]
+
+      - id: q_vol_start_date
+        text: "When did you start that involvement? (e.g., 2020-01 or 2020)"
+        text_ko: "그 활동은 언제 시작하셨나요? (예: 2020-01 또는 2020)"
+        writes: { entity: volunteer, field: start_date }
+        validate: date
+        requires: [q_vol_organization]
+
+      - id: q_vol_end_date
+        text: "When did it end, or is it still ongoing? (leave blank if ongoing)"
+        text_ko: "언제 종료되었나요, 아니면 아직 진행 중인가요? (진행 중이라면 비워 두세요)"
+        writes: { entity: volunteer, field: end_date }
+        requires: [q_vol_organization]
+
+      - id: q_vol_summary
+        text: "In a sentence or two, what did you actually do or contribute in that role?"
+        text_ko: "그 역할에서 실제로 무엇을 하셨는지, 어떤 기여를 하셨는지 한두 문장으로 말씀해 주시겠어요?"
+        writes: { entity: volunteer, field: summary }
+        requires: [q_vol_organization]
+        follow_up:
+          - if: len_lt:30
+            text: "Could you add one specific thing you did or organized?"
+            text_ko: "직접 하셨거나 주도하신 구체적인 활동을 하나 추가해 주시겠어요?"
+
+  # -----------------------------------------------------------------------
+  # 8. languages — writes to: language
+  # -----------------------------------------------------------------------
+  - name: languages
+    prompt: "Let's record the languages you speak or write."
+    prompt_ko: "구사하시는 언어에 대해 알아볼게요."
+    produces: [language]
+    required: [language]
+    questions:
+      - id: q_lang_name
+        text: "What's a language you speak or write professionally or fluently? (e.g., English, Korean, Japanese)"
+        text_ko: "직업적으로 또는 유창하게 구사하시는 언어가 있으신가요? (예: 영어, 한국어, 일본어)"
+        writes: { entity: language, field: language }
+        validate: non_empty
+
+      - id: q_lang_fluency
+        text: "How would you describe your fluency in that language? (native / fluent / professional / conversational / beginner)"
+        text_ko: "그 언어의 구사 수준을 어떻게 표현하시겠어요? (원어민 / 유창 / 업무 가능 / 일상 대화 / 초보)"
+        writes: { entity: language, field: fluency }
+        requires: [q_lang_name]
+        follow_up:
+          - if: starts_with:beg
+            text: "Is it something you're actively studying or just have a basic exposure to?"
+            text_ko: "지금 활발히 공부하고 계신 건가요, 아니면 기초적인 노출 정도인가요?"
+
+      - id: q_lang_second
+        text: "Do you speak another language at a professional or conversational level? If so, which one?"
+        text_ko: "업무나 일상 대화 수준으로 구사하시는 다른 언어가 있으신가요? 있으시면 말씀해 주세요."
+        writes: { entity: language, field: language }
+        requires: [q_lang_name]
+
+      - id: q_lang_second_fluency
+        text: "And how would you rate your fluency in that second language? (native / fluent / professional / conversational / beginner)"
+        text_ko: "두 번째 언어의 구사 수준은 어떻게 되나요? (원어민 / 유창 / 업무 가능 / 일상 대화 / 초보)"
+        writes: { entity: language, field: fluency }
+        requires: [q_lang_second]
+
+      - id: q_lang_context
+        text: "In which contexts do you typically use your non-native languages? (e.g., work meetings, writing reports, casual conversation)"
+        text_ko: "모국어가 아닌 언어를 주로 어떤 상황에서 사용하시나요? (예: 업무 회의, 보고서 작성, 일상 대화)"
+        writes: { entity: language, field: fluency }
+        requires: [q_lang_name]
+
+  # -----------------------------------------------------------------------
+  # 9. decisions_and_learning — writes to: decision, topic
+  # -----------------------------------------------------------------------
+  - name: decisions_and_learning
+    prompt: "Let's capture key decisions you've made and areas you're learning."
+    prompt_ko: "주요 결정 사항과 학습 중인 분야에 대해 이야기해 볼게요."
+    produces: [decision, topic]
+    required: [headline]
+    questions:
+      - id: q_decision_headline
+        text: "What's a significant career or technical decision you've made recently — the kind you'd want documented?"
+        text_ko: "최근에 내리신 중요한 커리어 또는 기술적 결정이 있으신가요? 기록해 두고 싶은 것을요."
+        writes: { entity: decision, field: headline }
+        validate: non_empty
+
+      - id: q_decision_context
+        text: "What was the situation that led to that decision? What pressure or opportunity triggered it?"
+        text_ko: "그 결정을 내리게 된 상황은 무엇이었나요? 어떤 압박이나 기회가 계기가 되었나요?"
+        writes: { entity: decision, field: context }
+        requires: [q_decision_headline]
+        follow_up:
+          - if: len_lt:40
+            text: "Could you add a bit more about the business or technical stakes involved?"
+            text_ko: "관련된 비즈니스 또는 기술적 비중에 대해 조금 더 말씀해 주시겠어요?"
+
+      - id: q_decision_rationale
+        text: "Looking back, what was the core reason you chose the path you did?"
+        text_ko: "돌이켜보면 그 선택을 한 핵심 이유가 무엇이었나요?"
+        writes: { entity: decision, field: rationale }
+        requires: [q_decision_headline]
+
+      - id: q_topic_name
+        text: "What's a technology, concept, or area you're actively learning or exploring right now?"
+        text_ko: "현재 적극적으로 학습하거나 탐구하고 있는 기술, 개념, 또는 분야가 있나요?"
+        writes: { entity: topic, field: name }
+        validate: non_empty
+
+      - id: q_topic_summary
+        text: "In a sentence or two, what draws you to that topic and what have you found most interesting so far?"
+        text_ko: "그 주제에 끌리는 이유와 지금까지 가장 흥미롭게 느낀 점을 한두 문장으로 말씀해 주시겠어요?"
+        writes: { entity: topic, field: summary }
+        requires: [q_topic_name]
+        follow_up:
+          - if: len_lt:30
+            text: "What specific aspect are you digging into most deeply?"
+            text_ko: "가장 깊이 파고들고 있는 구체적인 측면이 무엇인가요?"
+
+      - id: q_topic_url
+        text: "Is there a specific resource — a paper, course, repo, or article — that you'd point someone to for this topic? (leave blank to skip)"
+        text_ko: "이 주제와 관련해 추천할 만한 자료가 있으신가요? 논문, 강의, 저장소, 아티클 등이요. (없으면 건너뛰어도 됩니다)"
+        writes: { entity: topic, field: url }
+        validate: url
+        requires: [q_topic_name]

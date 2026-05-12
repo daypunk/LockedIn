@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "lockedin"
-version = "1.1.0"
+version = "1.2.0"
 description = "Your experience as a knowledge graph. Claude Code-native."
 readme = "README.md"
 requires-python = ">=3.10"

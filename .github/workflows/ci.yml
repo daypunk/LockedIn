@@ -55,7 +55,7 @@ jobs:
           # Allowed: fenced ko-example blocks AND language switcher links.
           stripped = re.sub(r'<!--\s*ko-example\s*-->.*?<!--\s*/ko-example\s*-->', '', text, flags=re.S)
           stripped = re.sub(
-              r'\[(English|한국어|日本語|中文|Español|Deutsch|Français)\]\([^)]+\)',
+              r'\[(English|한국어|日本語|简体中文|繁體中文|中文|Español|Deutsch|Français)\]\([^)]+\)',
               '', stripped,
           )
           if re.search(r'[가-힯ㄱ-ㆎ一-鿿]', stripped):

@@ -43,7 +43,7 @@ descriptions, sentences in prose).
 | Deterministic CLI | `install` (with `--setup-hud`, `--remove-hud`, lifecycle), `init --fixture FILE`, `ingest --dry-run`, `validate`, `migrate`, `experience`, `doctor`, `template`, `hud`. |
 | Skill-only commands | `init` (interactive), `ingest` (smart), `render jaso/resume`, `query`. Typed in plain shell, the CLI prints a redirect (exit 3) and points at Claude Code. |
 | OSS infrastructure | `CONTRIBUTING.md`, `CODE_OF_CONDUCT.md` (Contributor Covenant 2.1), `.github/ISSUE_TEMPLATE/{bug_report, feature_request, korean_reviewer_onboarding, config}.yml`. |
-| Tests | 49+ passing across import, ontology, storage round-trip, install lifecycle, doctor, validate v3, init from fixture, template, ingest dry-run, hud, plus non-LLM jaso fixture validation. |
+| Tests | 200+ passing across import, ontology, storage round-trip, install lifecycle, doctor, validate v3, init from fixture, template, ingest dry-run, ingest format parsers (pdf/docx/markdown/text), hud, interview resumability, render-interview and render-ideas calibration, README-promise lint. |
 
 ## Repo layout
 
@@ -113,6 +113,13 @@ README.md · README.ko.md · CHANGELOG.md · CONTRIBUTING.md · CODE_OF_CONDUCT.
   Claude Code already manages. `lockedin doctor` warns when
   `ANTHROPIC_API_KEY` is set unless the user opts in via
   `LOCKEDIN_ALLOW_API_KEY=1`.
+- **AI-native solution.** Rubric calibration, banned-phrase corpora,
+  and fixture generation go through cross-source AI research (Claude
+  Code skill calls), not human domain-reviewer engagements. The
+  two-turn writer/reviewer split with fresh `RUBRIC.md` reload is the
+  load-bearing quality mechanism, not external sign-off. Renderer
+  prompts and reviewer prompts are the contract; revising them is how
+  calibration improves.
 - **Two-turn writer/reviewer for renderers.** Writer turn drafts.
   Reviewer turn re-loads `RUBRIC.md` fresh and emits a JSON score.
   Same-context self-evaluation inflates scores by about one point.
@@ -170,7 +177,7 @@ non-zero. Unset should exit zero.
 ```bash
 python3 -m lockedin --version                      # version banner
 python3 -c "from lockedin.ontology import ENTITY_TYPES, EDGE_PREDICATES, SCHEMA_VERSION; print(len(ENTITY_TYPES), len(EDGE_PREDICATES), SCHEMA_VERSION)"   # 15 15 3
-python3 -m pytest -q                                # 49+ expected
+python3 -m pytest -q                                # 200+ expected
 python3 -m lockedin doctor                         # subscription/skill check
 LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin init --fixture examples/sample-vault.yaml
 LOCKEDIN_VAULT=/tmp/sg python3 -m lockedin validate

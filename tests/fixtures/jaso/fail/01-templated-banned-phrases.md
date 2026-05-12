@@ -1,4 +1,6 @@
 ---
+fixture_kind: fail
+target_question: 지원동기
 expected_dimensions:
   두괄식: 3
   구조화: 3
@@ -6,6 +8,8 @@ expected_dimensions:
   표현: 1
   적합성: 3
 expected_revisions_required: true
+banned_phrases_hit: ["성실하게", "책임감 있게", "솔선수범하는", "창의적인", "도전하는 자세", "열정적으로", "꾸준히 노력", "최선을 다해"]
+dimensions_failed: ["표현"]
 prompt: 지원동기
 company: SOME_COMPANY
 industry: 일반

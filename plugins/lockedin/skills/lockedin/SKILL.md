@@ -4,15 +4,19 @@ description: |
   Personal experience knowledge graph for Claude Code. Build and grow
   a markdown ontology from Q&A interviews and document ingestion (PDF,
   DOCX, MD, TXT), then render English resumes, Korean cover letters,
-  and meeting notes from the same vault. Runs entirely on the user's
-  Claude Code subscription — never calls the Anthropic API directly.
+  interview answers, and project ideas from the same vault. Also runs
+  a calibrated pre-flight audit on any resume document without
+  requiring a vault. Runs entirely on the user's Claude Code
+  subscription — never calls the Anthropic API directly.
 
   Activate when the user mentions lockedin by name, asks to set up or
   update a personal career / experience graph, asks to render a resume
-  / cover letter / meeting note from their own experience, drops a
-  resume PDF or DOCX with a request to absorb it, or queries
-  their own experience ("what projects used Rust?", "which roles taught
-  me X"). Do NOT activate for unrelated coding, code review, or general
+  / cover letter / interview answer / project idea from their own
+  experience, drops a resume PDF or DOCX with a request to absorb or
+  audit it, asks to score / review / audit a resume against the
+  calibrated rubric (drive-by, no vault needed), or queries their own
+  experience ("what projects used Rust?", "which roles taught me X").
+  Do NOT activate for unrelated coding, code review, or general
   questions.
 ---
 
@@ -25,9 +29,12 @@ render artifacts from it. Single-purpose: one namespace, one demo.
 
 - The user says "lockedin" or "career graph" or "experience graph".
 - The user asks to render an artifact from their own experience: a
-  resume, a cover letter, a meeting note.
+  resume, a cover letter, an interview answer, a project idea.
 - The user drops a resume `.pdf` / `.docx` or career notes and asks to
   absorb them into a structured graph.
+- The user asks to **audit / score / review** a resume against the
+  calibrated rubric — this works with or without an existing vault
+  (drive-by mode requires no install or signup, just a file path).
 - The user asks a query about their own experience.
 
 ## Do NOT use this skill when
@@ -75,17 +82,33 @@ will not appear until the user wires it.
 
 ## Core flow
 
+The fastest first try is **drive-by audit**: zero vault, zero install
+beyond the plugin itself. Past that, vault-backed flows give every
+artifact LockedIn produces.
+
+0. **Audit (drive-by, no vault)** — `/lockedin audit <path>` or "audit
+   this resume". Extracts text via the deterministic ingest pipeline,
+   scores against `lockedin-render-resume-en` or `lockedin-render-jaso`
+   rubric depending on detected language, returns a 5-dimension score
+   and a banned-phrase / weak-verb hit list. No mutation. Most natural
+   first artifact for a new user. Three modes:
+   - `--mode score` (default): rubric pass only.
+   - `--mode refine`: propose diff-based refinements; user approves.
+   - `--mode refine-score`: refine, then score the refined output to
+     quantify the lift.
 1. **Init** — `/lockedin init` (or natural language) runs a Q&A
-   interview that seeds the vault with the user's first ontology nodes
-   (experience template by default).
+   interview that seeds the vault. 49 questions across 9 sections;
+   pause-and-resume is supported.
 2. **Ingest** — `/lockedin ingest <path>` reads `.pdf` / `.docx` /
    `.md` / `.txt`, emits a typed diff, asks the user about ambiguities
-   one at a time, then merges.
-3. **Render** — `/lockedin render <kind>` produces the artifact. Writer
-   turn drafts; reviewer turn re-loads `RUBRIC.md` fresh and scores. If
-   any rubric dimension < 4, revise once with the notes.
-4. **Iterate** — every conversation grows the graph. Renders are queries
-   against it.
+   one at a time, then merges. After merge, offers the audit 3-mode
+   choice (Score / Refine / Refine→Score).
+3. **Render** — `/lockedin render <kind>` produces the artifact (`jaso`,
+   `resume`, `interview`, `ideas`). Writer turn drafts; reviewer turn
+   re-loads `RUBRIC.md` fresh and scores. If any rubric dimension < 4,
+   revise once with the notes.
+4. **Iterate** — every conversation grows the graph. Renders and audits
+   are queries against it.
 
 See `AGENTS.md` for the four sub-roles (Interviewer / Ingester /
 Renderer / GraphCurator). See `TOOLS.md` for the canonical CLI calls

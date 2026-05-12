@@ -19,10 +19,11 @@ description: |
 
 # render-ideas
 
-Status: **v1.1 (skeleton)**. Skill scaffold ships with prompts and a
-minimal rubric. Cross-source calibration is a v1.2 target. The skill
-is functional today; the rubric has not been validated against an
-external corpus the way jaso and resume-en have.
+Status: **v1.2 (calibrated)**. Research-based calibration complete.
+RUBRIC.md ships with five cross-source-validated dimensions. A
+banned_phrases.json (27 entries, each backed by 2+ sources) and
+research-notes.md (7 cited sources) ship alongside the prompts.
+Pass/fail fixture corpus under `tests/fixtures/ideas/`.
 
 ## Use this when
 
@@ -55,16 +56,22 @@ language by the orchestrator before the user sees the artifact.
 ## Files in this directory
 
 ```
-SKILL.md
+SKILL.md             (this file)
+research-notes.md    7 cited sources, cross-source analysis summary
+banned_phrases.json  27 entries, severity-tagged, each backed by 2+ URLs
 prompt-writer.md     writer-turn instruction
-prompt-reviewer.md   reviewer-turn instruction (separate Claude turn)
-RUBRIC.md            5-dimension scoring contract (calibration v1.2)
+prompt-reviewer.md   reviewer-turn instruction (re-loads RUBRIC.md fresh)
+RUBRIC.md            5-dimension scoring contract + score bands
 ```
 
 ## Calibration status
 
-The rubric here is v1.1 foundational. Cross-source calibration
-(against entrepreneur / career-coach corpora) is the v1.2 target.
-Until then, the reviewer turn is self-consistent against this
-rubric, but does not match the calibration density of the jaso or
-resume-en rubrics.
+v1.2 calibrated. The rubric dimensions (feasibility, novelty,
+evidence_ground, scope_match, motivation_alignment) are grounded in
+cross-source public research from Atlassian, Inc., FasterCapital,
+Proposify, Built In, fundsforNGOs, and arXiv. The banned_phrases.json
+contains 27 entries across five categories (buzzword_opener,
+vague_enthusiasm, hedging_language, unsubstantiated_claim,
+comparison_shortcut), each backed by 2+ independent sources. Pass and
+fail fixture corpus is at `tests/fixtures/ideas/{pass,fail}/`
+(3 pass, 3 fail).

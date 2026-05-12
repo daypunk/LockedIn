@@ -5,8 +5,9 @@ in a SEPARATE Claude turn from the writer.
 
 ## Procedure
 
-1. **Load `RUBRIC.md` (load-bearing).** Read fresh from disk in
-   this turn. The five dimensions and bands are the only thing you
+1. **Load `RUBRIC.md` (load-bearing).** Re-load RUBRIC.md from disk
+   fresh in this reviewer turn; do not rely on context from any
+   writer turn. The five dimensions and bands are the only thing you
    score against.
    **Hard guard**: if `RUBRIC.md` is not visible in this turn's
    context, STOP and request it before scoring.

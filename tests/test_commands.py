@@ -79,6 +79,75 @@ def test_doctor_warns_on_api_key_without_optin(monkeypatch, tmp_path: Path, caps
     assert "ANTHROPIC_API_KEY is set" in out
 
 
+def test_doctor_reports_audit_skill_check(monkeypatch, tmp_path: Path, capsys) -> None:
+    monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(tmp_path / "claude"))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path / "vault"))
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    run_doctor()
+    out = capsys.readouterr().out
+    assert "audit skill" in out
+
+
+def test_doctor_reports_ingest_optional_deps(monkeypatch, tmp_path: Path, capsys) -> None:
+    monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(tmp_path / "claude"))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path / "vault"))
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    run_doctor()
+    out = capsys.readouterr().out
+    assert "pypdf" in out
+    assert "python-docx" in out
+    assert "PyYAML" in out
+
+
+def test_doctor_reports_no_interview_state_by_default(monkeypatch, tmp_path: Path, capsys) -> None:
+    monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(tmp_path / "claude"))
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path / "vault"))
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    run_doctor()
+    out = capsys.readouterr().out
+    assert "no session in progress" in out
+
+
+def test_doctor_summarizes_in_progress_interview(monkeypatch, tmp_path: Path, capsys) -> None:
+    import json
+
+    monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(tmp_path / "claude"))
+    vault = tmp_path / "vault"
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(vault))
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    state_dir = vault / ".lockedin"
+    state_dir.mkdir(parents=True)
+    (state_dir / "interview-state.json").write_text(
+        json.dumps(
+            {
+                "answers": {"q1": "a", "q2": "b", "q3": "c"},
+                "completed_at": None,
+                "updated_at": "2026-05-12T10:23:00Z",
+            }
+        ),
+        encoding="utf-8",
+    )
+    run_doctor()
+    out = capsys.readouterr().out
+    assert "in progress: 3 answered" in out
+    assert "2026-05-12T10:23:00Z" in out
+
+
+def test_doctor_handles_corrupt_interview_state(monkeypatch, tmp_path: Path, capsys) -> None:
+    monkeypatch.setenv("CLAUDE_CONFIG_DIR", str(tmp_path / "claude"))
+    vault = tmp_path / "vault"
+    monkeypatch.setenv("LOCKEDIN_VAULT", str(vault))
+    monkeypatch.delenv("ANTHROPIC_API_KEY", raising=False)
+    state_dir = vault / ".lockedin"
+    state_dir.mkdir(parents=True)
+    (state_dir / "interview-state.json").write_text(
+        "{not valid json", encoding="utf-8"
+    )
+    run_doctor()
+    out = capsys.readouterr().out
+    assert "unreadable" in out
+
+
 def test_validate_passes_on_clean_vault(tmp_path: Path, monkeypatch, capsys) -> None:
     monkeypatch.setenv("LOCKEDIN_VAULT", str(tmp_path))
     person = Entity(

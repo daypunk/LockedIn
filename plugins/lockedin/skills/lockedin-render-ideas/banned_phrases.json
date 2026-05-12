@@ -1,0 +1,252 @@
+{
+  "schema_version": 1,
+  "status": "v1.0 — research-based; cross-source confirmed",
+  "rationale": "Each entry was flagged by 2+ independent proposal/pitch-coaching sources (Atlassian, Inc., FasterCapital, Proposify, Built In, fundsforNGOs, arXiv) as weak, vague, or credibility-damaging in project idea pitches and career-move proposals. Categories: buzzword_opener (assertion-not-evidence superlatives), vague_enthusiasm (emotional framing without substance), hedging_language (modal verb clusters signalling uncertain evidence base), unsubstantiated_claim (jargon substituting for specification), comparison_shortcut (market-analogy openers that avoid defining the idea). See research-notes.md for citations.",
+  "phrases": [
+    {
+      "phrase": "game-changer",
+      "category": "buzzword_opener",
+      "severity": "high",
+      "sources": [
+        "https://www.inc.com/ben-parr/the-list-of-buzzwords-you-should-never-use-in-a-pitch.html",
+        "https://builtin.com/founders-entrepreneurship/startup-pitch-planning"
+      ]
+    },
+    {
+      "phrase": "game changing",
+      "category": "buzzword_opener",
+      "severity": "high",
+      "sources": [
+        "https://www.inc.com/ben-parr/the-list-of-buzzwords-you-should-never-use-in-a-pitch.html",
+        "https://www.proposify.com/blog/words-to-avoid-in-proposals"
+      ]
+    },
+    {
+      "phrase": "disruptive",
+      "category": "buzzword_opener",
+      "severity": "high",
+      "sources": [
+        "https://www.inc.com/ben-parr/the-list-of-buzzwords-you-should-never-use-in-a-pitch.html",
+        "https://builtin.com/founders-entrepreneurship/startup-pitch-planning"
+      ]
+    },
+    {
+      "phrase": "groundbreaking",
+      "category": "buzzword_opener",
+      "severity": "high",
+      "sources": [
+        "https://www.inc.com/ben-parr/the-list-of-buzzwords-you-should-never-use-in-a-pitch.html",
+        "https://fastercapital.com/topics/how-to-avoid-being-vague,-boring,-or-unrealistic-in-your-pitch.html"
+      ]
+    },
+    {
+      "phrase": "revolutionary",
+      "category": "buzzword_opener",
+      "severity": "high",
+      "sources": [
+        "https://www.inc.com/ben-parr/the-list-of-buzzwords-you-should-never-use-in-a-pitch.html",
+        "https://builtin.com/founders-entrepreneurship/startup-pitch-planning"
+      ]
+    },
+    {
+      "phrase": "transformative",
+      "category": "buzzword_opener",
+      "severity": "high",
+      "sources": [
+        "https://www.inc.com/ben-parr/the-list-of-buzzwords-you-should-never-use-in-a-pitch.html",
+        "https://fastercapital.com/topics/how-to-avoid-being-vague,-boring,-or-unrealistic-in-your-pitch.html"
+      ]
+    },
+    {
+      "phrase": "next big thing",
+      "category": "buzzword_opener",
+      "severity": "high",
+      "sources": [
+        "https://www.inc.com/ben-parr/the-list-of-buzzwords-you-should-never-use-in-a-pitch.html",
+        "https://builtin.com/founders-entrepreneurship/startup-pitch-planning"
+      ]
+    },
+    {
+      "phrase": "innovative solution",
+      "category": "buzzword_opener",
+      "severity": "high",
+      "sources": [
+        "https://builtin.com/founders-entrepreneurship/startup-pitch-planning",
+        "https://fastercapital.com/topics/how-to-avoid-being-vague,-boring,-or-unrealistic-in-your-pitch.html"
+      ]
+    },
+    {
+      "phrase": "I'm excited about",
+      "category": "vague_enthusiasm",
+      "severity": "high",
+      "sources": [
+        "https://fastercapital.com/topics/how-to-avoid-being-vague,-boring,-or-unrealistic-in-your-pitch.html",
+        "https://www.proposify.com/blog/words-to-avoid-in-proposals"
+      ]
+    },
+    {
+      "phrase": "I've always wanted to",
+      "category": "vague_enthusiasm",
+      "severity": "high",
+      "sources": [
+        "https://fastercapital.com/topics/how-to-avoid-being-vague,-boring,-or-unrealistic-in-your-pitch.html",
+        "https://www.karpiakconsulting.com/post/how-realistic-is-pivoting"
+      ]
+    },
+    {
+      "phrase": "this is a great opportunity",
+      "category": "vague_enthusiasm",
+      "severity": "high",
+      "sources": [
+        "https://fastercapital.com/topics/how-to-avoid-being-vague,-boring,-or-unrealistic-in-your-pitch.html",
+        "https://builtin.com/founders-entrepreneurship/startup-pitch-planning"
+      ]
+    },
+    {
+      "phrase": "I'm passionate about",
+      "category": "vague_enthusiasm",
+      "severity": "high",
+      "sources": [
+        "https://www.proposify.com/blog/words-to-avoid-in-proposals",
+        "https://fastercapital.com/topics/how-to-avoid-being-vague,-boring,-or-unrealistic-in-your-pitch.html"
+      ]
+    },
+    {
+      "phrase": "I think this could be huge",
+      "category": "vague_enthusiasm",
+      "severity": "high",
+      "sources": [
+        "https://fastercapital.com/topics/how-to-avoid-being-vague,-boring,-or-unrealistic-in-your-pitch.html",
+        "https://builtin.com/founders-entrepreneurship/startup-pitch-planning"
+      ]
+    },
+    {
+      "phrase": "might be",
+      "category": "hedging_language",
+      "severity": "medium",
+      "sources": [
+        "https://fastercapital.com/topics/how-to-avoid-being-vague,-boring,-or-unrealistic-in-your-pitch.html",
+        "https://www.proposify.com/blog/writing-business-proposals-language-tone-style"
+      ]
+    },
+    {
+      "phrase": "could potentially",
+      "category": "hedging_language",
+      "severity": "high",
+      "sources": [
+        "https://fastercapital.com/topics/how-to-avoid-being-vague,-boring,-or-unrealistic-in-your-pitch.html",
+        "https://www.proposify.com/blog/writing-business-proposals-language-tone-style"
+      ]
+    },
+    {
+      "phrase": "perhaps it would",
+      "category": "hedging_language",
+      "severity": "medium",
+      "sources": [
+        "https://fastercapital.com/topics/how-to-avoid-being-vague,-boring,-or-unrealistic-in-your-pitch.html",
+        "https://www.fundsforngos.org/how-to-write-a-proposal/mistakes-to-avoid-in-project-proposal-writing/"
+      ]
+    },
+    {
+      "phrase": "I think this could",
+      "category": "hedging_language",
+      "severity": "medium",
+      "sources": [
+        "https://fastercapital.com/topics/how-to-avoid-being-vague,-boring,-or-unrealistic-in-your-pitch.html",
+        "https://builtin.com/founders-entrepreneurship/startup-pitch-planning"
+      ]
+    },
+    {
+      "phrase": "leverage synergies",
+      "category": "unsubstantiated_claim",
+      "severity": "high",
+      "sources": [
+        "https://www.proposify.com/blog/words-to-avoid-in-proposals",
+        "https://www.inc.com/ben-parr/the-list-of-buzzwords-you-should-never-use-in-a-pitch.html"
+      ]
+    },
+    {
+      "phrase": "add value",
+      "category": "unsubstantiated_claim",
+      "severity": "medium",
+      "sources": [
+        "https://www.proposify.com/blog/words-to-avoid-in-proposals",
+        "https://www.fundsforngos.org/how-to-write-a-proposal/mistakes-to-avoid-in-project-proposal-writing/"
+      ]
+    },
+    {
+      "phrase": "best practices",
+      "category": "unsubstantiated_claim",
+      "severity": "medium",
+      "sources": [
+        "https://www.proposify.com/blog/words-to-avoid-in-proposals",
+        "https://www.fundsforngos.org/how-to-write-a-proposal/mistakes-to-avoid-in-project-proposal-writing/"
+      ]
+    },
+    {
+      "phrase": "low-hanging fruit",
+      "category": "unsubstantiated_claim",
+      "severity": "medium",
+      "sources": [
+        "https://www.proposify.com/blog/words-to-avoid-in-proposals",
+        "https://www.inc.com/ben-parr/the-list-of-buzzwords-you-should-never-use-in-a-pitch.html"
+      ]
+    },
+    {
+      "phrase": "scalable solution",
+      "category": "unsubstantiated_claim",
+      "severity": "high",
+      "sources": [
+        "https://builtin.com/founders-entrepreneurship/startup-pitch-planning",
+        "https://www.proposify.com/blog/words-to-avoid-in-proposals"
+      ]
+    },
+    {
+      "phrase": "untapped potential",
+      "category": "unsubstantiated_claim",
+      "severity": "high",
+      "sources": [
+        "https://fastercapital.com/topics/how-to-avoid-being-vague,-boring,-or-unrealistic-in-your-pitch.html",
+        "https://www.inc.com/ben-parr/the-list-of-buzzwords-you-should-never-use-in-a-pitch.html"
+      ]
+    },
+    {
+      "phrase": "unique value proposition",
+      "category": "unsubstantiated_claim",
+      "severity": "medium",
+      "sources": [
+        "https://www.proposify.com/blog/words-to-avoid-in-proposals",
+        "https://builtin.com/founders-entrepreneurship/startup-pitch-planning"
+      ]
+    },
+    {
+      "phrase": "it's like Uber for",
+      "category": "comparison_shortcut",
+      "severity": "high",
+      "sources": [
+        "https://www.atlassian.com/blog/productivity/how-to-pitch-project-ideas-at-work",
+        "https://www.inc.com/ben-parr/the-list-of-buzzwords-you-should-never-use-in-a-pitch.html"
+      ]
+    },
+    {
+      "phrase": "it's like Airbnb for",
+      "category": "comparison_shortcut",
+      "severity": "high",
+      "sources": [
+        "https://www.atlassian.com/blog/productivity/how-to-pitch-project-ideas-at-work",
+        "https://www.inc.com/ben-parr/the-list-of-buzzwords-you-should-never-use-in-a-pitch.html"
+      ]
+    },
+    {
+      "phrase": "the Netflix of",
+      "category": "comparison_shortcut",
+      "severity": "high",
+      "sources": [
+        "https://www.atlassian.com/blog/productivity/how-to-pitch-project-ideas-at-work",
+        "https://builtin.com/founders-entrepreneurship/startup-pitch-planning"
+      ]
+    }
+  ],
+  "match_semantics": "Case-insensitive whole-phrase match with word boundaries on both sides (regex \\b<phrase>\\b where phrase has no leading/trailing word chars). Comparison-shortcut phrases contain 'for' at the end — use prefix match \\b<phrase> without right boundary. Implementations that use bare substring matching MUST tighten to whole-phrase to avoid false positives.",
+  "policy": "Each phrases[] occurrence with severity=high reduces the evidence_ground dimension by 1.0 (floor 0). severity=medium deducts 0.5. The reviewer turn surfaces the offending sentence via banned_phrase_hits in pipe-separated format: '<phrase>|... sentence containing phrase ...'."
+}

@@ -1,0 +1,234 @@
+{
+  "schema_version": 1,
+  "status": "v1.0 — research-based; cross-source confirmed",
+  "rationale": "Each entry was flagged by 2+ independent interview-coaching sources (MIT CAPD, The Muse, Indeed, Harvard Business Review, Yale OCS, The Interview Guys, Big Interview) as weak, clichéd, or diluting the candidate's credibility signal in behavioural interview answers. Categories: weak_ownership (passive / diluted contribution language), trait_claim (unprovable self-descriptions), rehearsed_non_answer (scripted answers to generic questions), vague_filler (process claims without evidence). See research-notes.md for citations.",
+  "phrases": [
+    {
+      "phrase": "was responsible for",
+      "category": "weak_ownership",
+      "severity": "high",
+      "sources": [
+        "https://www.indeed.com/career-advice/interviewing/how-to-use-the-star-interview-response-technique",
+        "https://capd.mit.edu/resources/the-star-method-for-behavioral-interviews/"
+      ]
+    },
+    {
+      "phrase": "was involved in",
+      "category": "weak_ownership",
+      "severity": "high",
+      "sources": [
+        "https://www.indeed.com/career-advice/interviewing/how-to-use-the-star-interview-response-technique",
+        "https://resources.biginterview.com/behavioral-interviews/star-interview-method/"
+      ]
+    },
+    {
+      "phrase": "helped with",
+      "category": "weak_ownership",
+      "severity": "high",
+      "sources": [
+        "https://www.indeed.com/career-advice/interviewing/how-to-use-the-star-interview-response-technique",
+        "https://capd.mit.edu/resources/the-star-method-for-behavioral-interviews/"
+      ]
+    },
+    {
+      "phrase": "helped to",
+      "category": "weak_ownership",
+      "severity": "high",
+      "sources": [
+        "https://www.indeed.com/career-advice/interviewing/how-to-use-the-star-interview-response-technique",
+        "https://blog.theinterviewguys.com/the-star-method/"
+      ]
+    },
+    {
+      "phrase": "was part of the team",
+      "category": "weak_ownership",
+      "severity": "high",
+      "sources": [
+        "https://resources.biginterview.com/behavioral-interviews/star-interview-method/",
+        "https://www.performancereviewssoftware.com/interview-red-flags/"
+      ]
+    },
+    {
+      "phrase": "worked with the team to",
+      "category": "weak_ownership",
+      "severity": "high",
+      "sources": [
+        "https://resources.biginterview.com/behavioral-interviews/star-interview-method/",
+        "https://www.indeed.com/career-advice/interviewing/how-to-use-the-star-interview-response-technique"
+      ]
+    },
+    {
+      "phrase": "supported the team",
+      "category": "weak_ownership",
+      "severity": "medium",
+      "sources": [
+        "https://resources.biginterview.com/behavioral-interviews/star-interview-method/",
+        "https://www.performancereviewssoftware.com/interview-red-flags/"
+      ]
+    },
+    {
+      "phrase": "contributed to",
+      "category": "weak_ownership",
+      "severity": "medium",
+      "sources": [
+        "https://capd.mit.edu/resources/the-star-method-for-behavioral-interviews/",
+        "https://resources.biginterview.com/behavioral-interviews/star-interview-method/"
+      ]
+    },
+    {
+      "phrase": "team player",
+      "category": "trait_claim",
+      "severity": "high",
+      "sources": [
+        "https://ocs.yale.edu/channels/the-behavioral-interview/",
+        "https://www.themuse.com/advice/9-cliche-interview-answers-that-you-think-are-original-but-hiring-managers-think-are-blah"
+      ]
+    },
+    {
+      "phrase": "I'm a quick learner",
+      "category": "trait_claim",
+      "severity": "high",
+      "sources": [
+        "https://www.themuse.com/advice/9-cliche-interview-answers-that-you-think-are-original-but-hiring-managers-think-are-blah",
+        "https://mondo.com/insights/cliche-interview-answers-to-avoid-what-to-say-instead/"
+      ]
+    },
+    {
+      "phrase": "I adapt well",
+      "category": "trait_claim",
+      "severity": "medium",
+      "sources": [
+        "https://www.themuse.com/advice/9-cliche-interview-answers-that-you-think-are-original-but-hiring-managers-think-are-blah",
+        "https://mondo.com/insights/cliche-interview-answers-to-avoid-what-to-say-instead/"
+      ]
+    },
+    {
+      "phrase": "I'm very detail-oriented",
+      "category": "trait_claim",
+      "severity": "high",
+      "sources": [
+        "https://ocs.yale.edu/channels/the-behavioral-interview/",
+        "https://mondo.com/insights/cliche-interview-answers-to-avoid-what-to-say-instead/"
+      ]
+    },
+    {
+      "phrase": "detail-oriented",
+      "category": "trait_claim",
+      "severity": "high",
+      "sources": [
+        "https://ocs.yale.edu/channels/the-behavioral-interview/",
+        "https://resources.biginterview.com/behavioral-interviews/star-interview-method/"
+      ]
+    },
+    {
+      "phrase": "thrive in fast-paced environments",
+      "category": "trait_claim",
+      "severity": "high",
+      "sources": [
+        "https://www.themuse.com/advice/9-cliche-interview-answers-that-you-think-are-original-but-hiring-managers-think-are-blah",
+        "https://mondo.com/insights/cliche-interview-answers-to-avoid-what-to-say-instead/"
+      ]
+    },
+    {
+      "phrase": "I'm passionate about",
+      "category": "trait_claim",
+      "severity": "high",
+      "sources": [
+        "https://www.themuse.com/advice/9-cliche-interview-answers-that-you-think-are-original-but-hiring-managers-think-are-blah",
+        "https://ocs.yale.edu/channels/the-behavioral-interview/"
+      ]
+    },
+    {
+      "phrase": "I go above and beyond",
+      "category": "trait_claim",
+      "severity": "medium",
+      "sources": [
+        "https://mondo.com/insights/cliche-interview-answers-to-avoid-what-to-say-instead/",
+        "https://www.themuse.com/advice/9-cliche-interview-answers-that-you-think-are-original-but-hiring-managers-think-are-blah"
+      ]
+    },
+    {
+      "phrase": "people person",
+      "category": "trait_claim",
+      "severity": "high",
+      "sources": [
+        "https://ocs.yale.edu/channels/the-behavioral-interview/",
+        "https://mondo.com/insights/cliche-interview-answers-to-avoid-what-to-say-instead/"
+      ]
+    },
+    {
+      "phrase": "hard worker",
+      "category": "trait_claim",
+      "severity": "high",
+      "sources": [
+        "https://ocs.yale.edu/channels/the-behavioral-interview/",
+        "https://www.themuse.com/advice/9-cliche-interview-answers-that-you-think-are-original-but-hiring-managers-think-are-blah"
+      ]
+    },
+    {
+      "phrase": "my greatest weakness is perfectionism",
+      "category": "rehearsed_non_answer",
+      "severity": "high",
+      "sources": [
+        "https://www.themuse.com/advice/9-cliche-interview-answers-that-you-think-are-original-but-hiring-managers-think-are-blah",
+        "https://www.monster.com/career-advice/article/worst-job-interview-cliches"
+      ]
+    },
+    {
+      "phrase": "I'm a perfectionist",
+      "category": "rehearsed_non_answer",
+      "severity": "high",
+      "sources": [
+        "https://www.themuse.com/advice/9-cliche-interview-answers-that-you-think-are-original-but-hiring-managers-think-are-blah",
+        "https://www.monster.com/career-advice/article/worst-job-interview-cliches"
+      ]
+    },
+    {
+      "phrase": "I work too hard",
+      "category": "rehearsed_non_answer",
+      "severity": "high",
+      "sources": [
+        "https://www.monster.com/career-advice/article/worst-job-interview-cliches",
+        "https://mondo.com/insights/cliche-interview-answers-to-avoid-what-to-say-instead/"
+      ]
+    },
+    {
+      "phrase": "I work well under pressure",
+      "category": "vague_filler",
+      "severity": "medium",
+      "sources": [
+        "https://www.themuse.com/advice/9-cliche-interview-answers-that-you-think-are-original-but-hiring-managers-think-are-blah",
+        "https://mondo.com/insights/cliche-interview-answers-to-avoid-what-to-say-instead/"
+      ]
+    },
+    {
+      "phrase": "I communicate effectively",
+      "category": "vague_filler",
+      "severity": "medium",
+      "sources": [
+        "https://mondo.com/insights/cliche-interview-answers-to-avoid-what-to-say-instead/",
+        "https://ocs.yale.edu/channels/the-behavioral-interview/"
+      ]
+    },
+    {
+      "phrase": "I'm very organized",
+      "category": "vague_filler",
+      "severity": "medium",
+      "sources": [
+        "https://mondo.com/insights/cliche-interview-answers-to-avoid-what-to-say-instead/",
+        "https://www.themuse.com/advice/9-cliche-interview-answers-that-you-think-are-original-but-hiring-managers-think-are-blah"
+      ]
+    },
+    {
+      "phrase": "I always put the team first",
+      "category": "vague_filler",
+      "severity": "medium",
+      "sources": [
+        "https://resources.biginterview.com/behavioral-interviews/star-interview-method/",
+        "https://mondo.com/insights/cliche-interview-answers-to-avoid-what-to-say-instead/"
+      ]
+    }
+  ],
+  "match_semantics": "Case-insensitive whole-phrase match with word boundaries on both sides (regex \\b<phrase>\\b where phrase has no leading/trailing word chars). Implementations that use bare substring matching MUST tighten to whole-phrase to avoid false positives.",
+  "policy": "Each phrases[] occurrence with severity=high reduces the tone dimension by 1.0 (floor 0). severity=medium deducts 0.5. The reviewer turn surfaces the offending sentence via banned_phrase_hits in pipe-separated format: '<phrase>|... sentence containing phrase ...'."
+}

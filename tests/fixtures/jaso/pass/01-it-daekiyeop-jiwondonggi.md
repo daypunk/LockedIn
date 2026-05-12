@@ -1,11 +1,16 @@
 ---
+fixture_kind: pass
+target_question: 지원동기
 expected_dimensions:
   두괄식: 5
   구조화: 5
   구체성: 5
   표현: 5
   적합성: 5
+expected_score: 4.8
 expected_revisions_required: false
+banned_phrases_hit: []
+dimensions_failed: []
 prompt: 지원동기
 company: GLOBAL_TECH (composite IT 대기업)
 industry: IT 대기업

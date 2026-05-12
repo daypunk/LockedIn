@@ -4,6 +4,7 @@
 #
 # Korean job-market sources (jaso skill)
 linkareer.co.kr
+linkareer.com
 saramin.co.kr
 jobkorea.co.kr
 wanted.co.kr
@@ -21,6 +22,27 @@ arxiv.org
 
 # OSS reference
 github.com
+
+# Interview / career coaching sources (render-interview skill)
+capd.mit.edu
+ocs.yale.edu
+hbr.org
+themuse.com
+indeed.com
+blog.theinterviewguys.com
+resources.biginterview.com
+mondo.com
+monster.com
+performancereviewssoftware.com
+
+# Proposal / pitch / ideas sources (render-ideas skill)
+atlassian.com
+inc.com
+fastercapital.com
+proposify.com
+builtin.com
+fundsforngos.org
+karpiakconsulting.com
 
 # Generic dev media (use sparingly; prefer the above)
 news.ycombinator.com
