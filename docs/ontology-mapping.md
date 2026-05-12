@@ -1,6 +1,6 @@
 # Ontology mapping — lockedin ↔ professional schemas
 
-Cross-walk between lockedin's ontology (v0.2 target) and three external
+Cross-walk between lockedin's ontology (v3) and three external
 references. Use this when (a) extending lockedin's schema, (b) building
 import/export adapters, or (c) deciding whether to add a new entity type
 versus extending an existing one.
@@ -18,29 +18,30 @@ References:
 
 | lockedin type | JSON Resume | Schema.org | FOAF | Notes |
 | --- | --- | --- | --- | --- |
-| `person` | `basics` | `Person` | `foaf:Person` | The user themselves; also any other person referenced |
-| `company` | `work[].name` | `Organization` | `foaf:Organization` | Employer / school / client |
+| `person` | `basics` | `Person` | `foaf:Person` | The user themselves; also any other person referenced. v3 adds `aliases` for ingest matching |
+| `company` | `work[].name` | `Organization` | `foaf:Organization` | Employer / school / client. v3 adds `aliases` for ingest matching |
 | `role` | `work` | `Occupation` | — | A position held at a company; carries start/end dates |
 | `project` | `projects` | `CreativeWork` | — | Work, side, OSS, study |
 | `achievement` | `awards` (partial) | `Award` (partial) | — | Quantified result; metric/delta/timeframe |
 | `skill` | `skills` | `DefinedTerm` | — | Technical or soft skill |
 | `education` | `education` | `EducationalOccupationalCredential` | — | Degree, course |
-| **`certificate`** *(new)* | `certificates` | `EducationalOccupationalCredential` | — | Professional certification — added in v0.2 |
-| **`publication`** *(new)* | `publications` | `CreativeWork` | — | Paper / article / talk |
-| **`volunteer`** *(new)* | `volunteer` | `Organization` (target) | — | Volunteer role |
-| **`language`** *(new)* | `languages` | `Language` | — | Language proficiency |
+| `certificate` | `certificates` | `EducationalOccupationalCredential` | — | Professional certification |
+| `publication` | `publications` | `CreativeWork` | — | Paper / article / talk |
+| `volunteer` | `volunteer` | `Organization` (target) | — | Volunteer role |
+| `language` | `languages` | `Language` | — | Language proficiency |
 | `document` | — | `DigitalDocument` | — | Ingested source file (provenance) |
 | `meeting` | — | `Event` | — | Meeting note |
 | `decision` | — | — | — | Documented decision |
 | `topic` | — | `DefinedTerm` | — | Learning topic / paper / area |
 
-JSON Resume gaps remaining (not adopted in v0.2):
+JSON Resume gaps remaining (not adopted in v3):
 
 - `interests` — too soft, often noise. Defer.
 - `references` — privacy concerns, defer.
 - `basics.profiles` — covered by `fields.url` per-entity for now.
 
-Total v0.2 entity count: **15** (was 11). 4 added (certificate / publication / volunteer / language).
+Total v3 entity count: **15**. v3 adds the `provenance` system field
+across every type, and `aliases` on `person` and `company`.
 
 ## Edge predicates
 
@@ -58,11 +59,11 @@ Total v0.2 entity count: **15** (was 11). 4 added (certificate / publication / v
 | `covers` | `foaf:topic_interest` | meeting / project / publication → topic | — |
 | `mentions` | — | any → any (weak link from ingest) | — |
 | `derived_from` | — | any → document (provenance) | — |
-| **`volunteered_at`** *(new)* | — | person → company / volunteer | yes |
-| **`speaks`** *(new)* | — | person → language | — |
-| **`authored`** *(new)* | `schema:author` (inverse) | person → publication | — |
+| `volunteered_at` | — | person → company / volunteer | yes |
+| `speaks` | — | person → language | — |
+| `authored` | `schema:author` (inverse) | person → publication | — |
 
-Total v0.2 edge count: **15** (was 12). 3 added.
+Total v3 edge count: **15**.
 
 ## Field-level coverage examples
 
@@ -133,12 +134,15 @@ once v0.2 lands.
 
 ## Schema versioning
 
-v0.2 introduces `schema_version: 2` at the vault root
-(`<vault>/.lockedin/version.json`). v0.1 vaults (no version file or
-`schema_version: 1`) auto-migrate on first `lockedin validate`:
+v3 sets `schema_version: 3` at the vault root
+(`<vault>/.lockedin/version.json`). Older vaults (`schema_version: 1`
+or `2`, or no version file at all) migrate via `lockedin migrate`:
 
+- Rename the default template directory `career/` → `experience/`.
+- Inject `provenance` defaults on every entity (existing entries get
+  `provenance: user_edit`).
+- Seed empty `aliases` lists on `person` and `company`.
 - Promote `fields: dict[str, Any]` to typed fields where the keys map
-  cleanly.
-- Surface unmappable keys as warnings.
+  cleanly; surface unmappable keys as warnings.
 
-Migration happens once and is idempotent.
+Migration is idempotent.

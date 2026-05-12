@@ -1,4 +1,4 @@
-"""Canonical ontology schema for lockedin (v0.2).
+"""Canonical ontology schema for lockedin (v3).
 
 Aligned with JSON Resume / Schema.org / FOAF where it makes sense — see
 ``docs/ontology-mapping.md`` for the cross-walk. The design goal is

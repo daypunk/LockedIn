@@ -4,10 +4,11 @@
 
 # LockedIn
 
-**English** | [한국어](README.ko.md)
+**English** | [한국어](README.ko.md) | [简体中文](README.zh.md)
 
 [![version](https://img.shields.io/badge/version-1.1.0-orange.svg)](https://github.com/daypunk/LockedIn/releases)
 [![license](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
+[![stars](https://img.shields.io/github/stars/daypunk/LockedIn?color=orange&style=flat)](https://github.com/daypunk/LockedIn/stargazers)
 
 > ***Before Linked In, get Locked In.***
 

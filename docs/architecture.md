@@ -48,34 +48,43 @@ focused on the parts that genuinely require an LLM.
 
 
 
-## Two install paths, one source of truth
+## Install model: plugin + optional Python CLI
 
-lockedin ships as a single repo with **two install paths**:
+lockedin ships as a single repo with **one primary install path** and
+an optional Python CLI accelerator:
 
 ```
                  ┌─────────────────────────────────────────────┐
-                 │  ~/.claude/skills/lockedin/  (skill files) │
-                 │   ├ SKILL.md / AGENTS.md / TOOLS.md         │
-                 │   ├ render-jaso/ / render-resume-en/ / ...  │
-                 │   └ helpers/  ← single-file Python helpers  │
-                 │     for the skill-only path                 │
+                 │  Claude Code plugin (primary)               │
+                 │   /plugin marketplace add daypunk/LockedIn │
+                 │   /plugin install lockedin@lockedin        │
+                 │   /lockedin:setup                          │
+                 │                                             │
+                 │  Installs the skills, the HUD wrapper,      │
+                 │  and the setup wizard. Reasoning runs       │
+                 │  through Claude Code on the user's          │
+                 │  existing subscription.                     │
                  └─────────────────────────────────────────────┘
                                        ▲
-                                       │ both paths register here
+                                       │ optional accelerator
                                        │
-   ┌────────────────────────────┐      │      ┌────────────────────────────┐
-   │ Skill-only path            │      │      │ CLI accelerator path       │
-   │ git clone <repo> →         │──────┘      │ uv tool install lockedin  │
-   │   ~/.claude/skills/...     │             │ lockedin install          │
-   │ python3 only, system       │             │   --auto-register          │
-   │ helpers via `python3 -c`   │             │ Adds: PDF ingest,          │
-   └────────────────────────────┘             │       multi-template,      │
-                                              │       validate, doctor     │
-                                              └────────────────────────────┘
+                 ┌─────────────────────────────────────────────┐
+                 │  Python CLI (optional)                      │
+                 │   pip install -e .  /  python3 -m lockedin  │
+                 │                                             │
+                 │  Adds deterministic file I/O: validate,     │
+                 │  migrate, init --fixture, ingest --dry-run, │
+                 │  doctor, template, experience, refresh,     │
+                 │  hud, install. stdlib-only by default; PDF, │
+                 │  DOCX, and YAML support are optional        │
+                 │  extras.                                    │
+                 └─────────────────────────────────────────────┘
 ```
 
-Both paths produce **byte-identical output** on shared fixtures (`init`,
-notes round-trip, validate). CI enforces this via the parity test.
+The plugin is enough on its own. The Python CLI exists so that
+deterministic operations (frontmatter parsing, PDF/DOCX extraction,
+graph derivation, validation) do not have to consume tokens. Both
+surfaces read and write the same vault layout.
 
 ## The vault is the contract
 
@@ -123,9 +132,12 @@ via `LOCKEDIN_ALLOW_API_KEY=1`.
 
 ## Roadmap shape
 
-- Repo + ontology schema + CLI surface (current)
-- Q&A interview engine + storage layer
-- Document ingestion (.pdf / .docx / .md / .txt)
-- Renderer skills with research-driven prompts and rubrics
-- Skill polish + two-recipe CI
-- Demo recording, README polish, soft launch
+Current state (1.1) covers: ontology v3 schema, the deterministic CLI
+surface, document ingestion (`.pdf` / `.docx` / `.md` / `.txt`), four
+renderer skills (`render-jaso`, `render-resume-en`,
+`render-interview`, `render-ideas`), the master `EXPERIENCE.md` view,
+and the HUD wired through Claude Code's statusline. See
+`CHANGELOG.md` "Future work" for the canonical outstanding list:
+deeper Q&A interview buildout, PDF-first quick-start onboarding, named
+human reviewer engagement for each renderer, v1.2 orchestration, and
+v1.3 vault curator.

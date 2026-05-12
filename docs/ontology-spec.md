@@ -1,4 +1,4 @@
-# lockedin ontology specification (v0.2)
+# lockedin ontology specification (v3)
 
 > The contract `lockedin validate` checks. If a note's frontmatter
 > doesn't conform, validate exits non-zero.
@@ -41,7 +41,7 @@ links:
 `type`, `title`, `slug`, `created`, `updated` are required at the
 frontmatter level. Per-entity required fields live in `ENTITY_SCHEMAS`.
 
-## Entity types (v0.2 — 15 types)
+## Entity types (v3 — 15 types)
 
 ```
 person       company      role         project      achievement
@@ -59,14 +59,28 @@ Example — `person`:
 ```yaml
 fields:
   name: "Sample User"          # required (string)
+  aliases: ["Sam", "샘"]       # optional (list[string]) — v3
   current_role: "PM"           # optional (string)
   email: "x@y.com"             # optional (email — validated)
   based_in: "Seoul"            # optional (string)
   summary: |                    # optional (text)
     Multi-sentence summary.
+  provenance: "interview"      # optional, system field on every type — v3
 ```
 
-## Edge predicates (v0.2 — 15 predicates)
+### v3 system fields
+
+- **`aliases: list[string]`** — present on `person` and `company`. Used
+  by free-form ingest matching so that "Sam", "샘", and "Sample User"
+  resolve to the same node. Authoring is optional; ingest can populate
+  it from observed variants.
+- **`provenance: string`** — present on every entity type. Records
+  where the record originated. Allowed values: `interview`,
+  `pdf_ingest`, `docx_ingest`, `user_edit`, `inferred`. Renderers
+  surface this in reviewer JSON so the user can audit the origin of
+  each cited fact.
+
+## Edge predicates (v3 — 15 predicates)
 
 ```
 works_on         held_role_at     has_role          produced
@@ -112,15 +126,21 @@ parity test diffs the two implementations against shared fixtures.
 
 ## Schema versioning
 
-This is **schema_version 2**. v0.1 vaults (no version file or
-`schema_version: 1`) are still readable, but `lockedin validate` will
-report any v0.2 contract violations (typically: missing required
-fields). Run the migration step (planned for a future `lockedin
-migrate` command) to bring older vaults forward, or hand-edit the
-flagged notes.
+This is **schema_version 3**. Older vaults (`schema_version: 1` or
+`2`, or no version file at all) are still readable, but `lockedin
+validate` will report any v3 contract violations. Run `lockedin
+migrate` to bring older vaults forward; the migration is idempotent
+and renames `career/` → `experience/`, injects `provenance` defaults,
+and seeds empty `aliases` on `person` / `company`.
+
+v3 changes (2026-05):
+
+- `aliases: list[string]` added to `person` and `company`.
+- `provenance: string` injected into every entity type.
+- Default vault template directory renamed `career/` → `experience/`.
 
 The vault root marker is `<vault>/.lockedin/version.json`:
 
 ```json
-{ "schema_version": 2 }
+{ "schema_version": 3 }
 ```

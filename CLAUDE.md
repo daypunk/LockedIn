@@ -165,17 +165,6 @@ README.md · README.ko.md · CHANGELOG.md · CONTRIBUTING.md · CODE_OF_CONDUCT.
 CI exercises both paths. `ANTHROPIC_API_KEY=fake` should exit
 non-zero. Unset should exit zero.
 
-## Future work
-
-See `CHANGELOG.md` "Future work" for the canonical list. Highlights:
-
-- Q&A interview buildout (9 sections, 5+ questions each, branching
-  and follow-up probing)
-- PDF-first quick-start onboarding
-- Automatic master `EXPERIENCE.md` view at the vault root
-- Named human reviewer engagement for both render skills
-- v1.2 orchestration and v1.3 vault curator
-
 ## Verification quick reference
 
 ```bash
@@ -204,7 +193,7 @@ If you are a Claude session opened with no prior context:
 3. Read `docs/architecture.md` for the skill / CLI split.
 4. Read `docs/ontology-spec.md` and `docs/ontology-mapping.md` for
    the data contract.
-5. Skim `CHANGELOG.md` "Future work" for what is outstanding.
+5. Skim `CHANGELOG.md` for the most recent shipped release notes.
 6. If working notes / spec / plan files exist locally at
    `.omc/specs/` and `.omc/plans/`, those are gitignored
    internal-only artifacts. Read them only if you need history that
