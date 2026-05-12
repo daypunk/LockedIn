@@ -139,16 +139,53 @@ it will warn unless the user explicitly opts in via
 
 ## Master view at the vault root
 
-Every vault write also regenerates `<vault>/EXPERIENCE.md`, a
-single human-readable markdown file that lists all entities grouped
-by type. The user can open this file in any markdown viewer to see
-their whole vault at a glance without navigating per-type folders.
-This is automatic and does not require an explicit step from the
-skill — `lockedin/storage/notes.py::write_entity` invokes
+Every vault write also regenerates `<vault>/EXPERIENCE.md`, a single
+human-readable markdown file that lists all entities grouped by type.
+The user can open this file in any markdown viewer to see their whole
+vault at a glance without navigating per-type folders. This is
+automatic and does not require an explicit step from the skill —
+`lockedin/storage/notes.py::write_entity` invokes
 `lockedin/render/master_view.py::refresh_master_view` after every
-successful write. If the user manually edits a frontmatter file in
-their editor, point them at `lockedin refresh` to regenerate the
-master view.
+successful write.
+
+## Drift detection — be proactive, not reactive
+
+Treat the vault as a living document. The user should rarely need
+to type `lockedin refresh` themselves. When you start a conversation
+or the user mentions experience, check for drift between three
+sources of truth:
+
+- (a) what the user is saying now,
+- (b) the existing vault entities,
+- (c) the master `EXPERIENCE.md` view.
+
+When you detect drift, reconcile actively rather than pointing the
+user at a CLI:
+
+- **User mentions something that conflicts with an existing vault
+  entity** → surface the contradiction and ask one focused question
+  ("You said you joined Acme in 2021, but the vault has 2022 — which
+  is right?"), then update the entity.
+- **User mentions something new that fits an existing entity** →
+  propose merging into the existing entity rather than creating a
+  duplicate. Ask one confirm question, then write.
+- **Files on disk are newer than the master view** (compare `stat`
+  mtime of vault notes vs `EXPERIENCE.md`) → silently call
+  `lockedin/render/master_view.py::refresh_master_view` to bring the
+  master current. This is deterministic bookkeeping; do not bother
+  the user.
+- **A vault entity references a slug that doesn't exist** (dangling
+  reference) → surface in a small batch ("3 dangling references; fix
+  now?") rather than one-at-a-time spam.
+- **The user's natural-language description of their career conflicts
+  with multiple existing entities at once** → summarize the conflict
+  briefly, ask the user how they want to reconcile (replace / merge /
+  keep both), then act.
+
+Pointing the user at `lockedin refresh` is a fallback for cases where
+you cannot reconcile programmatically — not a default behavior. The
+spirit of this skill is "AI notices and asks", not "user runs a
+command".
 
 ## Final checklist (self-verify before declaring a flow done)
 

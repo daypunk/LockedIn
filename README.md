@@ -55,32 +55,31 @@ Most career tools regenerate every artifact from scratch. The artifact is the po
 
 ## Features
 
-- **Natural-language activation.** Talk to Claude Code the way you already do.
-- **One vault, four artifacts.** Resumes, cover letters, interview answers, and project ideas all come from the same source.
-- **Quality guard built in.** Drafting and scoring run as two separate Claude turns and every artifact ships with a JSON rubric score.
-- **Pre-flight audit.** Drop any resume and get the same calibrated score before you commit to a vault — no install, no signup.
-- **Subscription, not API keys.** Everything runs on your existing Claude Code subscription.
+- **No commands to memorize.** Type the way you'd talk and LockedIn picks the right skill.
+- **Builds your experience with you, over time.** Resumes, cover letters, interview answers, and project ideas all come from the same experience.
+- **Scores your output.** A different Claude than the writer reviews it against a domain-researched rubric.
+- **No API key needed.** Runs on your existing Claude Code subscription.
 
 ## How it works
 
-Your experiences are stored as plain markdown files with frontmatter. Every entity becomes one file. There are fifteen entity types covering people, companies, roles, projects, achievements, skills, education, certificates, publications, volunteer work, languages, documents, meetings, decisions, and topics. Relationships between entities are stored as links inside frontmatter, and the schema enforces which type can connect to which.
+**1. Your experience gets structured.** Drop a resume or answer a few short interview questions. LockedIn organizes it into 15 typed markdown files in `~/Documents/LockedIn/`.
 
-When you ask for a render, LockedIn queries the vault, drafts the output in one Claude turn, and then reviews the draft against a calibrated rubric in a separate Claude turn. The split prevents self-evaluation bias. When the same Claude call both writes and scores, it tends to be lenient with itself by about one point. The reviewer turn runs separately and reloads the rubric from scratch, which removes the inflation.
+**2. Every claim is bound to a real entity.** The writer turn cites companies, projects, and metrics as `[[type/slug]]` references pointing at specific vault files. Slugs are swapped for natural language right before you see the output. If no matching entity backs a claim, the slug stays in place and LockedIn asks you whether to add the entity rather than fabricating one. There is no opening for a new fact to slip in.
 
-A master file `EXPERIENCE.md` is automatically maintained at the vault root (`~/Documents/LockedIn/`). Your entries live in per-type subfolders (person, company, role, project, and so on); instead of opening each folder, you can open this one file to scan the whole vault at a glance. If you edited markdown by hand and the master view feels stale, `lockedin refresh` rebuilds it.
+**3. Two Claudes grade.** Once the writer turn finishes, a separate reviewer turn reads `RUBRIC.md` fresh from disk and scores. Each artifact has its own 5 dimensions (for the English resume: metric density, action verb quality, structure, banned phrases, persona fit). You get a JSON alongside the markdown with per-dimension scores 0–5, a total, cited-entity recall, and any banned-phrase hits. If any dimension lands below 4, LockedIn auto-refines once before you see the result.
 
-LockedIn runs on your existing Claude Code subscription. It does not require an Anthropic API key, and it does not phone home.
+**4. Your experience and your conversation stay in sync.** If you edited a markdown file by hand, or said something in chat that conflicts with what's already there, LockedIn notices first and asks one focused question to reconcile. This is possible because your experience is stored as typed entities, not free-form text. The AI compares only the changed fields instead of re-reading everything. Sync cost scales with what changed, not with how large your experience grows. The richer your experience becomes, the more this matters.
 
 ## Skills
 
-| Skill | Role |
-|---|---|
-| `lockedin` | Main skill. Routes natural language requests, runs the Q&A interview that seeds your vault, coordinates ingest and render flows. |
-| `lockedin-render-jaso` | Korean cover letter renderer with a five-dimension rubric (<!-- ko-example -->두괄식, 구조화, 구체성, 표현, 적합성<!-- /ko-example -->). Cross-source confirmed banned phrase list. Two-turn writer and reviewer with a hard guard for fresh rubric loading. |
-| `lockedin-render-resume-en` | English resume renderer. Five dimensions: metric density, action verb quality, structural adherence, banned phrase cleanliness, persona fit. Built-in personas are us-tech-senior, us-tech-mid, and pm-product, and targeting other roles also works. The five dimensions apply regardless of target. The persona fit dimension is calibrated against the built-in three, so scores may be conservative for outside-set roles. |
-| `lockedin-render-interview` | Interview answer renderer. STAR or PAR shape with one experience per paragraph and explicit transitions between paragraphs. Five dimensions: clarity, evidence density, persona fit, conciseness, tone. |
-| `lockedin-render-ideas` | Surfaces 3 to 5 next-project or career-move ideas grounded in your vault. Each idea is one paragraph: pitch sentence plus rationale that cites real entities. Five dimensions: feasibility, novelty, evidence ground, scope match, motivation alignment. |
-| `lockedin-audit` | Calibrated pre-flight scorer. Takes any resume document, returns a 5-dimension rubric score plus banned-phrase and weak-verb hits. Optional refinement pass quantifies the score lift. Reuses `render-resume-en` and `render-jaso` rubrics — same calibration, no duplication. |
+| Function | Skill | Role |
+|---|---|---|
+| Talk to LockedIn | `/lockedin` | The natural-language entry point. Hears what you ask, routes to the right sub-skill, runs the Q&A interview when your experience is empty, and notices when the conversation and your existing experience have drifted apart. |
+| Write an English resume | `/lockedin-render-resume-en` | Pulls from your experience and writes a resume tuned to a target persona (us-tech-senior, us-tech-mid, or pm-product), scoring it on metric density, action verb quality, structure, banned phrases, and persona fit. Other roles work too; the rubric stays calibrated and only the persona dimension gets more conservative. |
+| Write a Korean cover letter | `/lockedin-render-jaso` | Give it a company and a question; it cites your experience and writes the answer. Reviewed against a five-dimension Korean rubric (<!-- ko-example -->두괄식, 구조화, 구체성, 표현, 적합성<!-- /ko-example -->) with a cross-source-verified list of banned phrases the draft must avoid. |
+| Draft an interview answer | `/lockedin-render-interview` | Give it the company, the role, and the question; it answers in STAR or PAR shape, one experience per paragraph with explicit transition sentences so an interviewer can follow you. Scored on clarity, evidence, persona fit, conciseness, and tone. |
+| Surface next project ideas | `/lockedin-render-ideas` | Reads your experience and pitches 3 to 5 directions you could take next, each one a one-paragraph pitch that cites the specific entries making it a fit for you. Scored on feasibility, novelty, evidence grounding, scope match, and motivation alignment. |
+| Audit any resume | `/lockedin-audit` | Drop a resume PDF or DOCX and get a 5-dimension score. |
 
 ## Documentation
 

@@ -55,32 +55,31 @@ LockedIn 需要更多信息时会一次只问一个问题,够用了就停下。
 
 ## 特性
 
-- **自然语言激活。** 像平时那样跟 Claude Code 对话即可,没有要背的命令。
-- **一个 vault,四种产出。** 简历、求职信、面试回答、项目想法都来自同一份素材。
-- **内置质量校验。** 起草和打分跑在两个独立的 Claude turn 里,每个产出都附带 JSON 评分。
-- **预审 audit。** 不必先建 vault — 任意一份简历丢进来,就能拿到同一套 calibrated 评分。无需安装、无需注册。
-- **订阅即可,不需要 API key。** 全部跑在你现有的 Claude Code 订阅上。
+- **没有要背的命令。** 像平时那样说,LockedIn 会选对技能。
+- **和你一起把经历整理起来。** 简历、求职信、面试回答、项目想法都来自同一份经历。
+- **给产出打分。** 和写作者不同的另一个 Claude,用基于领域研究的 rubric 进行评分。
+- **不需要 API key。** 跑在你现有的 Claude Code 订阅上。
 
 ## 工作原理
 
-经历以带 frontmatter 的 Markdown 文件存储,每个实体一个文件。实体类型共 15 种:person、company、role、project、achievement、skill、education、certificate、publication、volunteer、language、document、meeting、decision、topic。实体之间的关系作为 link 写在 frontmatter 里,schema 会校验哪些类型可以连到哪些类型。
+**1. 经历会被结构化。** 把已有的简历丢进来,或者回答几个简短的访谈问题,LockedIn 就会把它整理成 `~/Documents/LockedIn/` 中 15 种类型化的 Markdown 文件。
 
-收到渲染请求时,LockedIn 会先查询 vault,然后在一个 Claude turn 里起草内容,再在**另一个独立的** Claude turn 里按 calibrated 评分表打分。两个 turn 分开是为了避免自我评估偏差——同一个 Claude 调用既写又打分时,往往会高估自己大约 1 分。评审 turn 会重新从头加载评分表,从而消除这一偏差。
+**2. 每一条主张都绑定到真实实体。** 写作 turn 把公司、项目、指标都以 `[[type/slug]]` 引用的形式直接绑到 vault 文件。展示给你之前会把 slug 替换成自然语言,但如果某条主张找不到对应实体,slug 就原样保留,LockedIn 会问"这里没有对应的实体,要不要加一个?",而不是自己编造。新事实没有进入的缝隙。
 
-vault 根目录(`~/Documents/LockedIn/`)会自动维护一份名为 `EXPERIENCE.md` 的主索引文件。各类型分别放在 person、company、role、project 等子目录下;不必逐一打开,只看这一个文件即可一次性扫完整个 vault。如果你手动改了 Markdown 且觉得主文件不同步,运行 `lockedin refresh` 即可重建。
+**3. 两个 Claude 分头打分。** 写作 turn 结束后,一个独立的 reviewer turn 会重新从磁盘读取 `RUBRIC.md` 进行打分。每种产出有各自的 5 维(英文简历:指标密度、动词质量、结构、banned 表达、persona 适配)。结果是一份 JSON,和 markdown 一起返回,包含每个维度 0~5 分、总分、引用实体匹配率、banned 表达命中清单。如果某个维度低于 4,LockedIn 会自动再优化一次再展示。
 
-LockedIn 跑在你现有的 Claude Code 订阅上,不需要 Anthropic API key,也不会上传任何数据。
+**4. 经历和对话始终同步。** 手动改了 markdown,或者对话里说的和现有经历对不上,LockedIn 会先察觉,一次只问一个问题来对齐。之所以能做到,是因为你的经历不是自由文本,而是按类型化实体结构化存储的。AI 只比较变化的字段,不必从头重读。所以同步成本只随变化量增长,而不随经历的总规模增长。经历越丰富,差异越明显。
 
 ## Skills
 
-| Skill | 角色 |
-|---|---|
-| `lockedin` | 主 skill。路由自然语言请求,主持种子 Q&A 访谈,协调 ingest 与 render 流程。 |
-| `lockedin-render-jaso` | 韩文求职信(자기소개서)渲染器。五维评分:두괄식、구조화、구체성、표현、적합성。内置跨源验证的禁用表达清单。写作 turn 与评审 turn 严格分离,评审 turn 会重新加载评分表。 |
-| `lockedin-render-resume-en` | 英文简历渲染器。五维评分:metric density、action verb quality、structural adherence、banned phrase cleanliness、persona fit。内置 us-tech-senior、us-tech-mid、pm-product 三种 persona,对其他岗位也可使用。前四维与岗位无关,persona fit 这一维是按内置三种 persona calibrate 的,因此对内置之外的岗位评分可能偏保守。 |
-| `lockedin-render-interview` | 面试回答渲染器。采用 STAR 或 PAR 结构,一个段落对应一个经历,段落之间有显式过渡句。五维评分:clarity、evidence density、persona fit、conciseness、tone。 |
-| `lockedin-render-ideas` | 基于 vault 给出 3–5 个下一步项目或职业转向的想法。每个想法一段:一句 pitch + 引用真实 vault 实体的依据。五维评分:feasibility、novelty、evidence ground、scope match、motivation alignment。 |
-| `lockedin-audit` | 经过校准的预审评分器。接收任意简历文档,返回 5 维 rubric 评分以及 banned phrase / 弱动词命中列表。可选的 refinement 流程会量化分数提升幅度。复用 `render-resume-en` 和 `render-jaso` 的 rubric,无校准重复。 |
+| 功能 | 技能 | 角色 |
+|---|---|---|
+| 和 LockedIn 对话 | `/lockedin` | 自然语言入口。听你的请求,决定路由到哪个子技能,经历为空时启动 Q&A 访谈,对话与现有经历出现分歧时主动一题一题询问对齐。 |
+| 撰写英文简历 | `/lockedin-render-resume-en` | 从经历调取内容,按 persona 撰写英文简历。内置 persona 有 us-tech-senior、us-tech-mid、pm-product 三种,其他岗位也能用。从指标密度、动词质量、结构、banned 表达、persona 适配 5 维评分,内置之外的岗位只在 persona 维度上略保守。 |
+| 撰写韩文求职信 | `/lockedin-render-jaso` | 给定公司和题目,会引用你的经历写出答案。按韩文 5 维(두괄식、구조화、구체성、표현、적합성)评分,并避开跨源验证过的禁用表达。 |
+| 起草面试回答 | `/lockedin-render-interview` | 给定公司、岗位和问题,以 STAR 或 PAR 结构作答。每段只放一个经验,段落间放显式过渡句让面试官更容易跟上。从清晰度、证据、persona 适配、简洁度、语气 5 维评分。 |
+| 提出下一步想法 | `/lockedin-render-ideas` | 读你的经历,提出 3 到 5 个可走方向。每个想法一段。一句 pitch,加上引用你匹配经历作为依据。从可行性、新颖度、证据基础、范围匹配、动机对齐 5 维评分。 |
+| 任意简历预审 | `/lockedin-audit` | 把简历 PDF 或 DOCX 丢进来,就能拿到 5 维评分。 |
 
 ## 文档
 
