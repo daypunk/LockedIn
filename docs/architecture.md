@@ -12,30 +12,30 @@ Python CLI is a deterministic helper, not a parallel runtime.
 ┌──────────────────────────────────────────────────────────────────────┐
 │  Host: Claude Code session (user's subscription)                     │
 │                                                                      │
-│   ┌─ User says "/lockedin render jaso ..." or natural language      │
+│   ┌─ User says "/lockedin render jaso ..." or natural language       │
 │   │                                                                  │
 │   ▼                                                                  │
-│   Skill activates (lockedin/skill/SKILL.md)                         │
+│   Skill activates (lockedin/skill/SKILL.md)                          │
 │     ├─ Interviewer: ask the user one question at a time              │
 │     ├─ Ingester: classify diff, resolve ambiguities by asking        │
 │     ├─ Renderer: writer turn → reviewer turn (RUBRIC.md re-loaded)   │
 │     └─ GraphCurator: surface dangling references in batches          │
 │                                                                      │
 │   When deterministic work is needed, the skill issues a Bash call:   │
-│      lockedin validate                                              │
-│      lockedin migrate                                               │
-│      lockedin experience <slug>                                     │
-│      lockedin install --check                                       │
+│      lockedin validate                                               │
+│      lockedin migrate                                                │
+│      lockedin experience <slug>                                      │
+│      lockedin install --check                                        │
 │                                                                      │
 └──────────────────────────────────────────────────────────────────────┘
 
 ┌──────────────────────────────────────────────────────────────────────┐
 │  Pure CLI utilities (no LLM, run anywhere)                           │
 │                                                                      │
-│   lockedin init --non-interactive --fixture FILE                    │
-│   lockedin ingest <path> --dry-run     # diff preview, no merge     │
-│   lockedin validate / doctor / install / template add/remove       │
-│   lockedin migrate / experience <slug>                             │
+│   lockedin init --non-interactive --fixture FILE                     │
+│   lockedin ingest <path> --dry-run     # diff preview, no merge      │
+│   lockedin validate / doctor / install / template add/remove         │
+│   lockedin migrate / experience <slug>                               │
 │                                                                      │
 │   Skill-required commands typed here print a redirect (exit 3).      │
 └──────────────────────────────────────────────────────────────────────┘
@@ -56,9 +56,9 @@ an optional Python CLI accelerator:
 ```
                  ┌─────────────────────────────────────────────┐
                  │  Claude Code plugin (primary)               │
-                 │   /plugin marketplace add daypunk/LockedIn │
-                 │   /plugin install lockedin@lockedin        │
-                 │   /lockedin:setup                          │
+                 │   /plugin marketplace add daypunk/LockedIn  │
+                 │   /plugin install lockedin@lockedin         │
+                 │   /lockedin:setup                           │
                  │                                             │
                  │  Installs the skills, the HUD wrapper,      │
                  │  and the setup wizard. Reasoning runs       │
