@@ -1,20 +1,13 @@
 ---
 name: lockedin-render-resume-en
 description: |
-  Render an English resume from the lockedin ontology — metric-first
-  bullets in XYZ or CAR shape ("Accomplished X as measured by Y by
-  doing Z" / Challenge-Action-Result), target persona selected from
-  10 built-in personas under ./personas/. Two-turn writer/reviewer
-  pattern with a JSON rubric (≥80% metric density floor, action-verb
-  diversity, no weak verbs).
+  Writes an English resume from the user's experience, tuned to one
+  of 10 built-in personas. Metric-first XYZ/CAR bullets, two-turn
+  writer/reviewer with a 5-dimension rubric.
 
-  Use when the user says: "render resume", "make a resume",
-  "us-tech-senior resume", "resume for [target]", "polish my resume".
-  Output: a markdown resume quoting concrete ontology slugs plus a JSON
-  rubric score.
-
-  When the user requests a render, identify the closest persona from
-  ./personas/ and load its spec file in the writer turn.
+  Activate when the user says "render resume", "make a resume",
+  "polish my resume", or names a target role. The writer turn loads
+  the matching spec from ./personas/ before drafting.
 ---
 
 # render-resume-en

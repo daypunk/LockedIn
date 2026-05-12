@@ -1,23 +1,13 @@
 ---
 name: lockedin
 description: |
-  Personal experience knowledge graph for Claude Code. Build and grow
-  a markdown ontology from Q&A interviews and document ingestion (PDF,
-  DOCX, MD, TXT), then render English resumes, Korean cover letters,
-  interview answers, and project ideas from the same vault. Also runs
-  a calibrated pre-flight audit on any resume document without
-  requiring a vault. Runs entirely on the user's Claude Code
-  subscription — never calls the Anthropic API directly.
+  Renders resumes, Korean cover letters, interview answers, and
+  project ideas from the user's structured experience. Also scores
+  any resume against a calibrated rubric, no prior setup needed.
 
-  Activate when the user mentions lockedin by name, asks to set up or
-  update a personal career / experience graph, asks to render a resume
-  / cover letter / interview answer / project idea from their own
-  experience, drops a resume PDF or DOCX with a request to absorb or
-  audit it, asks to score / review / audit a resume against the
-  calibrated rubric (drive-by, no vault needed), or queries their own
-  experience ("what projects used Rust?", "which roles taught me X").
-  Do NOT activate for unrelated coding, code review, or general
-  questions.
+  Activate when the user mentions lockedin, asks to render a career
+  artifact, drops a resume PDF or DOCX, or asks about their own
+  experience.
 ---
 
 # lockedin

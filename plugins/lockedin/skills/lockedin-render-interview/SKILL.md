@@ -1,21 +1,13 @@
 ---
 name: lockedin-render-interview
 description: |
-  Draft an interview answer from the LockedIn vault, in English or
-  Korean. Uses the same two-turn writer/reviewer pattern as the resume
-  and cover letter renderers. The user asks an interview question
-  (behavioural, technical, or background); the writer turn pulls
-  evidence from the vault and drafts a STAR-shaped answer; the
-  reviewer turn checks it against a small rubric (clarity, evidence
-  density, persona fit, conciseness, tone) before the final answer
-  is shown.
+  Drafts an interview answer in English or Korean from the user's
+  experience. STAR or PAR structure, two-turn writer/reviewer with
+  a 5-dimension rubric.
 
-  Use when the user says any of <!-- ko-example -->"interview
-  answer", "면접 답변", "STAR 답변", "behavioral question", "tell me
-  about a time…"<!-- /ko-example -->, or names a question and asks
-  for an answer drawn from their experience.
-  Output: a single answer in markdown, with cited entities resolved
-  to natural language, plus a JSON rubric score.
+  Activate when the user says <!-- ko-example -->"interview answer",
+  "면접 답변", "STAR 답변", "tell me about a time…"<!-- /ko-example -->,
+  or names a question and asks for an answer.
 ---
 
 # render-interview

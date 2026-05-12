@@ -1,17 +1,13 @@
 ---
 name: lockedin-audit
 description: |
-  Score and refine arbitrary resume or cover-letter documents against
-  LockedIn's calibrated rubric. Works with or without a vault. Three
-  operating modes: Score only, Refine only, Refine then Score (default).
-  Two entry points: drive-by (file path, no vault required) and
-  post-ingest (triggered after a completed lockedin ingest).
+  Scores any resume or cover letter against LockedIn's calibrated
+  rubric. No vault required. Three modes: score, refine, refine then
+  score.
 
-  Use when the user says: "audit this resume", "score my resume",
-  "grade my resume", "audit my cover letter", "how does my resume
-  score", "check my resume", or provides a file path and asks for
-  feedback. Also triggered automatically after a successful
-  `lockedin ingest` to offer the user a scoring pass.
+  Activate when the user says "audit my resume", "score my resume",
+  "check my resume", or provides a resume file and asks for feedback.
+  Also triggered after a completed `lockedin ingest`.
 ---
 
 # lockedin-audit

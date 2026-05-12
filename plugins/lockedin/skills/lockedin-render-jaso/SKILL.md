@@ -1,16 +1,13 @@
 ---
 name: lockedin-render-jaso
 description: |
-  Render a Korean 자기소개서 from the lockedin ontology, in 두괄식 +
-  STAR/PAR structure, with banned-phrase filtering and self-evaluation
-  against a 5-dimension rubric. Two-turn writer/reviewer pattern emits a
-  JSON score so the user knows if the draft is ready to submit.
+  Writes a Korean 자기소개서 from the user's experience. Two-turn
+  writer/reviewer with a 5-dimension Korean rubric and banned-phrase
+  filter.
 
-  Use when the user says: "자소서", "자기소개서", "render jaso", "회사 X
-  자소서 N번 문항", "지원동기 써줘", "성장과정 써줘", "입사 후 포부", or
-  names a Korean company plus a 자소서 question. Input: company name,
-  question id or text, optional 직무. Output: a Korean cover letter
-  quoting concrete ontology slugs plus a JSON rubric score.
+  Activate when the user says "자소서", "자기소개서", "지원동기 써줘",
+  "성장과정 써줘", "입사 후 포부", or names a Korean company plus a
+  자소서 question.
 ---
 
 # render-jaso

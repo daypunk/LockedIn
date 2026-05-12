@@ -1,20 +1,13 @@
 ---
 name: lockedin-render-ideas
 description: |
-  Generate new project ideas, side-project pitches, or career-move
-  proposals from the LockedIn vault. The skill walks the user's
-  past work, identifies under-exploited combinations of skills and
-  domains, and proposes concrete next moves with a one-paragraph
-  rationale grounded in the user's actual experience. Two-turn
-  writer/reviewer pattern; reviewer scores feasibility, novelty,
-  evidence ground, scope match, and motivation alignment.
+  Proposes 3 to 5 next-project or career-move ideas grounded in the
+  user's experience. One-paragraph pitch each, with cited entities.
+  Two-turn writer/reviewer with a 5-dimension rubric.
 
-  Use when the user says any of <!-- ko-example -->"what should I
-  work on next", "ideas for side projects", "새 프로젝트 아이디어",
-  "next move", "career pivot ideas", "흥미로운 조합"<!-- /ko-example -->,
-  or asks for proposals derived from their own experience. Output: 3 to 5 ideas in markdown, each one
-  paragraph long with cited entities resolved to natural language,
-  plus a JSON rubric score for the set.
+  Activate when the user says <!-- ko-example -->"what should I work
+  on next", "side project ideas", "새 프로젝트 아이디어", "career
+  pivot ideas"<!-- /ko-example -->.
 ---
 
 # render-ideas
