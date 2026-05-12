@@ -62,8 +62,8 @@ plugins/lockedin/                   ← the plugin itself
     │   └── templates/experience/questions.yaml
     ├── lockedin-render-jaso/       ← Korean cover letter (Korean OK in skill files)
     │   └── RUBRIC + prompts + banned_phrases + reviewers + research-notes
-    └── lockedin-render-resume-en/  ← English resume (us-tech-senior, mid, pm-product)
-        └── RUBRIC + prompts + banned_phrases + research-notes
+    └── lockedin-render-resume-en/  ← English resume (10 personas in personas/)
+        └── RUBRIC + prompts + banned_phrases + research-notes + personas/
 
 lockedin/                           ← Python package (optional CLI accelerator)
 ├── cli.py · config.py · __main__.py · __init__.py

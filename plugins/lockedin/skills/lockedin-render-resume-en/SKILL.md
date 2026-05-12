@@ -3,15 +3,18 @@ name: lockedin-render-resume-en
 description: |
   Render an English resume from the lockedin ontology — metric-first
   bullets in XYZ or CAR shape ("Accomplished X as measured by Y by
-  doing Z" / Challenge-Action-Result), target persona (us-tech-senior
-  / us-tech-mid / pm-product). Two-turn writer/reviewer pattern with a
-  JSON rubric (≥80% metric density floor, action-verb diversity, no
-  weak verbs).
+  doing Z" / Challenge-Action-Result), target persona selected from
+  10 built-in personas under ./personas/. Two-turn writer/reviewer
+  pattern with a JSON rubric (≥80% metric density floor, action-verb
+  diversity, no weak verbs).
 
   Use when the user says: "render resume", "make a resume",
   "us-tech-senior resume", "resume for [target]", "polish my resume".
   Output: a markdown resume quoting concrete ontology slugs plus a JSON
   rubric score.
+
+  When the user requests a render, identify the closest persona from
+  ./personas/ and load its spec file in the writer turn.
 ---
 
 # render-resume-en
@@ -44,8 +47,11 @@ resume guides. See `research-notes.md` for citations.
   on", "was involved in".
 - **No keyword stuffing** — ATS-friendly via real verbs and metrics, not
   hidden keywords.
-- **Target persona** — `--target us-tech-senior`, `us-tech-mid`,
-  `pm-product` each have tuned tone and bullet density.
+- **Target persona** — 10 built-in personas under `./personas/`
+  (us-tech-senior, us-tech-mid, pm-product, backend-senior,
+  frontend-senior, mobile-senior, data-engineer-mid, ml-engineer-mid,
+  designer-senior, marketing-mid). Each spec file contains tone
+  guidance, action verb cluster, and persona-specific banned phrases.
 
 ## Two-turn pattern
 
@@ -67,9 +73,20 @@ Same writer/reviewer split as `render-jaso`:
 
 ```
 SKILL.md
-research-notes.md     citations with URL + ISO date + 2-sentence gloss
-RUBRIC.md             5 dimensions; score bands; fixture authoring guide
-prompt-writer.md      writer turn instruction
-prompt-reviewer.md    reviewer turn instruction (separate Claude context)
-banned_phrases.json   regex list of weak / vague / templated phrases
+research-notes.md           citations with URL + ISO date + 2-sentence gloss
+RUBRIC.md                   5 dimensions; score bands; fixture authoring guide
+prompt-writer.md            writer turn instruction
+prompt-reviewer.md          reviewer turn instruction (separate Claude context)
+banned_phrases.json         regex list of weak / vague / templated phrases
+personas/
+  us-tech-senior.md         Senior IC / Staff / Principal
+  us-tech-mid.md            Mid-level IC (3-7y)
+  pm-product.md             Product Manager
+  backend-senior.md         Senior backend engineer, distributed systems focus
+  frontend-senior.md        Senior frontend engineer, perf + design system focus
+  mobile-senior.md          Senior iOS/Android engineer
+  data-engineer-mid.md      Mid-level data engineer, dbt/Airflow/warehouse
+  ml-engineer-mid.md        Mid-level ML engineer, classical ML productization
+  designer-senior.md        Senior product / UX designer
+  marketing-mid.md          Mid-level growth / product marketing manager
 ```

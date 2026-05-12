@@ -23,8 +23,20 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 SKILL_DIR = REPO_ROOT / "plugins" / "lockedin" / "skills" / "lockedin-render-resume-en"
 BANNED_PHRASES_PATH = SKILL_DIR / "banned_phrases.json"
 RUBRIC_PATH = SKILL_DIR / "RUBRIC.md"
+PERSONAS_DIR = SKILL_DIR / "personas"
 PASS_DIR = REPO_ROOT / "tests" / "fixtures" / "resume-en" / "pass"
 FAIL_DIR = REPO_ROOT / "tests" / "fixtures" / "resume-en" / "fail"
+
+_REQUIRED_PERSONA_SECTIONS = {
+    "Snapshot",
+    "Skill cluster",
+    "Responsibility patterns",
+    "Tone guidance",
+    "Action verb cluster",
+    "Banned phrases",
+    "Persona fit scoring guidance",
+    "Quality bar examples",
+}
 
 _REQUIRED_FRONTMATTER_KEYS = {"fixture_kind", "persona"}
 
@@ -187,4 +199,76 @@ def test_fixtures_have_valid_frontmatter() -> None:
 
     assert not invalid, (
         "Fixtures with invalid frontmatter:\n" + "\n".join(invalid)
+    )
+
+
+def test_pass_fixture_personas_have_spec_files() -> None:
+    """Every persona declared in a pass fixture must have a matching personas/<slug>.md."""
+    yaml = pytest.importorskip("yaml")
+    pass_files = sorted(PASS_DIR.glob("*.md"))
+    assert pass_files, f"No pass fixtures found under {PASS_DIR}"
+
+    missing: list[str] = []
+    for fixture in pass_files:
+        front_text = _get_frontmatter_text(fixture)
+        if not front_text.strip():
+            continue
+        try:
+            data = yaml.safe_load(front_text)
+        except yaml.YAMLError:
+            continue
+        if not isinstance(data, dict):
+            continue
+        persona = data.get("persona", "")
+        if not persona:
+            continue
+        spec_path = PERSONAS_DIR / f"{persona}.md"
+        if not spec_path.exists():
+            missing.append(
+                f"{fixture.name}: persona '{persona}' has no matching "
+                f"personas/{persona}.md spec file"
+            )
+
+    assert not missing, (
+        "Pass fixtures reference personas without a spec file:\n"
+        + "\n".join(missing)
+    )
+
+
+def test_personas_directory_has_at_least_ten_files() -> None:
+    """The personas/ directory must contain at least 10 spec files."""
+    assert PERSONAS_DIR.exists(), (
+        f"personas/ directory missing at {PERSONAS_DIR}"
+    )
+    persona_files = sorted(PERSONAS_DIR.glob("*.md"))
+    assert len(persona_files) >= 10, (
+        f"Expected at least 10 persona spec files under {PERSONAS_DIR}, "
+        f"found {len(persona_files)}: {[f.name for f in persona_files]}"
+    )
+
+
+def test_persona_spec_files_have_required_sections() -> None:
+    """Each persona spec file must contain all 8 required H2 sections."""
+    assert PERSONAS_DIR.exists(), (
+        f"personas/ directory missing at {PERSONAS_DIR}"
+    )
+    persona_files = sorted(PERSONAS_DIR.glob("*.md"))
+    assert persona_files, f"No persona spec files found under {PERSONAS_DIR}"
+
+    missing_sections: list[str] = []
+    for spec in persona_files:
+        content = spec.read_text(encoding="utf-8")
+        for section in _REQUIRED_PERSONA_SECTIONS:
+            # Match H2 heading: "## <section>" possibly with trailing text
+            pattern = re.compile(
+                r"^##\s+" + re.escape(section), re.MULTILINE | re.IGNORECASE
+            )
+            if not pattern.search(content):
+                missing_sections.append(
+                    f"{spec.name}: missing required section '## {section}'"
+                )
+
+    assert not missing_sections, (
+        "Persona spec files missing required H2 sections:\n"
+        + "\n".join(missing_sections)
     )

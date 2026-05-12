@@ -14,6 +14,7 @@
 - `lockedin doctor` now reports: audit skill installation, `pypdf` / `python-docx` / `PyYAML` availability, interview-state progress summary.
 - New `README.ja.md` (Japanese); language switcher across all four READMEs links every locale.
 - CI lint additions: `tests/test_research_allowlist.py` (citation host enforcement), `tests/test_readme_promises.py` (README ↔ code drift guard).
+- `lockedin-render-resume-en` expanded from 3 to **10 built-in personas**. New persona spec files at `plugins/lockedin/skills/lockedin-render-resume-en/personas/`: `backend-senior`, `frontend-senior`, `mobile-senior`, `data-engineer-mid`, `ml-engineer-mid`, `designer-senior`, `marketing-mid`. Each spec carries skill cluster, responsibility patterns, tone guidance, action verb cluster, persona-specific banned phrases, and persona-fit scoring hints. The 3 existing personas (`us-tech-senior`, `us-tech-mid`, `pm-product`) also gained dedicated spec files in the same directory. Fixtures expanded with 1 pass + 1 fail per new persona, and `test_resume_en_calibration.py` gained per-persona spec-coverage invariants.
 
 ### Changed
 

@@ -5,11 +5,25 @@ reviewer turn lives in `prompt-reviewer.md` and runs in a SEPARATE
 Claude turn with `RUBRIC.md` re-loaded fresh. Do not collapse the two
 turns — same-context self-evaluation inflates scores by ~1 point.
 
+## Persona spec lookup (REQUIRED before drafting)
+
+Before writing a single bullet, load the persona spec file at
+`./personas/<slug>.md` for the requested persona. Incorporate its
+**Tone guidance** (vocabulary register, lean-on verbs, avoid list),
+**Action verb cluster** (lead-verb pool for bullets), and
+**Banned phrases** (persona-specific additions beyond
+`banned_phrases.json`) into your drafting rules for this turn.
+If no matching spec exists, fall back to the closest available persona
+and note the substitution in a comment to the reviewer.
+
 ## Inputs
 
-- **persona** (required): `us-tech-senior`, `us-tech-mid`, or
-  `pm-product`. Each has a tuned voice and emphasis (see RUBRIC.md
-  dimension 5).
+- **persona** (required): one of the 10 slugs under `./personas/`
+  (`us-tech-senior`, `us-tech-mid`, `pm-product`, `backend-senior`,
+  `frontend-senior`, `mobile-senior`, `data-engineer-mid`,
+  `ml-engineer-mid`, `designer-senior`, `marketing-mid`). Each has a
+  spec file with tuned voice and emphasis (see `./personas/<slug>.md`
+  and RUBRIC.md dimension 5).
 - **target_company** (optional): target company name. Used for
   keyword alignment with public job descriptions.
 - **target_jd_text** (optional): pasted job description. Used for
@@ -22,15 +36,30 @@ turns — same-context self-evaluation inflates scores by ~1 point.
 ## Vault query
 
 Before drafting, query the user's vault for nodes that match the
-persona slice:
+persona slice. Core slices by persona:
 
-- **us-tech-senior** → role + achievement + project nodes; surface
-  ownership and scope signals (team size, traffic, revenue under
-  management, on-call responsibility, multi-team influence).
-- **us-tech-mid** → role + project + achievement; surface shipping
-  cadence and feature-ownership stories. Recent 5–7 years prioritized.
-- **pm-product** → project + decision + achievement; surface
-  user-outcome metrics (activation, retention, revenue, NPS).
+- **us-tech-senior** → role + achievement + project; ownership/scope
+  signals (team size, traffic, on-call responsibility, multi-team
+  influence).
+- **us-tech-mid** → role + project + achievement; shipping cadence and
+  feature-ownership stories. Recent 5-7 years prioritized.
+- **pm-product** → project + decision + achievement; user-outcome
+  metrics (activation, retention, revenue, NPS).
+- **backend-senior** → role + achievement + project; distributed
+  systems ownership, infra metrics, on-call evidence.
+- **frontend-senior** → role + project + achievement; performance
+  metrics, design system scope, accessibility work.
+- **mobile-senior** → role + achievement + project; platform-specific
+  metrics (cold-start, binary size, crash-free rate), release
+  ownership.
+- **data-engineer-mid** → role + project + achievement; pipeline SLAs,
+  warehouse cost, data quality metrics.
+- **ml-engineer-mid** → role + project + achievement; model family,
+  evaluation metrics, serving latency, drift monitoring evidence.
+- **designer-senior** → role + project + achievement; research methods,
+  usability metrics, design system contribution.
+- **marketing-mid** → role + project + achievement; funnel metrics,
+  A/B test evidence, channel tool names.
 
 If the vault has no relevant nodes for the persona, ask the user one
 question to fill the gap before drafting. Do not invent ontology data.

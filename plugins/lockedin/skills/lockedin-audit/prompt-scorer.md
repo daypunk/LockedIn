@@ -20,9 +20,11 @@ You do not emit JSON here.
 - **doc_type** (required): `english-resume` or `korean-jaso`. Detect
   from content if not provided (see RUBRIC.md for heuristics). If
   ambiguous, ask the user one question before proceeding.
-- **persona** (optional, English resume only): `us-tech-senior`,
-  `us-tech-mid`, or `pm-product`. If not provided, infer from the
-  document's role titles and seniority signals.
+- **persona** (optional, English resume only): any of the 10 personas
+  declared under `../lockedin-render-resume-en/personas/` (e.g.,
+  `us-tech-senior`, `backend-senior`, `designer-senior`,
+  `data-engineer-mid`, `marketing-mid`). If not provided, infer from
+  the document's role titles and seniority signals.
 - **company** (optional, Korean cover letter (jaso) only): target company name.
   Needed for the company-fit dimension (<!-- ko-example -->적합성<!-- /ko-example -->).
   If not provided, infer from the document or ask one question.
