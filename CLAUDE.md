@@ -76,8 +76,7 @@ lockedin/                           ← Python package (optional CLI accelerator
 
 docs/                               ← architecture, spec, mappings, guides
 ├── architecture.md · ontology-spec.md · ontology-mapping.md
-├── orchestration.md · hud.md · cli.md
-└── adr/0001-viz-library.md         ← SUPERSEDED: render-graph removed in 1.1
+└── orchestration.md · hud.md · cli.md
 
 tests/                              ← pytest suite + fixtures
 ├── test_smoke · test_storage_roundtrip · test_commands · test_hud · test_init_template_ingest

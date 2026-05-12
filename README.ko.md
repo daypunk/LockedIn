@@ -1,16 +1,19 @@
+# LockedIn
+
+---
+
+[English](README.md) | **한국어** | [日本語](README.ja.md) | [简体中文](README.zh.md)
+
 <p align="center">
   <img src="docs/assets/logo.png" alt="LockedIn" width="100%" />
 </p>
 
-# LockedIn
+> ***Before Linked In, get Locked In.***
 
-[English](README.md) | **한국어** | [日本語](README.ja.md) | [简体中文](README.zh.md)
-
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-orange.svg?logo=anthropic&logoColor=white)](https://www.anthropic.com/claude-code)
 [![version](https://img.shields.io/badge/version-1.2.0-orange.svg)](https://github.com/daypunk/LockedIn/releases)
 [![license](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
 [![stars](https://img.shields.io/github/stars/daypunk/LockedIn?color=orange&style=flat)](https://github.com/daypunk/LockedIn/stargazers)
-
-> ***Before Linked In, get Locked In.***
 
 Claude Code에 이력서를 던지거나 짧은 질문 몇 개에 답해 본인의 경험을 구조화하세요. 그 다음부터는 묻기만 하면 됩니다. 영문 레쥬메, 한국 자소서, 면접 답변, 새 프로젝트 아이디어가 구조화된 경험을 기반으로 나옵니다.
 

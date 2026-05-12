@@ -1,16 +1,19 @@
+# LockedIn
+
+---
+
+[English](README.md) | [한국어](README.ko.md) | [日本語](README.ja.md) | **简体中文**
+
 <p align="center">
   <img src="docs/assets/logo.png" alt="LockedIn" width="100%" />
 </p>
 
-# LockedIn
+> ***Before Linked In, get Locked In.***
 
-[English](README.md) | [한국어](README.ko.md) | [日本語](README.ja.md) | **简体中文**
-
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-orange.svg?logo=anthropic&logoColor=white)](https://www.anthropic.com/claude-code)
 [![version](https://img.shields.io/badge/version-1.2.0-orange.svg)](https://github.com/daypunk/LockedIn/releases)
 [![license](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
 [![stars](https://img.shields.io/github/stars/daypunk/LockedIn?color=orange&style=flat)](https://github.com/daypunk/LockedIn/stargazers)
-
-> ***Before Linked In, get Locked In.***
 
 把简历丢进 Claude Code,或者简单回答几个问题,就把你的经历整理好。之后,你只需要提问。英文简历、中文求职信、面试回答、新项目想法都会从同一份经历里自动产出。
 

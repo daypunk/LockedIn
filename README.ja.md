@@ -1,16 +1,19 @@
+# LockedIn
+
+---
+
+[English](README.md) | [한국어](README.ko.md) | **日本語** | [简体中文](README.zh.md)
+
 <p align="center">
   <img src="docs/assets/logo.png" alt="LockedIn" width="100%" />
 </p>
 
-# LockedIn
+> ***Before Linked In, get Locked In.***
 
-[English](README.md) | [한국어](README.ko.md) | **日本語** | [简体中文](README.zh.md)
-
+[![Claude Code](https://img.shields.io/badge/Claude%20Code-orange.svg?logo=anthropic&logoColor=white)](https://www.anthropic.com/claude-code)
 [![version](https://img.shields.io/badge/version-1.2.0-orange.svg)](https://github.com/daypunk/LockedIn/releases)
 [![license](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
 [![stars](https://img.shields.io/github/stars/daypunk/LockedIn?color=orange&style=flat)](https://github.com/daypunk/LockedIn/stargazers)
-
-> ***Before Linked In, get Locked In.***
 
 履歴書を Claude Code に投げ込むか、いくつかの質問に答えるだけで、自分の経歴を一度きちんと構造化できます。そのあとは、聞くだけです。英文レジュメ、韓国語の自己紹介書(자소서)、面接の回答、次のプロジェクトのアイデアが、すべて同じ素材から生まれます。
 
