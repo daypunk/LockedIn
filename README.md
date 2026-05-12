@@ -6,8 +6,6 @@
   <img src="docs/assets/logo.png" alt="LockedIn" width="100%" />
 </p>
 
-> ***Before Linked In, get Locked In.***
-
 Drop a resume into Claude Code or answer a handful of questions to structure your experience once. After that, you just ask. English résumés, Korean cover letters, interview answers, and new project ideas all come out of calibrated skills.
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-orange.svg?logo=anthropic&logoColor=white)](https://www.anthropic.com/claude-code)

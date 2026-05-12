@@ -6,8 +6,6 @@
   <img src="docs/assets/logo.png" alt="LockedIn" width="100%" />
 </p>
 
-> ***Before Linked In, get Locked In.***
-
 Claude Code에 이력서를 던지거나 짧은 질문 몇 개에 답해 본인의 경험을 구조화하세요. 그 다음부터는 묻기만 하면 됩니다. 영문 레쥬메, 한국 자소서, 면접 답변, 새 프로젝트 아이디어가 구조화된 경험을 기반으로 나옵니다.
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-orange.svg?logo=anthropic&logoColor=white)](https://www.anthropic.com/claude-code)

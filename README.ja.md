@@ -6,8 +6,6 @@
   <img src="docs/assets/logo.png" alt="LockedIn" width="100%" />
 </p>
 
-> ***Before Linked In, get Locked In.***
-
 履歴書を Claude Code に投げ込むか、いくつかの質問に答えるだけで、自分の経歴を一度きちんと構造化できます。そのあとは、聞くだけです。英文レジュメ、韓国語の自己紹介書(자소서)、面接の回答、次のプロジェクトのアイデアが、すべて同じ素材から生まれます。
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-orange.svg?logo=anthropic&logoColor=white)](https://www.anthropic.com/claude-code)

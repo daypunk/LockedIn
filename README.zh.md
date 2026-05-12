@@ -6,8 +6,6 @@
   <img src="docs/assets/logo.png" alt="LockedIn" width="100%" />
 </p>
 
-> ***Before Linked In, get Locked In.***
-
 把简历丢进 Claude Code,或者简单回答几个问题,就把你的经历整理好。之后,你只需要提问。英文简历、中文求职信、面试回答、新项目想法都会从同一份经历里自动产出。
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-orange.svg?logo=anthropic&logoColor=white)](https://www.anthropic.com/claude-code)
