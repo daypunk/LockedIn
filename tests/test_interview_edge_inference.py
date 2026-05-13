@@ -128,7 +128,7 @@ def _config_with(*entity_types: str) -> dict:
         "publication": "name",
     }
     questions = []
-    for i, etype in enumerate(entity_types):
+    for _i, etype in enumerate(entity_types):
         naming_field = _naming.get(etype, "name")
         q: dict = {
             "id": f"q_{etype}",
@@ -225,7 +225,7 @@ class TestProducedEdge:
         project = next(e for e in entities if e.type == "project")
         role = next(e for e in entities if e.type == "role")
         project_predicates = [lnk["predicate"] for lnk in project.links]
-        role_predicates = [lnk["predicate"] for lnk in role.links]
+        _role_predicates = [lnk["predicate"] for lnk in role.links]
         # project is the preferred source for produced
         assert "produced" in project_predicates
         # role should NOT also get a produced edge for the same achievement

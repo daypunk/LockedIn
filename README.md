@@ -9,7 +9,7 @@
 LockedIn lives inside your Claude Code session. While you're coding or writing docs, save the work that matters as structured experience. When you need a resume, a Korean cover letter, an interview answer, or a project idea, LockedIn writes it from that structured experience.
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-orange.svg?logo=anthropic&logoColor=white)](https://www.anthropic.com/claude-code)
-[![version](https://img.shields.io/badge/version-1.2.0-orange.svg)](https://github.com/daypunk/LockedIn/releases)
+[![version](https://img.shields.io/badge/version-1.2.1-orange.svg)](https://github.com/daypunk/LockedIn/releases)
 [![license](https://img.shields.io/badge/license-MIT-orange.svg)](LICENSE)
 [![stars](https://img.shields.io/github/stars/daypunk/LockedIn?color=orange&style=flat)](https://github.com/daypunk/LockedIn/stargazers)
 
@@ -57,9 +57,9 @@ LockedIn asks one question at a time when it needs more from you, and it stops w
 
 Most tools for organizing experience want you to leave your work, log in somewhere else, and remember everything that mattered. By then, half of it is already gone from your head.
 
-LockedIn lives where the work happens. While you're coding, writing docs, or reviewing a PR in Claude Code, you can say "save this to LockedIn" and the moment accumulates locally as a structured markdown file. No second tool to manage your experience, no context switch.
+Other tools sit outside your work. LockedIn sits inside it. The moment you merge a line of code, lock in a meeting decision, or settle on a new design choice gets saved as structured experience. The flow doesn't break.
 
-The files are yours. Open them in any editor, carry them to any tool. When you need a resume, a cover letter, or an interview answer, LockedIn writes one from your structured experience and skills.
+Once saved, your experience connects to your outputs. Six months later when you need a resume, the six months of real work is right there. Stacked as markdown in your filesystem, not in someone else's database. Carry it to any tool, reuse it for any artifact.
 
 ## Features
 
@@ -83,6 +83,7 @@ The files are yours. Open them in any editor, carry them to any tool. When you n
 | Function | Skill | Role |
 |---|---|---|
 | Talk to LockedIn | `/lockedin` | The natural-language entry point. Hears what you ask, routes to the right sub-skill, runs the Q&A interview when your experience is empty, and notices when the conversation and your existing experience have drifted apart. |
+| Capture work moments | `/lockedin-capture` | Converts in-session capture intents ("save this", "log this", "track this") into structured entries. Writer/reviewer pattern scored on schema conformance, edge completeness, field specificity, semantic accuracy, and duplicate detection. Surfaces candidate duplicates and asks before merging; never silent-merges or silent-creates duplicates. |
 | Write an English resume | `/lockedin-render-resume-en` | Pulls from your experience and writes a resume tuned to a target persona. 10 built-in personas cover senior IC, mid-level, PM, backend, frontend, mobile, data engineer, ML engineer, designer, and marketing roles. Other targets work too; the rubric stays calibrated and only the persona-fit dimension gets more conservative. Scored on metric density, action verb quality, structure, banned phrases, and persona fit. |
 | Write a Korean cover letter | `/lockedin-render-jaso` | Give it a company and a question; it cites your experience and writes the answer. Reviewed against a five-dimension Korean rubric (lead-with-conclusion, structure, specificity, phrasing, fit) with a cross-source-verified list of banned phrases the draft must avoid. |
 | Draft an interview answer | `/lockedin-render-interview` | Give it the company, the role, and the question; it answers in STAR or PAR shape, one experience per paragraph with explicit transition sentences so an interviewer can follow you. Scored on clarity, evidence, persona fit, conciseness, and tone. |

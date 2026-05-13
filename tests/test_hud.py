@@ -25,7 +25,7 @@ def test_hud_no_vault_emits_service_label(tmp_path: Path, monkeypatch, capsys) -
     assert rc == 0
     out = capsys.readouterr().out.strip()
     assert out.startswith("LockedIn")
-    assert "1.2.0" in out  # version surfaces
+    assert "1.2.1" in out  # version surfaces
 
 
 def test_hud_empty_vault_says_empty(tmp_path: Path, monkeypatch, capsys) -> None:
@@ -66,7 +66,7 @@ def test_hud_reports_node_and_edge_counts(tmp_path: Path, monkeypatch, capsys) -
     rc = hud(["--no-color"])
     assert rc == 0
     out = capsys.readouterr().out.strip()
-    assert "LockedIn 1.2.0" in out
+    assert "LockedIn 1.2.1" in out
     assert "2n" in out
     assert "1e" in out
     assert "dangling" not in out

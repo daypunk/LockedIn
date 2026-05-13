@@ -1,0 +1,242 @@
+{
+  "schema_version": 2,
+  "status": "v0.1 — foundational; calibrated against internal design rationale",
+  "rationale": "Each entry represents a class of text that degrades vault quality when it appears in an entity field. Categories: placeholder_field (values that are filler rather than data), vague_value (imprecise quantification), boilerplate_summary (passive/generic ownership language), unverified_metric (numeric claims without source context), temporal_vague (time references that cannot be resolved to a date). Sources: lockedin/ontology/schema.py (field contracts), docs/ontology-spec.md (field-quality rationale), and CLAUDE.md (working agreements on placeholder fields). See research-notes.md.",
+  "phrases": [
+    {
+      "phrase": "TODO",
+      "category": "placeholder_field",
+      "severity": "high",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md"
+      ]
+    },
+    {
+      "phrase": "TBD",
+      "category": "placeholder_field",
+      "severity": "high",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md"
+      ]
+    },
+    {
+      "phrase": "[fill in]",
+      "category": "placeholder_field",
+      "severity": "high",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md"
+      ]
+    },
+    {
+      "phrase": "unknown",
+      "category": "placeholder_field",
+      "severity": "high",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md"
+      ]
+    },
+    {
+      "phrase": "N/A",
+      "category": "placeholder_field",
+      "severity": "medium",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md"
+      ]
+    },
+    {
+      "phrase": "placeholder",
+      "category": "placeholder_field",
+      "severity": "high",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md"
+      ]
+    },
+    {
+      "phrase": "fill me in",
+      "category": "placeholder_field",
+      "severity": "high",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md",
+        "https://github.com/daypunk/LockedIn/blob/main/CLAUDE.md"
+      ]
+    },
+    {
+      "phrase": "a few",
+      "category": "vague_value",
+      "severity": "medium",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md"
+      ]
+    },
+    {
+      "phrase": "some",
+      "category": "vague_value",
+      "severity": "medium",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md"
+      ]
+    },
+    {
+      "phrase": "many",
+      "category": "vague_value",
+      "severity": "medium",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md"
+      ]
+    },
+    {
+      "phrase": "various",
+      "category": "vague_value",
+      "severity": "medium",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/CLAUDE.md"
+      ]
+    },
+    {
+      "phrase": "several",
+      "category": "vague_value",
+      "severity": "medium",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md",
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py"
+      ]
+    },
+    {
+      "phrase": "worked on",
+      "category": "boilerplate_summary",
+      "severity": "high",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md",
+        "https://github.com/daypunk/LockedIn/blob/main/CLAUDE.md"
+      ]
+    },
+    {
+      "phrase": "involved in",
+      "category": "boilerplate_summary",
+      "severity": "high",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md",
+        "https://github.com/daypunk/LockedIn/blob/main/CLAUDE.md"
+      ]
+    },
+    {
+      "phrase": "responsible for",
+      "category": "boilerplate_summary",
+      "severity": "high",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md",
+        "https://github.com/daypunk/LockedIn/blob/main/CLAUDE.md"
+      ]
+    },
+    {
+      "phrase": "assisted with",
+      "category": "boilerplate_summary",
+      "severity": "high",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md",
+        "https://github.com/daypunk/LockedIn/blob/main/CLAUDE.md"
+      ]
+    },
+    {
+      "phrase": "helped with",
+      "category": "boilerplate_summary",
+      "severity": "high",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md",
+        "https://github.com/daypunk/LockedIn/blob/main/CLAUDE.md"
+      ]
+    },
+    {
+      "phrase": "participated in",
+      "category": "boilerplate_summary",
+      "severity": "medium",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md",
+        "https://github.com/daypunk/LockedIn/blob/main/CLAUDE.md"
+      ]
+    },
+    {
+      "phrase": "significant improvement",
+      "category": "unverified_metric",
+      "severity": "high",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md"
+      ]
+    },
+    {
+      "phrase": "greatly improved",
+      "category": "unverified_metric",
+      "severity": "high",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md",
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py"
+      ]
+    },
+    {
+      "phrase": "much faster",
+      "category": "unverified_metric",
+      "severity": "high",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md"
+      ]
+    },
+    {
+      "phrase": "recently",
+      "category": "temporal_vague",
+      "severity": "medium",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md"
+      ]
+    },
+    {
+      "phrase": "a while ago",
+      "category": "temporal_vague",
+      "severity": "medium",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md",
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py"
+      ]
+    },
+    {
+      "phrase": "at some point",
+      "category": "temporal_vague",
+      "severity": "medium",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/CLAUDE.md"
+      ]
+    },
+    {
+      "phrase": "sometime last year",
+      "category": "temporal_vague",
+      "severity": "medium",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md",
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py"
+      ]
+    },
+    {
+      "phrase": "not sure when",
+      "category": "temporal_vague",
+      "severity": "medium",
+      "sources": [
+        "https://github.com/daypunk/LockedIn/blob/main/lockedin/ontology/schema.py",
+        "https://github.com/daypunk/LockedIn/blob/main/docs/ontology-spec.md"
+      ]
+    }
+  ],
+  "policy": "Each phrases[] occurrence in a required entity field reduces the field_specificity dimension by 1.0 (floor 0). Occurrences in optional fields reduce by 0.5. The reviewer turn surfaces the offending field value in banned_phrase_hits using pipe-separated format: '<phrase>|<field_name>: <field_value>'. Multiple distinct phrases compound; multiple instances of the same phrase in different fields count once per field."
+}

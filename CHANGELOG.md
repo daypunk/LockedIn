@@ -1,5 +1,18 @@
 # Changelog
 
+## [1.2.1] — 2026-05-13
+
+### Added
+
+- `lockedin-capture` skill: a dedicated calibrated skill for in-session work capture. Two-turn writer/reviewer pattern with five dimensions: schema conformance, edge completeness, field specificity, semantic accuracy, and **duplicate detection + reconciliation** (surface candidates, let the user merge or keep separate, never silent-merge). Full asset set (`SKILL.md`, `prompt-writer.md`, `prompt-reviewer.md`, `RUBRIC.md`, `AGENTS.md`, `TOOLS.md`, `banned_phrases.json`, `research-notes.md`) plus 3 pass / 3 fail fixtures and `test_capture_calibration.py`.
+- Main `lockedin` SKILL.md gained a "Capture quality — writer/reviewer pattern" section codifying the routing to `lockedin-capture` and the reconciliation policy. Duplicates are signals to enrich existing entities, not noise to suppress.
+
+### Changed
+
+- README Why-it-exists tightened across all four languages. Paragraph 2 reframed as direct contrast (*Other tools sit outside your work. LockedIn sits inside it.*) and paragraph 3 reframed around compounding value over time (*six months later, the six months of real work is right there*).
+- README How-it-works step 1 now lists three entry paths: resume drop, short interview, and in-session capture (the third was missing in 1.2.0).
+- Version bump 1.2.0 → 1.2.1 across `pyproject.toml`, `lockedin/__init__.py`, plugin manifest, HUD script, test_hud assertions, and the four README badges.
+
 ## [1.2.0] — 2026-05-12
 
 ### Added

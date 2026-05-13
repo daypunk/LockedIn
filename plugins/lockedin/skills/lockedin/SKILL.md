@@ -92,6 +92,10 @@ artifact LockedIn produces.
    - `--mode refine`: propose diff-based refinements; user approves.
    - `--mode refine-score`: refine, then score the refined output to
      quantify the lift.
+Capture intents ("save this", "log this", "track this") route through
+`lockedin-capture`, which runs writer/reviewer with dedup detection
++ reconciliation.
+
 1. **Init** — `/lockedin init` (or natural language) runs a Q&A
    interview that seeds the vault. 49 questions across 9 sections;
    pause-and-resume is supported.
@@ -132,6 +136,44 @@ Metric pressure belongs to the renderer's writer turn, not the
 interview. If the user later asks for a resume and a particular
 achievement lacks a metric, the writer turn asks one focused
 question at that moment.
+
+## Capture quality — writer/reviewer pattern
+
+When the user signals a capture intent ("save this", "log this",
+"track this", "absorb this"), do not write to the experience layer
+in one shot. Route through `lockedin-capture` (or, when that skill
+is unavailable, replicate its pattern inline):
+
+1. **Writer pass** — read the user's input plus any available
+   context (the current file, recent git log, README of cwd, an
+   attached document). Propose entity / field / edge structure.
+2. **Deterministic check** — required fields present, types match
+   the schema. Slug-grep the existing vault for candidate
+   duplicates by name, alias, and proximity.
+3. **Reviewer pass** (fresh context) — re-read the user's input
+   and the writer's proposal. Score against five dimensions:
+   schema conformance, edge completeness, field specificity,
+   semantic accuracy, and duplicate detection. Surface candidate
+   duplicates as questions for the user rather than deciding for
+   them.
+4. **Write-before-confirm** — show the proposed diff (entities,
+   edges, any merge actions) and ask the user once before writing.
+
+Reconciliation policy is load-bearing:
+
+- **No candidate duplicate**: write smoothly. Don't bother the
+  user with confirmation prompts beyond write-before-confirm.
+- **Candidate duplicate found**: surface it explicitly.
+  *"Looks like [[project/payment-pipeline-2024]] already exists.
+  Same thing, or new project?"* The user picks: merge into
+  existing (enrich fields, add edges), keep separate (both
+  preserved as distinct), or partial overlap (which fields to
+  copy across).
+- **Never silent-merge.** **Never silent-create-duplicate.**
+
+The point of capture is to make the experience richer over time.
+A surfaced duplicate is an opportunity to enrich an existing
+entity with new evidence, not noise to suppress.
 
 ## Subscription, not API keys
 
