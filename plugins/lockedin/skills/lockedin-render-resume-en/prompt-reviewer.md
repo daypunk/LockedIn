@@ -72,8 +72,9 @@ inflates scores by ~1 point.
 ```
 
 - All five dimension keys must be present.
-- `notes` is a list of strings, one per dimension, in the listed
-  order.
+- `notes` is a list of exactly five strings, one per dimension in the
+  listed order. Each string is a one-sentence rationale visible to the
+  user — this is the trace that lets the user audit the score.
 - `banned_phrase_hits` lists each matched phrase with its surrounding
   bullet, pipe-separated:
   `["responsible for|... was responsible for production deploys ..."]`.

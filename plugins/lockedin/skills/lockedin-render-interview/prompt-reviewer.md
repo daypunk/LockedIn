@@ -40,6 +40,15 @@ runs in a SEPARATE Claude turn from the writer.
 }
 ```
 
+- All five dimension keys must be present.
+- `notes` is a list of exactly five strings, one per dimension in the
+  listed order. Each string is a one-sentence rationale visible to the
+  user — this is the trace that lets the user audit the score.
+- `missing_slugs` lists `[[type/slug]]` references that do not resolve
+  in the vault.
+- `revisions_required` is `true` if any dimension < 4.0 OR
+  `missing_slugs` non-empty.
+
 ## Revision feedback
 
 If `revisions_required` is `true`, the calling skill MAY pass the

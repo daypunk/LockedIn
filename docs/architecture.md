@@ -2,43 +2,62 @@
 
 > Authoritative reference for how the pieces fit together.
 
-## Execution model: skill-driven, CLI-assisted
+## Design posture: harness-engineering patterns
 
-lockedin is a Claude Code skill, not a standalone agent. Reasoning runs
-inside the host AI assistant on the user's existing subscription. The
-Python CLI is a deterministic helper, not a parallel runtime.
+lockedin implements the harness-engineering patterns that the
+LLM-agent discourse keeps returning to: writer/reviewer separation in
+distinct contexts, rubric-as-contract with JSON output, state
+externalized to disk for resumable sessions, deterministic feedback
+sensors (banned-phrase regex, schema validate, edge domain/range)
+running *before* the LLM judges, and an "AI surfaces, user decides"
+control flow that never silent-merges or fabricates. The control
+plane lives in the skill manifests and the Python CLI; the model
+chooses content, the harness chooses what happens next.
+
+## Execution model: plugin + CLI
+
+lockedin is a Claude Code plugin composed of seven focused skills, not
+a standalone agent. Reasoning runs inside the host Claude Code session
+on the user's existing subscription. The Python CLI is a deterministic
+helper for file I/O and validation, not a parallel runtime.
 
 ```
-┌──────────────────────────────────────────────────────────────────────┐
-│  Host: Claude Code session (user's subscription)                     │
-│                                                                      │
-│   ┌─ User says "/lockedin render jaso ..." or natural language       │
-│   │                                                                  │
-│   ▼                                                                  │
-│   Skill activates (lockedin/skill/SKILL.md)                          │
-│     ├─ Interviewer: ask the user one question at a time              │
-│     ├─ Ingester: classify diff, resolve ambiguities by asking        │
-│     ├─ Renderer: writer turn → reviewer turn (RUBRIC.md re-loaded)   │
-│     └─ GraphCurator: surface dangling references in batches          │
-│                                                                      │
-│   When deterministic work is needed, the skill issues a Bash call:   │
-│      lockedin validate                                               │
-│      lockedin migrate                                                │
-│      lockedin experience <slug>                                      │
-│      lockedin install --check                                        │
-│                                                                      │
-└──────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────┐
+│  Host: Claude Code session (user's subscription)                       │
+│                                                                        │
+│   ┌─ User talks naturally, or invokes /lockedin /lockedin-capture      │
+│   │  /lockedin-render-jaso /lockedin-render-resume-en                  │
+│   │  /lockedin-render-interview /lockedin-render-ideas /lockedin-audit │
+│   ▼                                                                    │
+│   Router skill (plugins/lockedin/skills/lockedin/SKILL.md)             │
+│     ├─ routes to the right sub-skill based on intent                   │
+│     ├─ runs the Q&A interview when the vault is empty                  │
+│     └─ notices when conversation and vault drift; asks one question    │
+│                                                                        │
+│   Sub-skills (one focused responsibility each)                         │
+│     ├─ lockedin-capture        in-session work capture                 │
+│     ├─ lockedin-render-jaso    Korean cover letter                     │
+│     ├─ lockedin-render-resume-en  English resume (10 personas)         │
+│     ├─ lockedin-render-interview  STAR/PAR interview answers           │
+│     ├─ lockedin-render-ideas   project direction proposals             │
+│     └─ lockedin-audit          drive-by resume scoring                 │
+│                                                                        │
+│   When deterministic work is needed, any skill issues a Bash call:     │
+│      lockedin validate / migrate / experience <slug>                   │
+│      lockedin install --check / doctor                                 │
+│                                                                        │
+└────────────────────────────────────────────────────────────────────────┘
 
-┌──────────────────────────────────────────────────────────────────────┐
-│  Pure CLI utilities (no LLM, run anywhere)                           │
-│                                                                      │
-│   lockedin init --non-interactive --fixture FILE                     │
-│   lockedin ingest <path> --dry-run     # diff preview, no merge      │
-│   lockedin validate / doctor / install / template add/remove         │
-│   lockedin migrate / experience <slug>                               │
-│                                                                      │
-│   Skill-required commands typed here print a redirect (exit 3).      │
-└──────────────────────────────────────────────────────────────────────┘
+┌────────────────────────────────────────────────────────────────────────┐
+│  Pure CLI utilities (no LLM, run anywhere)                             │
+│                                                                        │
+│   lockedin init --non-interactive --fixture FILE                       │
+│   lockedin ingest <path> --dry-run     # diff preview, no merge        │
+│   lockedin validate / doctor / install / template add/remove           │
+│   lockedin migrate / experience <slug>                                 │
+│                                                                        │
+│   Skill-required commands typed here print a redirect (exit 3).        │
+└────────────────────────────────────────────────────────────────────────┘
 ```
 
 **Why this split exists.** Claude's reasoning is the expensive resource
@@ -115,14 +134,20 @@ not conform to the schema.
 ┌─────────────────┐   ┌─────────────────┐   ┌──────────────────────────┐
 │ Writer turn     │ → │ banned-phrase   │ → │ Reviewer turn            │
 │ - query vault   │   │ regex check     │   │ - re-load RUBRIC.md      │
-│ - draft jaso/   │   │ (jaso only)     │   │ - score 5 dimensions     │
-│   resume        │   │                 │   │ - emit JSON              │
-│ - quote slugs   │   │                 │   │ - revise once if any < 4 │
+│ - draft output  │   │ (deterministic, │   │ - score 5 dimensions     │
+│ - quote slugs   │   │  pre-rubric)    │   │ - emit JSON              │
+│                 │   │                 │   │ - revise once if any < 4 │
 └─────────────────┘   └─────────────────┘   └──────────────────────────┘
 ```
 
-The two turns are intentionally separate Claude contexts to prevent the
-writer-reviewer fusion that inflates self-scores by ~1 point.
+All six calibrated skills (jaso, resume-en, interview, ideas, capture,
+audit) ship a `banned_phrases.json` regex pass that runs *before* the
+reviewer turn. The two turns are intentionally separate Claude contexts
+to prevent the writer-reviewer fusion that inflates self-scores by
+~1 point. Slugs quoted by the writer are resolved to natural language
+at render time; if no matching entity backs a claim, the slug stays
+in place and the skill asks the user whether to add the entity rather
+than fabricating one.
 
 ## Subscription path
 
