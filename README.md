@@ -6,7 +6,7 @@
   <img src="docs/assets/logo.png" alt="LockedIn" width="100%" />
 </p>
 
-Drop a resume into Claude Code or answer a handful of questions to structure your experience once. After that, you just ask. English résumés, Korean cover letters, interview answers, and new project ideas all come out of calibrated skills.
+LockedIn lives inside your Claude Code session. While you're coding or writing docs, save the work that matters as structured experience. When you need a resume, a Korean cover letter, an interview answer, or a project idea, LockedIn writes it from that structured experience.
 
 [![Claude Code](https://img.shields.io/badge/Claude%20Code-orange.svg?logo=anthropic&logoColor=white)](https://www.anthropic.com/claude-code)
 [![version](https://img.shields.io/badge/version-1.2.0-orange.svg)](https://github.com/daypunk/LockedIn/releases)
@@ -27,20 +27,25 @@ The third command runs a one-time wizard. It wires the heads-up display, picks y
 
 ## How you use it
 
-LockedIn activates when you talk to Claude Code about your experience. There are no commands to memorize.
+No commands to memorize, no extra tab to open. Just start naturally inside Claude Code.
 
-When you want to capture experience:
+To start fresh, build your experience from zero:
 
 - "start organizing my experience"
-- "log today's meeting with the design team"
+- "interview me about my work history"
 - "absorb my resume.pdf"
-- "add what I learned this week from a paper"
 
-When you want to produce something from what is already captured:
+While you're working, capture moments as they happen:
+
+- "save this commit as a project highlight"
+- "this meeting just wrapped, log it"
+- "I just learned how to use X, track it"
+
+When you need to produce something:
 
 - "make me an English resume"
 - "I'm applying to company X for role Y, write the answer to question Z"
-- "summarize last quarter's decisions"
+- "audit this resume PDF"
 
 LockedIn asks one question at a time when it needs more from you, and it stops when it has enough.
 
@@ -50,12 +55,16 @@ LockedIn asks one question at a time when it needs more from you, and it stops w
 
 ## Why it exists
 
-Most career tools regenerate every artifact from scratch. The artifact is the point, the source evaporates. LockedIn treats the source as the point. Your structured experience accumulates at `~/Documents/LockedIn/` as plain markdown files that you own and can carry to other tools. Resumes, cover letters, and meeting notes are artifacts of that memory, not the memory itself.
+Most tools for organizing experience want you to leave your work, log in somewhere else, and remember everything that mattered. By then, half of it is already gone from your head.
+
+LockedIn lives where the work happens. While you're coding, writing docs, or reviewing a PR in Claude Code, you can say "save this to LockedIn" and the moment accumulates locally as a structured markdown file. No second tool to manage your experience, no context switch.
+
+The files are yours. Open them in any editor, carry them to any tool. When you need a resume, a cover letter, or an interview answer, LockedIn writes one from your structured experience and skills.
 
 ## Features
 
 - **No commands to memorize.** Type the way you'd talk and LockedIn picks the right skill.
-- **Builds your experience with you, over time.** Resumes, cover letters, interview answers, and project ideas all come from the same experience.
+- **Captures while you work.** Save a moment from your Claude Code session as structured experience, no context switch.
 - **Scores your output.** A different Claude than the writer reviews it against a domain-researched rubric.
 - **No API key needed.** Runs on your existing Claude Code subscription.
 

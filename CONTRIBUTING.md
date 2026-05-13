@@ -27,10 +27,10 @@ If you are new to the codebase, read these in order:
 | Welcome | Maybe (open an issue first) | Not now |
 | --- | --- | --- |
 | Bug fixes with a regression test | New entity types in the ontology | New renderer skills before the existing ones are calibrated |
-| Korean 자소서 reviewer engagement | New persona for `render-resume-en` | API-key-based execution paths (we are subscription-only) |
-| Documentation improvements | A new ingest source (e.g., another file format) | Telemetry / phone-home features |
+| New `render-resume-en` persona spec (under `personas/`) | A new ingest source (e.g., another file format) | API-key-based execution paths (we are subscription-only) |
+| Documentation improvements | New CLI subcommands | Telemetry / phone-home features |
 | Skill prompt refinements (with rubric scores before/after) | Translation of skills into other languages | Anything that writes outside `~/Documents/LockedIn/` and the documented CLI flow |
-| Golden fixtures (with the rules below) | New CLI subcommands | Auto-modification of `~/.claude/settings.json` outside the wizard |
+| Golden fixtures (with the rules below) | New banned-phrase entries (with ≥2 source URLs) | Auto-modification of `~/.claude/settings.json` outside the wizard |
 
 ## Development setup
 
@@ -75,14 +75,18 @@ CI gates:
 - **leakage scan**: tracked files must not reference internal-only
   terms. The `.github/workflows/ci.yml` enforces this.
 
-## Contributing a Korean cover-letter (자소서) fixture
+## Contributing a fixture (any render skill)
 
-This is one of the highest-value contributions right now. The
-renderer ships with research-based calibration; golden fixtures
-sharpen it.
+Golden fixtures sharpen the calibrated rubrics. Each render skill
+has its own pass / fail set:
 
-**Where**: `tests/fixtures/jaso/{pass,fail}/*.md`.
-**Template**: see [`tests/fixtures/jaso/TEMPLATE.md`](./tests/fixtures/jaso/TEMPLATE.md).
+- `tests/fixtures/jaso/{pass,fail}/` — Korean cover letter
+- `tests/fixtures/resume-en/{pass,fail}/` — English resume
+- `tests/fixtures/interview/{pass,fail}/` — interview answer
+- `tests/fixtures/ideas/{pass,fail}/` — project ideas
+
+Template: see [`tests/fixtures/jaso/TEMPLATE.md`](./tests/fixtures/jaso/TEMPLATE.md)
+for the frontmatter shape. The other skills mirror it.
 
 Rules:
 
@@ -90,40 +94,24 @@ Rules:
   synthetic. If you base a fixture on your own experience, anonymize
   every identifier (replace company / school / colleague names with
   generic placeholders or fictional substitutes).
-- **No copying from Linkareer / 사람인 / 잡코리아 verbatim.** You may
-  read those sites to internalize patterns; the fixture body itself
-  must be original prose written by you.
+- **No verbatim copying from public sources.** You may read industry
+  sites or published guides to internalize patterns; the fixture body
+  itself must be original prose written by you.
 - **`pass/` fixtures** must satisfy the rubric pass criterion (every
-  dimension ≥ 4, zero banned-phrase hits). Frontmatter
-  `expected_dimensions` records this.
-- **`fail/` fixtures** isolate ONE failure mode each (templated
-  phrasing / passive voice / generic / missing structure / missing
-  metrics). Frontmatter records which dimension is below 4.
-- **Industry coverage target**: 5 pass fixtures spanning IT 대기업,
-  외국계, 금융, 제조, 스타트업.
-- **Body length**: ≤ 1500 자 per fixture.
+  dimension ≥ 4, zero high-severity banned-phrase hits). Frontmatter
+  declares `fixture_kind: pass` and `expected_score`.
+- **`fail/` fixtures** isolate ONE failure mode each. Frontmatter
+  declares `fixture_kind: fail` and either `banned_phrases_hit: [...]`
+  or `expected_revisions_required: true` for structural failures.
+- **Coverage target for jaso**: pass fixtures should span 5 Korean
+  market segments — IT conglomerate, foreign-tech (Korea offices of
+  multinationals), finance, manufacturing, startup. See existing
+  filenames in `tests/fixtures/jaso/pass/` for the canonical slugs.
+- **Body length**: ≤ 1500 characters per fixture.
 
-Open a PR with the fixture file. The maintainer runs the reviewer
-turn against it and confirms scores match the labeled
-`expected_dimensions`. If they don't, the rubric chases the fixture,
-not the reverse.
-
-## Becoming a Korean domain reviewer (`render-jaso`)
-
-The renderer's RUBRIC currently ships with research-based calibration
-(public guides + cross-source consensus). v1.1 wants a named human
-domain reviewer to walk through the golden fixture set and sign off
-on the rubric bands.
-
-If you have read or written successful 자소서 in the past 2 years, or
-have hired in 2+ Korean industries (IT 대기업 / 외국계 / 금융 / 제조
-/ 스타트업), please open an issue with the
-[Korean reviewer onboarding template](./.github/ISSUE_TEMPLATE/korean_reviewer_onboarding.yml).
-Engagement is approximately 2–3 hours, asynchronous, attribution as
-you prefer.
-
-See [`plugins/lockedin/skills/lockedin-render-jaso/reviewers.md`](./plugins/lockedin/skills/lockedin-render-jaso/reviewers.md)
-for the engagement format.
+Open a PR with the fixture file. The calibration tests
+(`tests/test_*_calibration.py`) automatically verify schema and
+banned-phrase containment.
 
 ## Adding or refining a renderer skill
 

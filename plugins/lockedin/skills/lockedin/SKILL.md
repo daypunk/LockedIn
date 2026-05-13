@@ -1,13 +1,18 @@
 ---
 name: lockedin
 description: |
-  Renders resumes, Korean cover letters, interview answers, and
-  project ideas from the user's structured experience. Also scores
-  any resume against a calibrated rubric, no prior setup needed.
+  Captures the user's work moments — a shipped feature, a meeting
+  outcome, a learning, a decision — from inside their Claude Code
+  session into structured local markdown. Renders English resumes,
+  Korean cover letters, interview answers, and project ideas from the
+  same source on request. Also scores any resume against a calibrated
+  rubric without prior setup.
 
-  Activate when the user mentions lockedin, asks to render a career
-  artifact, drops a resume PDF or DOCX, or asks about their own
-  experience.
+  Activate when the user mentions lockedin, asks to save / log /
+  track something from their current work as experience, asks to
+  render an English resume / Korean cover letter / interview answer /
+  project idea, drops a resume PDF or DOCX, or asks about their own
+  past work.
 ---
 
 # lockedin
@@ -29,9 +34,10 @@ render artifacts from it. Single-purpose: one namespace, one demo.
 
 ## Do NOT use this skill when
 
-- The user asks general coding / code review / debugging questions.
+- The user is doing coding, debugging, or technical work and hasn't
+  signaled they want to save it as experience.
 - The user asks about somebody else's experience or a public dataset.
-- The user wants a one-shot AI answer with no vault to maintain — point
+- The user wants a one-shot AI answer without keeping notes — point
   them at Claude Projects on claude.ai instead.
 
 ## Execution model
@@ -104,6 +110,29 @@ See `AGENTS.md` for the four sub-roles (Interviewer / Ingester /
 Renderer / GraphCurator). See `TOOLS.md` for the canonical CLI calls
 each role issues, with skill-only-path fallbacks.
 
+## Write-before-confirm
+
+Before writing to the user's experience, briefly state what's going
+in: *"Saving 3 entries — project X, achievement Y, skill Z. OK?"*.
+This applies even if write permission is cached for the experience
+path from an earlier turn.
+
+Deterministic bookkeeping (`refresh_master_view`, state-file atomic
+writes) does not need confirmation — it adds no user-visible content.
+
+## Interview principles — gentle and short
+
+All interview questions are general, gentle, short, and intuitive.
+The experience layer accepts entries with thin information; never
+force the user to provide a specific metric, structure, or
+completeness level to create one. A toy project, a meeting note, a
+learning, and a shipped feature with hard numbers are all first-class.
+
+Metric pressure belongs to the renderer's writer turn, not the
+interview. If the user later asks for a resume and a particular
+achievement lacks a metric, the writer turn asks one focused
+question at that moment.
+
 ## Subscription, not API keys
 
 This skill assumes the user runs Claude Code on a subscription. If the
@@ -171,6 +200,15 @@ user at a CLI:
   with multiple existing entities at once** → summarize the conflict
   briefly, ask the user how they want to reconcile (replace / merge /
   keep both), then act.
+- **Edge reconciliation during interview** — when the Q&A interview
+  engine completes a session, edges are inferred automatically from
+  entity co-presence using the domain/range rules in
+  `lockedin/ontology/schema.py` (e.g. person + company → `held_role_at`,
+  project + skill → `uses_skill`). When the user mentions a new project
+  that fits an existing role mid-conversation, propose adding the
+  `uses_skill` or `produced` edge as part of the reconcile step — the
+  same rules that drive automatic inference also tell you which
+  predicates are valid between those two entity types.
 
 Pointing the user at `lockedin refresh` is a fallback for cases where
 you cannot reconcile programmatically — not a default behavior. The

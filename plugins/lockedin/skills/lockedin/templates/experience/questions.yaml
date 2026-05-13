@@ -164,14 +164,10 @@ sections:
             text_ko: "기술적 또는 조직적 접근 방식에 대해 조금 더 말씀해 주시겠어요?"
 
       - id: q_metric
-        text: "How did you measure success on that project?"
-        text_ko: "그 프로젝트의 성공은 어떻게 측정했나요?"
+        text: "What's the most concrete thing you remember about it? A number, a decision, something you learned — whatever comes to mind. Skip if nothing stands out."
+        text_ko: "그 작업에서 가장 구체적으로 기억나는 것 하나만요. 숫자도, 결정도, 배운 것도 다 좋아요. 떠오르는 게 없으면 스킵하셔도 됩니다."
         writes: { entity: achievement, field: metric }
         requires: [q_proudest_project]
-        follow_up:
-          - if: len_lt:20
-            text: "Could you add one concrete number, like a percentage or a count?"
-            text_ko: "구체적인 수치를 하나 더 추가해 주실 수 있나요? 예를 들어 비율이나 횟수처럼요."
 
       - id: q_achievement_headline
         text: "What's the single most memorable result from that project — the one-liner you'd put on a resume?"

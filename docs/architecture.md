@@ -103,9 +103,11 @@ surfaces read and write the same vault layout.
 ```
 
 Every entity is one markdown file. Every edge is one entry in a note's
-`links:` frontmatter. The markdown is the source of truth. `lockedin
-validate` walks the vault and reports any frontmatter that does not
-conform to `lockedin/ontology/schema.py`.
+`links:` frontmatter, inferred from the interview session by domain/range
+rules in `lockedin/ontology/schema.py`. Edges are explicit and auditable;
+the renderer turn cites entity slugs but does not require edge traversal.
+`lockedin validate` walks the vault and reports any frontmatter that does
+not conform to the schema.
 
 ## Renderer two-turn pattern
 

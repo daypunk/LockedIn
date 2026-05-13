@@ -112,7 +112,7 @@ ENTITY_SCHEMAS: dict[str, EntitySpec] = {
         description="A position held at a company; carries start/end dates.",
         fields={
             "title": FieldSpec("string", "Job title", required=True),
-            "start_date": FieldSpec("date", "ISO date the role started", required=True),
+            "start_date": FieldSpec("date", "ISO date the role started"),
             "end_date": FieldSpec("date", "Omit while currently held"),
             "level": FieldSpec("string", "junior / mid / senior / lead / etc."),
             "summary": FieldSpec("text"),
@@ -229,10 +229,10 @@ ENTITY_SCHEMAS: dict[str, EntitySpec] = {
     ),
     "meeting": EntitySpec(
         type="meeting",
-        description="A meeting note.",
+        description="A meeting, 1:1, code review, mentoring session, or other structured interaction event.",
         fields={
             "title": FieldSpec("string", required=True),
-            "date": FieldSpec("date", required=True),
+            "date": FieldSpec("date", "Defaults to capture time if not provided"),
             "duration_minutes": FieldSpec("int"),
             "agenda": FieldSpec("list[string]"),
             "summary": FieldSpec("text"),

@@ -8,6 +8,7 @@
 - `audit` CLI subcommand (`/lockedin audit <path>`) and `interview` alias for `init`.
 - Real document ingest: PDF (`pypdf`), DOCX (`python-docx`), markdown, and plain text now expose `extract_text()` and regex-based `parse()` returning grounding dicts (dates, urls, emails, candidate orgs). Previously `NotImplementedError` stubs.
 - Interview resumability: state persistence at `<vault>/.lockedin/interview-state.json`, atomic write, pause/skip/resume keywords, progress banner `[Section M/N · Q N/N]`, `sections=[…]` filter, `fresh=True` restart.
+- Automatic edge inference: the interview engine now populates `entity.links` at session completion, inferring all valid edges from entity co-presence using domain/range rules in `lockedin/ontology/schema.py` (e.g. person + company → `held_role_at`, project + skill → `uses_skill`, project + achievement → `produced`). Document-ingest-only predicates (`mentions`, `derived_from`) are excluded. Inference is idempotent — edges are recomputed from scratch each run.
 - Interview question bank expanded from 6 to 49 questions across 9 sections (identity, companies and roles, projects, education, certificates, publications, volunteer experience, languages, decisions and learning).
 - Korean cover letter and English resume calibration parity: `banned_phrases.json` schema v2 (object array with category/severity/sources), 3 pass + 3 fail fixtures per skill, `test_jaso_calibration.py` and `test_resume_en_calibration.py`.
 - AI-native cross-source calibration shipped for `lockedin-render-interview` (7 sources, 25 banned phrases) and `lockedin-render-ideas` (7 sources, 27 banned phrases) with 3 pass + 3 fail fixtures each.
@@ -19,6 +20,7 @@
 ### Changed
 
 - Ingest layer refactor: per-format modules at `lockedin/ingest/{pdf,docx,markdown,text}.py` now own `extract_text` and `parse`; `lockedin/commands/ingest_dry.py` slimmed to a thin orchestrator. Shared regex helpers extracted into `_parse_helpers.py` and `_section_heuristics.py`.
+- Schema looseness for gentler capture: `role.start_date` and `meeting.date` no longer required. `meeting` description widened to include 1:1s, code reviews, and mentoring sessions. The vault accepts thin entities; renderer turns ask for missing precision when needed.
 - Main skill `SKILL.md`: `audit` flagged as the lowest-friction first try (Step 0 in Core flow); activation triggers include audit-related natural language.
 - `/lockedin:setup` wizard final guidance restructured to a 3-path menu (audit → absorb → demo).
 - Render CLI choices expanded from `{jaso, resume}` to `{jaso, resume, interview, ideas}` to match shipped skills.

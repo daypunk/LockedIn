@@ -34,7 +34,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-from lockedin.ontology import Entity
+from lockedin.ontology import EDGE_SCHEMAS, Entity
 
 _DATE_RE = re.compile(r"^\d{4}(-\d{2}(-\d{2})?)?$")
 
@@ -216,6 +216,116 @@ def _ask(prompt: str) -> str:
 
 
 # ---------------------------------------------------------------------------
+# Edge inference
+# ---------------------------------------------------------------------------
+
+# Predicates created by document ingest, not interview co-presence.
+_SKIP_PREDICATES = frozenset({"mentions", "derived_from"})
+
+# For multi-domain predicates, preferred source type when both are present.
+# Key: predicate name, Value: (preferred_type, fallback_type)
+_DOMAIN_PREFERENCE: dict[str, tuple[str, str]] = {
+    "produced": ("project", "role"),
+    "uses_skill": ("project", "role"),
+    "covers": ("project", "meeting"),  # publication is also valid but rarer
+    "made": ("person", "meeting"),
+}
+
+
+def _infer_edges(
+    entities: dict[tuple[str, str], Entity],
+    insertion_order: list[tuple[str, str]],
+) -> None:
+    """Infer ontology edges from entity co-presence in an interview session.
+
+    Walks ``EDGE_SCHEMAS``, finds all (src, dst) pairs that satisfy the
+    predicate's domain/range given the entities present, and appends
+    edge dicts to ``src.links``.  Existing links on each entity are
+    cleared first so repeated calls produce identical results
+    (idempotent / recomputed from scratch).
+
+    The ``insertion_order`` list controls which entity is chosen as
+    source when a predicate allows multiple domain types (e.g.
+    ``produced`` can come from a project or a role — we prefer the
+    most-recently-created entity of the preferred type, falling back to
+    the other type).
+
+    Parameters
+    ----------
+    entities:
+        Mapping of (entity_type, slug) → Entity as maintained by run().
+    insertion_order:
+        List of (entity_type, slug) keys in the order they were first
+        created.  Used to pick the "most recent" source for multi-domain
+        predicates.
+    """
+    # Clear existing inferred links so re-runs don't accumulate duplicates.
+    for ent in entities.values():
+        ent.links = []
+
+    # Build convenience lookup: type → list of slugs (in insertion order)
+    type_to_slugs: dict[str, list[str]] = {}
+    for et, slug in insertion_order:
+        if (et, slug) in entities:
+            type_to_slugs.setdefault(et, []).append(slug)
+
+    def _latest_slug_for_types(preferred: str, *fallbacks: str) -> str | None:
+        """Return slug of the most-recently-created entity for the first
+        type (in preference order) that has at least one entity."""
+        for t in (preferred, *fallbacks):
+            slugs = type_to_slugs.get(t)
+            if slugs:
+                return slugs[-1]  # last inserted = most recent
+        return None
+
+    for predicate, spec in EDGE_SCHEMAS.items():
+        if predicate in _SKIP_PREDICATES:
+            continue
+
+        pref = _DOMAIN_PREFERENCE.get(predicate)
+
+        if pref is not None:
+            # Multi-domain predicate: pick one source entity.
+            preferred_type, fallback_type = pref
+            # Build the full ordered type list from the spec to respect all
+            # domain members (e.g. "covers" has domain (meeting, project, publication))
+            domain_types = list(spec.domain)
+            # Move preferred to front, keep rest in spec order
+            ordered = [preferred_type] + [t for t in domain_types if t != preferred_type]
+            src_slug = _latest_slug_for_types(*ordered)
+            if src_slug is None:
+                continue
+            # Find which type this slug belongs to
+            src_type = next(
+                et for et, sl in insertion_order if sl == src_slug and (et, sl) in entities
+            )
+            src_entity = entities[(src_type, src_slug)]
+
+            for dst_type in spec.range:
+                for dst_slug in type_to_slugs.get(dst_type, []):
+                    edge = {"predicate": predicate, "object": dst_slug, "weight": 1.0}
+                    if edge not in src_entity.links:
+                        src_entity.links.append(edge)
+        else:
+            # Simple predicate: for each src/dst pair that matches domain×range
+            for src_type in spec.domain:
+                for src_slug in type_to_slugs.get(src_type, []):
+                    src_entity = entities[(src_type, src_slug)]
+                    for dst_type in spec.range:
+                        for dst_slug in type_to_slugs.get(dst_type, []):
+                            # Skip self-links
+                            if src_slug == dst_slug and src_type == dst_type:
+                                continue
+                            edge = {
+                                "predicate": predicate,
+                                "object": dst_slug,
+                                "weight": 1.0,
+                            }
+                            if edge not in src_entity.links:
+                                src_entity.links.append(edge)
+
+
+# ---------------------------------------------------------------------------
 # Public entry point
 # ---------------------------------------------------------------------------
 
@@ -341,6 +451,8 @@ def run(
     entities: dict[tuple[str, str], Entity] = {}
     # entity_type → current slug of the "in-progress" instance for that type
     primary_slug: dict[str, str] = {}
+    # ordered list of (entity_type, slug) keys in creation order
+    insertion_order: list[tuple[str, str]] = []
 
     def _get_entity(entity_type: str) -> Entity:
         slug = primary_slug.get(entity_type)
@@ -355,6 +467,7 @@ def run(
         )
         primary_slug[entity_type] = new_slug
         entities[(entity_type, new_slug)] = ent
+        insertion_order.append((entity_type, new_slug))
         return ent
 
     def _finalize_slug(ent: Entity) -> None:
@@ -366,6 +479,11 @@ def run(
                     old_key = (ent.type, ent.slug)
                     if old_key in entities:
                         del entities[old_key]
+                    # Update insertion_order entry for this entity
+                    for i, (et, sl) in enumerate(insertion_order):
+                        if et == ent.type and sl == ent.slug:
+                            insertion_order[i] = (ent.type, new_slug)
+                            break
                     ent.slug = new_slug
                     ent.title = value
                     entities[(ent.type, new_slug)] = ent
@@ -527,6 +645,12 @@ def run(
             break
 
         cumulative_q_idx += len(section_questions)
+
+    # ------------------------------------------------------------------
+    # Edge inference
+    # ------------------------------------------------------------------
+    if not paused:
+        _infer_edges(entities, insertion_order)
 
     # ------------------------------------------------------------------
     # Completion / cleanup
