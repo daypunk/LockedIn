@@ -70,7 +70,7 @@ The files are yours. Open them in any editor, carry them to any tool. When you n
 
 ## How it works
 
-**1. Your experience gets structured.** Drop a resume or answer a few short interview questions. LockedIn organizes it into 15 typed markdown files in `~/Documents/LockedIn/`.
+**1. Your experience gets structured.** Drop a resume, answer a few short interview questions, or capture a moment from your current work. LockedIn organizes it into 15 typed markdown files in `~/Documents/LockedIn/`.
 
 **2. Every claim is bound to a real entity.** The writer turn cites companies, projects, and metrics as `[[type/slug]]` references pointing at specific vault files. Slugs are swapped for natural language right before you see the output. If no matching entity backs a claim, the slug stays in place and LockedIn asks you whether to add the entity rather than fabricating one. There is no opening for a new fact to slip in.
 
