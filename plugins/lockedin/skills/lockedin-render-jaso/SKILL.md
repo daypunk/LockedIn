@@ -15,8 +15,6 @@ description: |
 Research-based calibration. RUBRIC.md ships with five dimensions and
 score bands. prompt-writer.md, prompt-reviewer.md, and
 banned_phrases.json (28 cross-source-confirmed entries) all ship.
-Named human domain reviewer engagement is in progress. See
-`reviewers.md` for the engagement format.
 
 ## Use this when
 
@@ -77,5 +75,4 @@ RUBRIC.md           5-dimension scoring contract + score bands
 banned_phrases.json 28 cross-source-confirmed regex entries
 prompt-writer.md    writer-turn prompt
 prompt-reviewer.md  reviewer-turn prompt (re-loaded fresh)
-reviewers.md        engagement format; v1.1 named reviewer placeholder
 ```

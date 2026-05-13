@@ -132,14 +132,3 @@ user pays for them via their existing subscription. `lockedin doctor`
 detects API key configuration and exits non-zero unless the user opts in
 via `LOCKEDIN_ALLOW_API_KEY=1`.
 
-## Roadmap shape
-
-Current state (1.1) covers: ontology v3 schema, the deterministic CLI
-surface, document ingestion (`.pdf` / `.docx` / `.md` / `.txt`), four
-renderer skills (`render-jaso`, `render-resume-en`,
-`render-interview`, `render-ideas`), the master `EXPERIENCE.md` view,
-and the HUD wired through Claude Code's statusline. See
-`CHANGELOG.md` "Future work" for the canonical outstanding list:
-deeper Q&A interview buildout, PDF-first quick-start onboarding, named
-human reviewer engagement for each renderer, v1.2 orchestration, and
-v1.3 vault curator.

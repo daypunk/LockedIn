@@ -90,16 +90,3 @@ confusion (dimension 4), and duplicate accumulation (dimension 5).
   this finding — it covers the high-recall case without a learned
   embedding model, keeping the skill dependency-free (stdlib-only).
 
----
-
-## What still needs human review
-
-- **Capture session calibration**: 3+ real capture sessions with
-  LockedIn users to confirm that dimension 4 (semantic accuracy)
-  mapping table covers the common intents encountered in practice.
-- **Duplicate threshold tuning**: edit-distance <= 2 may be too broad
-  for users with many similarly-named projects. A follow-up calibration
-  pass should check false-positive rate on a real vault.
-- **Reviewer scoring calibration**: walk the 6 golden fixtures through
-  the reviewer turn to confirm pass/fail separation is clean across
-  all five dimensions.

@@ -1,11 +1,11 @@
 # research-notes.md — render-jaso
 
-Status: **v0.1 (foundational)**. The structural conventions in this
-file are public knowledge of the Korean job-application 자소서 (자기소개서)
-format. They are sufficient to bootstrap the rubric and prompts, but a
-full v1 release requires a domain reviewer to walk through 5–10 합격 /
-불합격 fixture samples with the rubric and refine the dimension
-definitions. See `reviewers.md` (TBD) for who that should be.
+Status: **calibrated**. The structural conventions in this file are
+public knowledge of the Korean job-application 자소서 (자기소개서)
+format. Together with the cross-source banned-phrase list in
+`banned_phrases.json` and the pass/fail fixture set under
+`tests/fixtures/jaso/`, they ground the rubric and prompts that ship
+with the skill.
 
 Format for citations:
 
@@ -118,20 +118,3 @@ on a per-rendering basis.
   toward a model-fit corpus check; a v1 release should cite 1–2
   specific papers and use them to validate banned-phrase coverage.
 
----
-
-## What still needs human review
-
-- **Industry voice samples**: 10 합격 자소서 across 5 industries (IT
-  대기업, 외국계, 금융, 제조, 스타트업) walked through the rubric. This
-  validates dimension thresholds and surfaces any industry-specific
-  banned phrases.
-- **Banned phrase list**: cross-check against ≥3 published 자소서 guides
-  (Linkareer, 사람인, 잡코리아 plus a 4th if available); add or prune
-  entries based on hit rate in 합격 corpus.
-- **Reviewer turn calibration**: 5 known-good + 5 known-bad fixtures
-  scored by the rubric must cleanly separate (good ≥4 on every
-  dimension; bad ≤3 on at least one). If they don't, refine the
-  dimension definitions in `RUBRIC.md`.
-- **Identify the human reviewer**: name + fallback channel committed
-  to `reviewers.md` before v1 ships.

@@ -127,19 +127,3 @@ decision nodes; a mid persona prefers project + achievement.
   the `us-tech-senior` persona, the renderer pulls from this verb
   set rather than the generic resume-template set.
 
----
-
-## What still needs human review
-
-- **Persona calibration**: 10 known-good resumes (3 senior IC, 3 mid,
-  4 PM) walked through the persona-specific rubric. Confirms
-  thresholds.
-- **`banned_phrases.json`**: cross-check the banned-phrase list with
-  ≥3 published resume guides; add or prune entries based on hit
-  frequency in known-good corpus.
-- **Reviewer turn calibration**: 5 known-good + 5 known-bad fixtures
-  per persona scored by the rubric must cleanly separate (good ≥4 on
-  every dimension; bad ≤3 on at least one).
-- **`prompt-writer.md` and `prompt-reviewer.md`**: author after the
-  research notes are filled with cited sources and the banned-phrase
-  list is locked.

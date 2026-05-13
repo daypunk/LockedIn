@@ -48,9 +48,6 @@ Issues = "https://github.com/daypunk/LockedIn/issues"
 [tool.hatch.build.targets.wheel]
 packages = ["lockedin"]
 
-[tool.hatch.build.targets.wheel.force-include]
-"lockedin/skill" = "lockedin/skill"
-
 [tool.ruff]
 line-length = 100
 target-version = "py310"

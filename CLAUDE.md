@@ -200,13 +200,9 @@ If you are a Claude session opened with no prior context:
 4. Read `docs/ontology-spec.md` and `docs/ontology-mapping.md` for
    the data contract.
 5. Skim `CHANGELOG.md` for the most recent shipped release notes.
-6. If working notes / spec / plan files exist locally at
-   `.omc/specs/` and `.omc/plans/`, those are gitignored
-   internal-only artifacts. Read them only if you need history that
-   is not in this CLAUDE.md.
-7. Before any significant change, run `pytest -q` to confirm the
+6. Before any significant change, run `pytest -q` to confirm the
    baseline is green.
-8. If a change touches the ontology, update all four of:
+7. If a change touches the ontology, update all four of:
    `lockedin/ontology/schema.py`, `docs/ontology-spec.md`,
    `docs/ontology-mapping.md`, and the renderer skills' SKILL.md
    that reference field shapes.

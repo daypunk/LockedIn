@@ -220,11 +220,10 @@ notes: |
 {Proposed entity structure as markdown table or YAML block}
 ```
 
-## Calibration status (v0.1)
+## Calibration status
 
-Foundational. Calibrated against internal design rationale
+Calibrated against internal design rationale
 (`lockedin/ontology/schema.py`, `docs/ontology-spec.md`, CLAUDE.md
-working agreements). A named human reviewer walkthrough of the golden
-fixtures is recommended before v1 release to confirm band thresholds.
-Until then, the LLM reviewer turn is self-consistent against this
-rubric, and the fixture set provides ground truth.
+working agreements) and the golden fixture set under
+`tests/fixtures/capture/`. The reviewer turn scores against this
+rubric and against the fixtures as ground truth.

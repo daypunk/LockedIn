@@ -111,25 +111,10 @@ respect the cheat sheet in `lockedin/skill/lockedin/TOOLS.md`. The
 dispatch is *suggested* by SKILL.md instructions, not enforced by the
 skill — Claude Code chooses based on its own routing.
 
-## Sequencing
+## Where orchestration lives
 
-| Version | Flow | Orchestration depth |
-| --- | --- | --- |
-| v1.0 (now) | render | writer and reviewer two turns, already shipped |
-| v1.2 | render | full 5-step pipeline above |
-| v1.2 | bulk ingest | dispatcher and parallel parsers |
-| v1.3 | vault curator | first quarterly run |
-
-Each step is shipped as a behavior change in the skill files (more
-explicit pipeline instructions in SKILL.md / AGENTS.md). The CLI does
-not change — orchestration is internal to the skill.
-
-## What this means for users
-
-Users see no new commands. They see:
-
-- Faster bulk ingest.
-- Higher-quality renders (rubric scores climb).
-- Fewer duplicate entities accumulating over time.
-
-Same surface, more careful internals.
+Orchestration is internal to the skill. Pipeline behavior changes ship
+as edits to `SKILL.md` and `AGENTS.md` instructions, not as new CLI
+surface. Users see the same commands; what changes underneath is
+render quality, ingest throughput, and how aggressively duplicate
+entities are surfaced for reconciliation.

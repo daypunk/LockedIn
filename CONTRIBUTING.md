@@ -72,8 +72,6 @@ CI gates:
   (`[한국어](README.ko.md)` etc.) are allowed.
 - **tests**: `pytest -q` on macOS-latest and ubuntu-latest, Python
   3.12.
-- **leakage scan**: tracked files must not reference internal-only
-  terms. The `.github/workflows/ci.yml` enforces this.
 
 ## Contributing a fixture (any render skill)
 

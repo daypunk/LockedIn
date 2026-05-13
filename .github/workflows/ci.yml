@@ -64,26 +64,18 @@ jobs:
           PY
           done
 
-  research-notes-liveness:
-    name: research-notes URL liveness
+  packaging-smoke:
+    name: packaging smoke (pip install)
     runs-on: ubuntu-latest
-    if: ${{ false }}  # enables when research-notes.md ships with citations
     steps:
       - uses: actions/checkout@v4
-      - run: echo "URL liveness gate enables when renderer skills land."
-
-  skill-only-smoke:
-    name: skill-only path smoke
-    runs-on: ubuntu-latest
-    if: ${{ false }}  # enables when helpers/init.py and helpers/migrate.py exist
-    steps:
-      - uses: actions/checkout@v4
-      - run: echo "Skill-only Docker recipe enables once helpers ship."
-
-  cli-accelerator-smoke:
-    name: CLI accelerator path smoke
-    runs-on: ubuntu-latest
-    if: ${{ false }}  # enables when CLI subcommands implement core flows
-    steps:
-      - uses: actions/checkout@v4
-      - run: echo "CLI accelerator Docker recipe enables once core flows ship."
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: pip install from source
+        run: python -m pip install .
+      - name: import + version banner
+        run: |
+          python -c "import lockedin; print(lockedin.__version__)"
+          python -m lockedin --version
+          lockedin --version
