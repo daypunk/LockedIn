@@ -27,18 +27,19 @@ def isolated_creds(tmp_path, monkeypatch):
     return creds_path
 
 
-def test_normalize_payload_handles_floats():
-    raw = {"five_hour": {"utilization": 0.27}, "seven_day": {"utilization": 0.42}}
+def test_normalize_payload_handles_float_percent():
+    """API returns utilization as a percentage; floats too (8.0 == 8%)."""
+    raw = {"five_hour": {"utilization": 8.0}, "seven_day": {"utilization": 1.0}}
     out = ou._normalize_payload(raw)
-    assert out["five_hour"] == 0.27
-    assert out["seven_day"] == 0.42
+    assert out["five_hour"] == 0.08
+    assert out["seven_day"] == 0.01
     # No reset timestamps in this raw input, so the corresponding fields
     # are present but None.
     assert out["five_hour_resets_at"] is None
     assert out["seven_day_resets_at"] is None
 
 
-def test_normalize_payload_handles_percentages():
+def test_normalize_payload_handles_int_percent():
     raw = {"five_hour": {"utilization": 27}, "seven_day": {"utilization": 42}}
     out = ou._normalize_payload(raw)
     assert out["five_hour"] == 0.27
@@ -46,10 +47,31 @@ def test_normalize_payload_handles_percentages():
 
 
 def test_normalize_payload_handles_camelcase():
-    raw = {"fiveHour": {"utilization": 0.5}, "sevenDay": {"utilization": 0.6}}
+    raw = {"fiveHour": {"utilization": 50}, "sevenDay": {"utilization": 60}}
     out = ou._normalize_payload(raw)
     assert out["five_hour"] == 0.5
     assert out["seven_day"] == 0.6
+
+
+def test_normalize_payload_low_percent_not_confused_with_fraction():
+    """Regression guard: the old heuristic (`v / 100 if v > 1.5 else v`)
+    misread sub-1.5% values (1.0 == 1%) as 100% fractions. The API always
+    returns percentages, so it must be divided by 100 every time."""
+    payload = ou._normalize_payload({
+        "five_hour": {"utilization": 1.0, "resets_at": "2026-01-01T00:00:00Z"},
+        "seven_day": {"utilization": 0.5, "resets_at": "2026-01-07T00:00:00Z"},
+    })
+    assert payload is not None
+    assert payload["five_hour"] == 0.01
+    assert payload["seven_day"] == 0.005
+
+    zero = ou._normalize_payload({
+        "five_hour": {"utilization": 0.0, "resets_at": "2026-01-01T00:00:00Z"},
+        "seven_day": {"utilization": 0.0, "resets_at": "2026-01-07T00:00:00Z"},
+    })
+    assert zero is not None
+    assert zero["five_hour"] == 0.0
+    assert zero["seven_day"] == 0.0
 
 
 def test_normalize_payload_extracts_reset_timestamps():
@@ -126,7 +148,7 @@ def test_get_usage_succeeds_when_credentials_and_fetch_work(
     monkeypatch.setattr(
         ou,
         "_fetch_usage",
-        lambda token: {"five_hour": {"utilization": 0.18}, "seven_day": {"utilization": 0.24}},
+        lambda token: {"five_hour": {"utilization": 18.0}, "seven_day": {"utilization": 24.0}},
     )
     out = ou.get_usage()
     assert out["five_hour"] == 0.18

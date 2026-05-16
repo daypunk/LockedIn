@@ -136,3 +136,5 @@ def test_hud_usage_section_appears_when_session_has_user_turns(
     out = capsys.readouterr().out
     assert "5h:" in out and "%" in out
     assert "wk:" in out
+
+

@@ -346,8 +346,7 @@ def _normalize_oauth_payload(raw):
         if isinstance(value, dict):
             value = value.get("utilization")
         if isinstance(value, (int, float)):  # noqa: UP038
-            v = float(value)
-            return v / 100 if v > 1.5 else v
+            return float(value) / 100
         return None
 
     def _pull_reset(value):

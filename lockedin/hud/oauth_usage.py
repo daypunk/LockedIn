@@ -210,12 +210,11 @@ def _fetch_usage(token: str) -> dict[str, Any] | None:
 def _normalize_payload(raw: dict[str, Any]) -> dict[str, Any] | None:
     """Pick out the two utilization values and their reset timestamps.
 
-    The API returns either floats (0.27) or integer percentages (27)
-    for utilization. We coerce both to a 0-1 float so the HUD's color
-    thresholds work consistently. The reset timestamp comes through as
-    an ISO-8601 string in the ``resets_at`` field; we keep it as a
-    string and let the renderer format it. If neither window is
-    present, return None.
+    The API returns ``utilization`` as a percentage (8.0 == 8%, 1.0 == 1%).
+    We coerce to a 0-1 float so the HUD's color thresholds work
+    consistently. The reset timestamp comes through as an ISO-8601
+    string in the ``resets_at`` field; we keep it as a string and let
+    the renderer format it. If neither window is present, return None.
     """
     if not isinstance(raw, dict):
         return None
@@ -224,8 +223,7 @@ def _normalize_payload(raw: dict[str, Any]) -> dict[str, Any] | None:
         if isinstance(value, dict):
             value = value.get("utilization")
         if isinstance(value, (int, float)):  # noqa: UP038 — Python 3.8 fallback
-            v = float(value)
-            return v / 100 if v > 1.5 else v
+            return float(value) / 100
         return None
 
     def _pull_reset(value: Any) -> str | None:
